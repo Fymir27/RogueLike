@@ -5,5 +5,5 @@
 class Floor : public Field
 {
 	public:
-		Floor():Field(' ') {};
+		Floor():Field(sf::Color::White) {};
 };

@@ -2,6 +2,7 @@
 #include "Field.h"
 #include "Floor.h"
 #include "Wall.h"
+#include <SFML\Graphics.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -18,6 +19,7 @@ Field* Room::getField(int x, int y)
 	{
 		std::cout << e.what();
 	}
+	return nullptr;
 }
 
 Room::Room()
@@ -65,4 +67,25 @@ bool Room::readRoomFromFile(const char * filename)
 		}
 	}
 	return true;
+}
+
+void Room::draw(sf::RenderWindow& window)
+{
+	size_t rows = getRowCount();
+	size_t cols = getColCount();
+
+	//-- draw tiles --//
+	sf::Color wall_color(0x80, 0x80, 0x80);
+	sf::Color tile_color;
+	for (int y = 0; y < rows; y++)
+	{
+		for (int x = 0; x < cols; x++)
+		{
+			tile_color = getField(x, y)->getColor();
+			sf::RectangleShape tile(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+			tile.setFillColor(tile_color);
+			tile.setPosition(sf::Vector2f(x * TILE_SIZE, y * TILE_SIZE));
+			window.draw(tile);
+		}
+	}
 }

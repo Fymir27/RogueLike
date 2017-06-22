@@ -12,32 +12,47 @@
 using std::cout;
 using std::endl;
 
+const unsigned int WINDOW_WIDTH  = 480;
+const unsigned int WINDOW_HEIGHT = 320;
 
 int main()
 {
+	//-- load new room from file --//
 	char* filename = "Room1.txt";
 	Room* room = new Room(filename);
 
-	Player* player = new Player("Oliver", { 1,3 }, { 100,100,10,10,10 });
+	//-- create player --//
+	Position player_pos{ 1, 3 };
+	Stats player_stats = {};
+	player_stats.hp_   = 100;
+	player_stats.mana_ = 100;
+	player_stats.str_  = 10;
+	player_stats.int_  = 10;
+	player_stats.dex_  = 10;
+	Player* player = new Player("Oliver", player_pos, player_stats);
 
-	Item* item = new LargeHealingPotion(3);
-	player->addItem(item);
+	//-- create window --//
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike");
+	window.setFramerateLimit(60);
+	sf::Event event;
 
-	player->printInventory();
+	//-- main loop --//
+	while (window.isOpen())
+	{
+		//-- get input --//
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
 
-	item = new LargeHealingPotion(5);
-	player->addItem(item);
-
-	player->printInventory();
-
-	item = new LargeHealingPotion(7);
-	player->addItem(item);
-
-	player->printInventory();
-
-	Screen* screen = new Screen(600, 500, filename);
-	std::thread graphics(&Screen::init, screen);
-	screen->setRoom(room);
-	graphics.join();
+		window.clear(sf::Color::Black);
+		
+		room->draw(window);
+	
+		window.display();
+	}
+	delete player;
 	return 0;
 }
+

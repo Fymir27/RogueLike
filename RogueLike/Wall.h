@@ -5,5 +5,5 @@
 class Wall : public Field
 {
 	public:
-		Wall():Field('#') {};
+		Wall():Field(sf::Color(0x80, 0x80, 0x80)) {};
 };
