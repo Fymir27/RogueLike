@@ -44,13 +44,14 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			else if(event.type = sf::Event::KeyPressed)
+			else if(event.type == sf::Event::KeyPressed)
 				player->processInput(event);
 		}
 
 		window.clear(sf::Color::Black);
 		
 		current_room->draw(window);
+		player->draw(window);
 	
 		window.display();
 	}

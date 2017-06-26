@@ -20,6 +20,7 @@ class Tree : public Field
 {
 public:
 	Tree() : Field(sf::Color::Black, 2) {};
+	virtual bool stepOn() { return false; };
 };
 
 class Water : public Field
@@ -32,4 +33,5 @@ class Lava : public Field
 {
 public:
 	Lava() : Field(sf::Color::Black, 4) {};
+	virtual bool stepOn() { return false; };
 };
