@@ -26,3 +26,5 @@ class Room
 		bool readRoomFromFile(const char* filename);
 		void draw(sf::RenderWindow& window);
 };
+
+extern Room* current_room;

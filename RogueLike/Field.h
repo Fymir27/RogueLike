@@ -2,16 +2,18 @@
 
 #include <SFML/Graphics.hpp>
 
+class Player;
 class Field
 {
 	protected:
 		int tile_nr_;
+		Field(sf::Color color, int tile_nr) : tile_nr_(tile_nr), color_(color) {};
 	private:
 		sf::Color color_;
 	public:
-		Field(sf::Color color, int tile_nr) : tile_nr_(tile_nr), color_(color) {}
-		sf::Color getColor() const { return color_; }
+		sf::Color getColor() const { return color_; };
 		int getTileNr() const { return tile_nr_; };
+		virtual bool stepOn(Player* player) { return true; };
 };
 
 class Tree : public Field

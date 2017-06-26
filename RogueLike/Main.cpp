@@ -19,7 +19,7 @@ int main()
 	//-- load new room from file --//
 	char* filename = "Room1.txt";
 	cout << "Instantiating new room..." << endl;
-	Room* room = new Room(filename);
+	current_room = new Room(filename);
 
 	//-- create player --//
 	Position player_pos{ 1, 3 };
@@ -44,11 +44,13 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			else if(event.type = sf::Event::KeyPressed)
+				player->processInput(event);
 		}
 
 		window.clear(sf::Color::Black);
 		
-		room->draw(window);
+		current_room->draw(window);
 	
 		window.display();
 	}

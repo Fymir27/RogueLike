@@ -9,6 +9,8 @@
 using std::cout;
 using std::endl;
 
+Room* current_room = NULL;
+
 Field* Room::getField(int x, int y)
 {
 	try
