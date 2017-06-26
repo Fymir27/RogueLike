@@ -1,9 +1,10 @@
 #include "Room.h"
 #include "Field.h"
-#include "Screen.h"
+//#include "Screen.h"
 #include "Player.h"
 #include "HealingPotion.h"
 #include "Item.h"
+#include "Types.h"
 
 #include <iostream>
 #include <vector>
@@ -12,13 +13,12 @@
 using std::cout;
 using std::endl;
 
-const unsigned int WINDOW_WIDTH  = 480;
-const unsigned int WINDOW_HEIGHT = 320;
-
 int main()
 {
+	cout << "Welcome to RogueLike!" << endl;
 	//-- load new room from file --//
 	char* filename = "Room1.txt";
+	cout << "Instantiating new room..." << endl;
 	Room* room = new Room(filename);
 
 	//-- create player --//
