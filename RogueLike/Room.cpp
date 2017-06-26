@@ -1,7 +1,5 @@
 #include "Room.h"
 #include "Field.h"
-#include "Floor.h"
-#include "Wall.h"
 #include <SFML/Graphics.hpp>
 
 #include <iostream>
@@ -40,7 +38,7 @@ Room::Room(const char * filename)
 		cout << endl;
 	}
 	tile_map_ = new TileMap();
-	tile_map_->load("../images/tileset.png", map_, TILE_SIZE, getColCount(), getRowCount());
+	tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int)getColCount(), (int)getRowCount());
 }
 
 bool Room::readRoomFromFile(const char * filename)
@@ -60,7 +58,7 @@ bool Room::readRoomFromFile(const char * filename)
 	while (reading)
 	{
 		c = file.get();
-		Field* field;
+		Field* field = NULL;
 
 		switch(c)
 		{

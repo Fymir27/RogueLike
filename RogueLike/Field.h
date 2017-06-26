@@ -6,35 +6,46 @@
 using std::cout;
 using std::endl;
 
+class Player;
 class Field
 {
 	protected:
 		int tile_nr_;
-		Field(sf::Color color, int tile_nr) : tile_nr_(tile_nr), color_(color) {};
-	private:
-		sf::Color color_;
+		Field(int tile_nr) : tile_nr_(tile_nr) {};
 	public:
-		sf::Color getColor() const { return color_; };
 		int getTileNr() const { return tile_nr_; };
 		virtual bool stepOn(Player* player) { return true; };
+};
+
+class Wall : public Field
+{
+	public:
+	Wall() :Field(0) {};
+	virtual bool stepOn() { return false; };
+};
+
+class Floor : public Field
+{
+	public:
+	Floor() :Field(1) {};
 };
 
 class Tree : public Field
 {
 public:
-	Tree() : Field(sf::Color::Black, 2) {};
+	Tree() : Field(2) {};
 	virtual bool stepOn() { return false; };
 };
 
 class Water : public Field
 {
 public:
-	Water() : Field(sf::Color::Black, 3) {};
+	Water() : Field(3) {};
 };
 
 class Lava : public Field
 {
 public:
-	Lava() : Field(sf::Color::Black, 4) {};
+	Lava() : Field( 4) {};
 	virtual bool stepOn() { return false; };
 };

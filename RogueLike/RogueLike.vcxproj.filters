@@ -13,18 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Headerdateien\Fields">
-      <UniqueIdentifier>{5cb36c6c-7e98-40f0-8ff5-dc46e71d3af6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Quelldateien\Fields">
       <UniqueIdentifier>{bcfb95c4-ad8d-4747-aec6-ab671509a1e6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="SFMLTest.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Room.cpp">
@@ -54,19 +48,13 @@
     <ClCompile Include="Floor.cpp">
       <Filter>Quelldateien\Fields</Filter>
     </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Room.h">
       <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Field.h">
-      <Filter>Headerdateien\Fields</Filter>
-    </ClInclude>
-    <ClInclude Include="Floor.h">
-      <Filter>Headerdateien\Fields</Filter>
-    </ClInclude>
-    <ClInclude Include="Wall.h">
-      <Filter>Headerdateien\Fields</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Headerdateien</Filter>
@@ -84,6 +72,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="HealingPotion.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Field.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

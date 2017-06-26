@@ -132,20 +132,19 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Room.cpp" />
-    <ClCompile Include="SFMLTest.cpp" />
+    <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Types.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
     <ClInclude Include="Field.h" />
-    <ClInclude Include="Floor.h" />
     <ClInclude Include="HealingPotion.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="TileMap.h" />
     <ClInclude Include="Types.h" />
-    <ClInclude Include="Wall.h" />
     <ClInclude Include="Room.h" />
   </ItemGroup>
   <ItemGroup>
