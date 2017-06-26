@@ -1,6 +1,20 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
+#include <string>
+using std::cout;
+using std::endl;
+
+const float TILE_SIZE = 64;
+const unsigned int WINDOW_WIDTH  = 860;
+const unsigned int WINDOW_HEIGHT = 640;
+
+
+class Field;
+
+typedef std::vector<Field*> Row;
+typedef std::vector<Row> Map;
 
 typedef struct
 {

@@ -9,5 +9,6 @@ class Wall : public Field
 	static sf::Texture texture_;
 
 	public:
-	sf::Texture& getTexture();
+		Wall():Field(sf::Color(0x80, 0x80, 0x80), 0) {};
+		virtual bool stepOn() { return false; };
 };

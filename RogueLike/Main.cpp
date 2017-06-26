@@ -1,9 +1,10 @@
 #include "Room.h"
 #include "Field.h"
-#include "Screen.h"
+//#include "Screen.h"
 #include "Player.h"
 #include "HealingPotion.h"
 #include "Item.h"
+#include "Types.h"
 
 #include <iostream>
 #include <vector>
@@ -12,14 +13,13 @@
 using std::cout;
 using std::endl;
 
-const unsigned int WINDOW_WIDTH  = 860;
-const unsigned int WINDOW_HEIGHT = 640;
-
 int main()
 {
+	cout << "Welcome to RogueLike!" << endl;
 	//-- load new room from file --//
 	char* filename = "Room1.txt";
-	Room* room = new Room(filename);
+	cout << "Instantiating new room..." << endl;
+	current_room = new Room(filename);
 
 	//-- create player --//
 	Position player_pos{ 1, 3 };
@@ -44,11 +44,14 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			else if(event.type == sf::Event::KeyPressed)
+				player->processInput(event);
 		}
 
 		window.clear(sf::Color::Black);
 		
-		room->draw(window);
+		current_room->draw(window);
+		player->draw(window);
 	
 		window.display();
 	}
