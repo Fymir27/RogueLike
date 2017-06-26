@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Floor.cpp" />
     <ClCompile Include="HealingPotion.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -133,6 +134,7 @@
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="SFMLTest.cpp" />
     <ClCompile Include="Types.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />

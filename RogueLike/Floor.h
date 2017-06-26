@@ -4,6 +4,10 @@
 
 class Floor : public Field
 {
+	private:
+	static bool texture_loaded_;
+	static sf::Texture texture_;
+
 	public:
-		Floor():Field(sf::Color::White) {};
+	sf::Texture& getTexture();
 };

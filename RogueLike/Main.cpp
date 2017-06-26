@@ -12,8 +12,8 @@
 using std::cout;
 using std::endl;
 
-const unsigned int WINDOW_WIDTH  = 480;
-const unsigned int WINDOW_HEIGHT = 320;
+const unsigned int WINDOW_WIDTH  = 860;
+const unsigned int WINDOW_HEIGHT = 640;
 
 int main()
 {
@@ -32,7 +32,7 @@ int main()
 	Player* player = new Player("Oliver", player_pos, player_stats);
 
 	//-- create window --//
-	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike");
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
 	window.setFramerateLimit(60);
 	sf::Event event;
 

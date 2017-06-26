@@ -1,12 +1,13 @@
 #pragma once
 
 #include <SFML\Graphics.hpp>
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 class Field
 {
-	private:
-		sf::Color color_;
 	public:
-		Field(sf::Color color) : color_(color) {}
-		sf::Color getColor() const { return color_; }
+	virtual sf::Texture& getTexture() = 0;
 };

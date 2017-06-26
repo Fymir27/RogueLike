@@ -16,6 +16,9 @@
     <Filter Include="Headerdateien\Fields">
       <UniqueIdentifier>{5cb36c6c-7e98-40f0-8ff5-dc46e71d3af6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Quelldateien\Fields">
+      <UniqueIdentifier>{bcfb95c4-ad8d-4747-aec6-ab671509a1e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -44,6 +47,12 @@
     </ClCompile>
     <ClCompile Include="Types.cpp">
       <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>Quelldateien\Fields</Filter>
+    </ClCompile>
+    <ClCompile Include="Floor.cpp">
+      <Filter>Quelldateien\Fields</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

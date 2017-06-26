@@ -75,16 +75,13 @@ void Room::draw(sf::RenderWindow& window)
 	size_t cols = getColCount();
 
 	//-- draw tiles --//
-	sf::Color wall_color(0x80, 0x80, 0x80);
-	sf::Color tile_color;
+	sf::Sprite tile;
 	for (int y = 0; y < rows; y++)
 	{
 		for (int x = 0; x < cols; x++)
 		{
-			tile_color = getField(x, y)->getColor();
-			sf::RectangleShape tile(sf::Vector2f(TILE_SIZE, TILE_SIZE));
-			tile.setFillColor(tile_color);
-			tile.setPosition(sf::Vector2f(x * TILE_SIZE, y * TILE_SIZE));
+			tile.setTexture(getField(x,y)->getTexture());
+			tile.setPosition(x*TILE_SIZE, y*TILE_SIZE);
 			window.draw(tile);
 		}
 	}

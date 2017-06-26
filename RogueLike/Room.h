@@ -7,7 +7,7 @@
 #include <string>
 typedef std::vector<Field*> Row;
 
-const float TILE_SIZE = 32;
+const float TILE_SIZE = 64;
 
 class Room
 {
