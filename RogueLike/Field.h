@@ -21,7 +21,7 @@ class Wall : public Field
 {
 	public:
 	Wall() :Field(0) {};
-	virtual bool stepOn() { return false; };
+	virtual bool stepOn(Player* player) { return false; };
 };
 
 class Floor : public Field
@@ -34,7 +34,7 @@ class Tree : public Field
 {
 public:
 	Tree() : Field(2) {};
-	virtual bool stepOn() { return false; };
+	virtual bool stepOn(Player* player) { return false; };
 };
 
 class Water : public Field
@@ -47,5 +47,5 @@ class Lava : public Field
 {
 public:
 	Lava() : Field( 4) {};
-	virtual bool stepOn() { return false; };
+	virtual bool stepOn(Player* player) { return false; };
 };

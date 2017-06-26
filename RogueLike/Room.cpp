@@ -17,6 +17,7 @@ Field* Room::getField(int x, int y)
 	}
 	catch (std::exception e)
 	{
+		cout << "Invalid Field!" << endl;
 		std::cout << e.what();
 	}
 	return NULL;
