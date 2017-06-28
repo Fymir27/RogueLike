@@ -7,9 +7,11 @@ std::ostream& operator<<(std::ostream& out, const Item* item)
 	return out;
 };
 
-Item::Item(string name, int count) : name_(name), count_(count)
+Item::Item(string name, int count, const char* texture_file) : name_(name), count_(count), texture_file_(texture_file)
 {
-	//cout << "Item " << name << " created (" << count << "x)" << endl;
+	if (!texture_.loadFromFile(texture_file))
+		cout << "Couldn't load texture for " << name << endl;
+	sprite_.setTexture(texture_);
 }
 void Item::decreaseCount(const int amount)
 {
@@ -29,4 +31,9 @@ bool Item::tryUse(Room* room, Character* character)
 		cout << "Item has " << count_ << " charges left" << endl;
 	}
 	return usable_;
+}
+
+sf::Sprite& Item::getSprite()
+{
+	return sprite_;
 }

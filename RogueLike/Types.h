@@ -7,8 +7,8 @@ using std::cout;
 using std::endl;
 
 const unsigned int TILE_SIZE = 64;
-const unsigned int WINDOW_WIDTH  = 860;
-const unsigned int WINDOW_HEIGHT = 640;
+const unsigned int WINDOW_WIDTH  = 960;
+const unsigned int WINDOW_HEIGHT = 576;
 
 
 class Field;

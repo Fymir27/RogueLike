@@ -41,4 +41,9 @@ void Player::draw(sf::RenderWindow& window)
 	window.draw(sprite_);
 }
 
+Inventory& Player::getInventory() const
+{
+	return *inventory_;
+}
+
 

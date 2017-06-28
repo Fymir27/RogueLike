@@ -13,5 +13,7 @@ public:
 	Player(const string name, const Position pos, const Stats stats);
 	void processInput(const sf::Event& event);
 	void draw(sf::RenderWindow& window);
+	Inventory & getInventory() const;
+	Inventory & printInventory() const;
 };
 

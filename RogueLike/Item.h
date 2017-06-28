@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <assert.h>
+#include "Types.h"
+#include <SFML\Graphics.hpp>
 
 using std::string;
 
@@ -10,7 +12,10 @@ class Character;
 
 class Item
 {
+	friend class Inventory;
+
 protected:
+	Position pos_; //position relative to inventory
 	string name_;
 	string description_;
 	int count_;
@@ -18,8 +23,12 @@ protected:
 	Inventory* inventory_;
 	bool usable_ = true;
 
+	string texture_file_;
+	sf::Texture texture_;
+	sf::Sprite sprite_;
+
 public:
-	Item(string name, int count);
+	Item(string name, int count, const char* teture_file);
 	virtual ~Item() {};
 
 	virtual const int getMaxCount() { return 0; };
@@ -31,7 +40,9 @@ public:
 	string getName() const { return name_; };
 	friend std::ostream& operator<<(std::ostream& out, const Item* item);
 	bool tryUse(Room* room, Character* character);
+	sf::Sprite & getSprite();
 	virtual void use(Room* room, Character* character) { assert(0 && "Trying to use base class Item"); };
-	virtual Item* duplicate() { return new Item(name_, count_); };
+	virtual Item* duplicate() { return new Item(name_, count_, texture_file_.c_str()); };
 
+	void setPosition(Position p) { pos_ = p; };
 };

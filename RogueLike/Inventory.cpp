@@ -1,5 +1,14 @@
 #include "Inventory.h"
 #include "Item.h"
+#include "Room.h"
+#include <SFML\Graphics.hpp>
+
+Inventory::Inventory() : limit_(9), rows_(3)
+{
+	if (!background_.loadFromFile("../images/inventory_background.png"))
+		cout << "Failed to load Inventory background!" << endl;
+
+}
 
 std::ostream& operator<<(std::ostream& out, const Inventory* inv)
 {
@@ -10,7 +19,6 @@ std::ostream& operator<<(std::ostream& out, const Inventory* inv)
 	out << "# ----------------- #" << endl << endl;
 	return out;
 }
-
 
 bool Inventory::addItem(Item* new_item, bool silent)
 {
@@ -61,6 +69,9 @@ bool Inventory::addItem(Item* new_item, bool silent)
 
 			new_item->decreaseCount(overflow);
 			new_item->associateWithInventory(this);
+			size_t new_count = items_.size();
+			new_item->pos_.x_ = new_count % rows_;
+			new_item->pos_.y_ = new_count / rows_;
 			items_.push_back(new_item);
 
 			addItem(overflowItem, true);
@@ -68,6 +79,9 @@ bool Inventory::addItem(Item* new_item, bool silent)
 		else
 		{
 			new_item->associateWithInventory(this);
+			size_t new_count = items_.size();
+			new_item->pos_.x_ = new_count % rows_;
+			new_item->pos_.y_ = new_count / rows_;
 			items_.push_back(new_item);
 		}
 
@@ -83,6 +97,23 @@ bool Inventory::addItem(Item* new_item, bool silent)
 void Inventory::removeItem(Item* item)
 {
 	items_.remove(item);
+}
+
+void Inventory::draw(sf::RenderWindow & window)
+{
+	sprite_.setTexture(background_);
+	sprite_.setPosition(current_room->getColCount() * TILE_SIZE, 0);
+	window.draw(sprite_);
+
+	unsigned int old_x = sprite_.getPosition().x;
+	unsigned int old_y = sprite_.getPosition().y;
+
+	for (auto item : items_)
+	{
+		sf::Sprite& sprite = item->getSprite();
+		sprite.setPosition(old_x + item->pos_.x_ * TILE_SIZE, old_y + item->pos_.y_ * TILE_SIZE);
+		window.draw(sprite);
+	}
 }
 
 Inventory::~Inventory()

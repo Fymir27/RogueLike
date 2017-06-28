@@ -1,7 +1,7 @@
 #include "HealingPotion.h"
 #include "Character.h"
 
-HealingPotion::HealingPotion(string name, int count, int heal_amount) : Item(name, count), heal_amount_(heal_amount)
+HealingPotion::HealingPotion(string name, int count, int heal_amount, const char* texture_file) : Item(name, count, texture_file), heal_amount_(heal_amount)
 {
 
 }
@@ -14,5 +14,6 @@ void HealingPotion::use(Room* room, Character* character)
 
 Item* HealingPotion::duplicate()
 {
-	return new HealingPotion(name_, count_, heal_amount_);
+	return new HealingPotion(name_, count_, heal_amount_, texture_file_.c_str());
 }
+

@@ -30,6 +30,8 @@ int main()
 	player_stats.int_  = 10;
 	player_stats.dex_  = 10;
 	Player* player = new Player("Oliver", player_pos, player_stats);
+	Item* item = new MediumHealingPotion(23);
+	player->addItem(item);
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
@@ -52,6 +54,7 @@ int main()
 		
 		current_room->draw(window);
 		player->draw(window);
+		player->getInventory().draw(window);
 	
 		window.display();
 	}
