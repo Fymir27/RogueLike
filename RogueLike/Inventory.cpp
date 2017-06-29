@@ -1,7 +1,6 @@
 #include "Inventory.h"
 #include "Item.h"
 #include "Room.h"
-#include <SFML\Graphics.hpp>
 
 Inventory::Inventory() : limit_(9), rows_(3)
 {

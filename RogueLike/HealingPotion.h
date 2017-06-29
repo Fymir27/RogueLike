@@ -1,8 +1,7 @@
 #pragma once
-#include <string>
+#include "Common.h"
 #include "Item.h"
 
-using std::string;
 
 class HealingPotion : public Item
 {

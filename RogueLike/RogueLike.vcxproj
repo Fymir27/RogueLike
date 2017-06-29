@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Common.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="HealingPotion.h" />
     <ClInclude Include="Inventory.h" />

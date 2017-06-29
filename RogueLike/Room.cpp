@@ -1,11 +1,8 @@
 #include "Room.h"
 #include "Field.h"
-#include <SFML/Graphics.hpp>
+#include "Common.h"
 
-#include <iostream>
 #include <fstream>
-using std::cout;
-using std::endl;
 
 Room* current_room = NULL;
 

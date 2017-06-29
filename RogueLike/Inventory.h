@@ -1,11 +1,5 @@
 #pragma once
-#include <iostream>
-#include <list>
-#include <SFML\Graphics.hpp>
-
-using std::list;
-using std::cout;
-using std::endl;
+#include "Common.h"
 
 class Item;
 class Inventory

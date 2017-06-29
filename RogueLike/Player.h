@@ -1,7 +1,6 @@
 #pragma once
+#include "Common.h"
 #include "Character.h"
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
 
 class Player : public Character
 {

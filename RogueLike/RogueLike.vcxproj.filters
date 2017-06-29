@@ -80,6 +80,9 @@
     <ClInclude Include="TileMap.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Room1.txt">

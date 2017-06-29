@@ -1,15 +1,6 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <string>
-using std::cout;
-using std::endl;
-
-const unsigned int TILE_SIZE = 64;
-const unsigned int WINDOW_WIDTH  = 960;
-const unsigned int WINDOW_HEIGHT = 576;
-
+#include "Common.h"
 
 class Field;
 

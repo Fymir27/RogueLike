@@ -4,9 +4,7 @@
 #include "Types.h"
 #include "TileMap.h"
 
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include <string>
+#include "Common.h"
 
 class TileMap;
 class Room

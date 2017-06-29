@@ -1,17 +1,10 @@
 #include "Room.h"
 #include "Field.h"
-//#include "Screen.h"
 #include "Player.h"
 #include "HealingPotion.h"
 #include "Item.h"
 #include "Types.h"
-
-#include <iostream>
-#include <vector>
-#include <thread>
-
-using std::cout;
-using std::endl;
+#include "Common.h"
 
 int main()
 {

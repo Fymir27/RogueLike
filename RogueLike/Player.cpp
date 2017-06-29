@@ -1,5 +1,4 @@
 #include "Player.h"
-#include <iostream>
 #include "Room.h"
 
 Player::Player(string name, Position pos, Stats stats) : Character(name, pos, stats)

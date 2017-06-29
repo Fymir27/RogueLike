@@ -1,9 +1,5 @@
 #include "TileMap.h"
-#include <vector>
-#include <iostream>
-
-using std::cout;
-using std::endl;
+#include "Common.h"
 
 TileMap::TileMap()
 {

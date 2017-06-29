@@ -1,8 +1,4 @@
 #include "Types.h"
-#include <iostream>
-
-using std::cout;
-using std::endl;
 
 std::ostream& operator<<(std::ostream& out, const Position& pos)
 {

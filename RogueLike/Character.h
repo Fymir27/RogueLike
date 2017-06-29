@@ -1,9 +1,7 @@
 #pragma once
-#include <string>
-#include "Types.h"
+#include "Common.h"
 #include "Inventory.h"
-
-using std::string;
+#include "Types.h"
 
 class Character
 {

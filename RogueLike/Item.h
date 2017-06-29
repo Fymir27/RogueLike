@@ -1,8 +1,6 @@
 #pragma once
-#include <string>
-#include <assert.h>
+#include "Common.h"
 #include "Types.h"
-#include <SFML\Graphics.hpp>
 
 using std::string;
 
@@ -41,7 +39,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& out, const Item* item);
 	bool tryUse(Room* room, Character* character);
 	sf::Sprite & getSprite();
-	virtual void use(Room* room, Character* character) { assert(0 && "Trying to use base class Item"); };
+	virtual void use(Room* room, Character* character) { cout << "Trying to use base class Item"; };
 	virtual Item* duplicate() { return new Item(name_, count_, texture_file_.c_str()); };
 
 	void setPosition(Position p) { pos_ = p; };
