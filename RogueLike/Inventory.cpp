@@ -1,11 +1,15 @@
 #include "Inventory.h"
 #include "Item.h"
 #include "Room.h"
+#include "Common.h"
 
 Inventory::Inventory() : limit_(9), rows_(3)
 {
 	if (!background_.loadFromFile("../images/inventory_background.png"))
 		cout << "Failed to load Inventory background!" << endl;
+
+	if (!font_.loadFromFile("../fonts/ArcadeClassic.ttf"))
+		cout << "Failed to load Inventory font!" << endl;
 
 }
 
@@ -112,6 +116,15 @@ void Inventory::draw(sf::RenderWindow & window)
 		sf::Sprite& sprite = item->getSprite();
 		sprite.setPosition(old_x + item->pos_.x_ * TILE_SIZE, old_y + item->pos_.y_ * TILE_SIZE);
 		window.draw(sprite);
+		char string[3];
+		sprintf_s(string, 3, "%d", item->count_);
+		sf::Text& text = item->text_;
+		text.setFont(font_);
+		text.setString(string);
+		text.setCharacterSize(30);
+		text.setFillColor(sf::Color::Black);
+		text.setPosition(old_x + item->pos_.x_ * TILE_SIZE + 3, old_y + item->pos_.y_ * TILE_SIZE + 30);
+		window.draw(text);
 	}
 }
 

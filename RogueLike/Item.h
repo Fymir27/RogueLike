@@ -24,6 +24,7 @@ protected:
 	string texture_file_;
 	sf::Texture texture_;
 	sf::Sprite sprite_;
+	sf::Text text_;
 
 public:
 	Item(string name, int count, const char* teture_file);

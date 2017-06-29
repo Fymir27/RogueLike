@@ -1,6 +1,7 @@
 #include "Room.h"
 #include "Field.h"
 #include "Common.h"
+#include "Types.h"
 
 #include <fstream>
 
@@ -57,8 +58,9 @@ bool Room::readRoomFromFile(const char * filename)
 	{
 		c = file.get();
 		Field* field = NULL;
+		Position pos = { 0.0 };
 
-		switch(c)
+		switch (c)
 		{
 		case '/':
 			map_.push_back(row);
@@ -67,36 +69,42 @@ bool Room::readRoomFromFile(const char * filename)
 			break;
 
 		case '#':
-			field = new Wall();
+			field = new Wall(pos);
 			break;
 
 		case ' ':
-			field = new Floor();
+			field = new Floor(pos);
 			break;
 
 		case '*':
-			field = new Tree();
+			field = new Tree(pos);
 			break;
 
 		case '%':
-			field = new Water();
+			field = new Water(pos);
 			break;
 
 		case 'X':
-			field = new Lava();
+			field = new Lava(pos);
 			break;
 
 		case '\n':
 			map_.push_back(row);
 			row.clear();
 			field = NULL;
+			pos.x_ = 0;
+			pos.y_++;
 			break;
 		default:
 			break;
 		}
 
-		if(field)
+		if (field)
+		{
 			row.push_back(field);
+			pos.x_++;
+		}
+
 		cout << c;
 	}
 	cout << endl;
@@ -105,21 +113,19 @@ bool Room::readRoomFromFile(const char * filename)
 
 void Room::draw(sf::RenderWindow& window)
 {
-	/*
-	size_t rows = getRowCount();
-	size_t cols = getColCount();
-
-	//-- draw tiles --//
-	sf::Sprite tile;
-	for (int y = 0; y < rows; y++)
+	window.draw(*tile_map_);
+	for (auto row : map_)
 	{
-		for (int x = 0; x < cols; x++)
+		for (auto field : row)
 		{
-			tile.setTexture(getField(x,y)->getTexture());
-			tile.setPosition(x*TILE_SIZE, y*TILE_SIZE);
-			window.draw(tile);
+			field->draw(window);
 		}
 	}
-	*/
-	window.draw(*tile_map_);
+}
+
+void Room::addField(Position pos, Field* field)
+{
+	cout << "Adding field at " << pos << endl;
+	delete map_.at(pos.y_).at(pos.x_);
+	map_.at(pos.y_).at(pos.x_) = field;
 }

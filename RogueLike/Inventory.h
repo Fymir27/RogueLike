@@ -10,6 +10,7 @@ private:
 	size_t rows_;
 	sf::Texture background_;
 	sf::Sprite sprite_;
+	sf::Font font_;
 
 public:
 	Inventory();

@@ -13,7 +13,6 @@ Player::Player(string name, Position pos, Stats stats) : Character(name, pos, st
 
 void Player::processInput(const sf::Event& event)
 {
-	cout << "Player::processInput" << endl;
 	auto key = event.key.code;
 	Position new_pos = pos_;
 	if(key == sf::Keyboard::Right) new_pos.x_++;
@@ -26,10 +25,8 @@ void Player::processInput(const sf::Event& event)
 	if(field == NULL)
 		return;
 
-	cout << "Trying to step on field" << new_pos << endl;
 	if(field->stepOn(this))
 	{
-		cout << "Stepped on!" << endl;
 		pos_ = new_pos;
 	}
 }

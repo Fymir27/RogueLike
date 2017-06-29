@@ -51,6 +51,9 @@
     <ClCompile Include="TileMap.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Pickup.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Room.h">
@@ -81,6 +84,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Common.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Pickup.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

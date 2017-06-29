@@ -2,6 +2,7 @@
 #include "Field.h"
 #include "Player.h"
 #include "HealingPotion.h"
+#include "Pickup.h"
 #include "Item.h"
 #include "Types.h"
 #include "Common.h"
@@ -23,14 +24,15 @@ int main()
 	player_stats.int_  = 10;
 	player_stats.dex_  = 10;
 	Player* player = new Player("Oliver", player_pos, player_stats);
-	Item* item = new MediumHealingPotion(23);
-	player->addItem(item);
+	Item* item = new MediumHealingPotion(57);
+	Position pos{ 2,1 };
+	Field* pickup = new Pickup(pos, item);
+	current_room->addField(pos, pickup);
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
 	window.setFramerateLimit(60);
 	sf::Event event;
-
 	//-- main loop --//
 	while (window.isOpen())
 	{
