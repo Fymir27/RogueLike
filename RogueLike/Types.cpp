@@ -15,3 +15,16 @@ std::ostream& operator<<(std::ostream& out, Stats stats)
 	out << "Dexterity:   " << stats.dex_ << endl;
 	return out;
 }
+
+char* getStatString(Stats stats)
+{
+	static char buffer[1024];
+	sprintf_s(buffer, 1024, 
+		"Hitpoints %d\n"
+		"Mana     %d\n"
+		"Str      %d\n"
+		"Int      %d\n"
+		"Dex      %d\n",
+		stats.hp_, stats.mana_, stats.str_, stats.int_, stats.dex_);
+	return buffer;
+}

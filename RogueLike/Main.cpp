@@ -24,7 +24,10 @@ int main()
 	player_stats.int_  = 10;
 	player_stats.dex_  = 10;
 	Player* player = new Player("Oliver", player_pos, player_stats);
+	current_player = player;
 	Item* item = new MediumHealingPotion(57);
+	item->tryUse(current_room, player);
+	cout << player->getStats() << endl;
 	Position pos{ 2,1 };
 	Field* pickup = new Pickup(pos, item);
 	current_room->addField(pos, pickup);
@@ -41,8 +44,12 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			else if(event.type == sf::Event::KeyPressed)
+			else if (event.type == sf::Event::KeyPressed)
 				player->processInput(event);
+			else if (event.type == sf::Event::MouseButtonPressed)
+			{
+				player->getInventory().click(event);
+			}
 		}
 
 		window.clear(sf::Color::Black);

@@ -16,9 +16,12 @@ public:
 	Inventory();
 	~Inventory();
 
+	void click(sf::Event event);
+
 	void sort() {};
 	bool addItem(Item* item, bool silent = false); //returns false when full
 	friend std::ostream& operator<<(std::ostream& out, const Inventory* inv);
 	void removeItem(Item* item);
+	sf::Sprite & getSprite();
 	void draw(sf::RenderWindow& window);
 };

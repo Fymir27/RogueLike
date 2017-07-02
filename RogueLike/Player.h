@@ -7,6 +7,8 @@ class Player : public Character
 private:
 	sf::Texture texture_;
 	sf::Sprite sprite_;
+	sf::Font font_;
+	sf::Text text_;
 
 public:
 	Player(const string name, const Position pos, const Stats stats);
@@ -16,3 +18,4 @@ public:
 	Inventory & printInventory() const;
 };
 
+extern Player* current_player;

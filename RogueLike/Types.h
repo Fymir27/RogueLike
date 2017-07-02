@@ -25,3 +25,5 @@ typedef struct
 } Stats;
 
 std::ostream& operator<<(std::ostream& out, Stats stats);
+
+extern char* getStatString(Stats stats);

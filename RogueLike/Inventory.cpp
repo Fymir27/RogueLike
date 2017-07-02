@@ -2,13 +2,15 @@
 #include "Item.h"
 #include "Room.h"
 #include "Common.h"
+#include "Types.h"
+#include "Player.h"
 
 Inventory::Inventory() : limit_(9), rows_(3)
 {
 	if (!background_.loadFromFile("../images/inventory_background.png"))
 		cout << "Failed to load Inventory background!" << endl;
 
-	if (!font_.loadFromFile("../fonts/ArcadeClassic.ttf"))
+	if (!font_.loadFromFile("../fonts/Arcade.ttf"))
 		cout << "Failed to load Inventory font!" << endl;
 
 }
@@ -102,6 +104,11 @@ void Inventory::removeItem(Item* item)
 	items_.remove(item);
 }
 
+sf::Sprite& Inventory::getSprite()
+{
+	return sprite_;
+}
+
 void Inventory::draw(sf::RenderWindow & window)
 {
 	sprite_.setTexture(background_);
@@ -138,4 +145,23 @@ Inventory::~Inventory()
 		delete item;
 	}
 	items_.clear();
+}
+
+void Inventory::click(sf::Event event)
+{
+	Position origin = { sprite_.getPosition().x, sprite_.getPosition().y };
+	cout << "origin: " << origin << endl;
+	Position pos_clicked = { event.mouseButton.x, event.mouseButton.y };
+	cout << "pos_clicked: " << pos_clicked << endl;
+	unsigned int x = (pos_clicked.x_ - origin.x_) / TILE_SIZE;
+	unsigned int y = (pos_clicked.y_ - origin.y_) / TILE_SIZE;
+	cout << x << "|"<< y << endl;
+	for (auto item : items_)
+	{
+		if (item->pos_.x_ == x && item->pos_.y_ == y)
+		{
+			item->tryUse(current_room, current_player);
+			break;
+		}
+	}
 }
