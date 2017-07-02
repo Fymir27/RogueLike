@@ -23,7 +23,7 @@ class Room
 		Room(const char* filename);
 		bool readRoomFromFile(const char* filename);
 		void draw(sf::RenderWindow& window);
-		void addField(Position pos, Field * field);
+		void addField(Field * field);
 };
 
 extern Room* current_room;

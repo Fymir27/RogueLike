@@ -1,6 +1,7 @@
 #include "Pickup.h"
 #include "Player.h"
 #include "Item.h"
+#include "Room.h"
 
 Pickup::Pickup(Position pos, Item * item) : Field(pos, 0), item_(item)
 {

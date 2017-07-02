@@ -109,20 +109,18 @@ sf::Sprite& Inventory::getSprite()
 	return sprite_;
 }
 
-void Inventory::draw(sf::RenderWindow & window)
+void Inventory::draw(sf::RenderWindow& window, Position pos)
 {
 	sprite_.setTexture(background_);
-	sprite_.setPosition(current_room->getColCount() * TILE_SIZE, 0);
+	sprite_.setPosition(pos.x_, pos.y_);
 	window.draw(sprite_);
-
-	unsigned int old_x = sprite_.getPosition().x;
-	unsigned int old_y = sprite_.getPosition().y;
 
 	for (auto item : items_)
 	{
 		sf::Sprite& sprite = item->getSprite();
-		sprite.setPosition(old_x + item->pos_.x_ * TILE_SIZE, old_y + item->pos_.y_ * TILE_SIZE);
+		sprite.setPosition(pos.x_ + item->pos_.x_ * TILE_SIZE, pos.y_ + item->pos_.y_ * TILE_SIZE);
 		window.draw(sprite);
+
 		char string[3];
 		sprintf_s(string, 3, "%d", item->count_);
 		sf::Text& text = item->text_;
@@ -130,7 +128,7 @@ void Inventory::draw(sf::RenderWindow & window)
 		text.setString(string);
 		text.setCharacterSize(30);
 		text.setFillColor(sf::Color::Black);
-		text.setPosition(old_x + item->pos_.x_ * TILE_SIZE + 3, old_y + item->pos_.y_ * TILE_SIZE + 30);
+		text.setPosition(pos.x_ + item->pos_.x_ * TILE_SIZE + 3, pos.y_ + item->pos_.y_ * TILE_SIZE + 30);
 		window.draw(text);
 	}
 }
@@ -165,3 +163,4 @@ void Inventory::click(sf::Event event)
 		}
 	}
 }
+

@@ -6,6 +6,7 @@
 #include "Item.h"
 #include "Types.h"
 #include "Common.h"
+#include "UI.h"
 
 int main()
 {
@@ -16,27 +17,29 @@ int main()
 	current_room = new Room(filename);
 
 	//-- create player --//
-	Position player_pos{ 1, 3 };
 	Stats player_stats = {};
 	player_stats.hp_   = 100;
 	player_stats.mana_ = 100;
 	player_stats.str_  = 10;
 	player_stats.int_  = 10;
 	player_stats.dex_  = 10;
-	Player* player = new Player("Oliver", player_pos, player_stats);
+
+	Player* player = new Player("Oliver", { 1, 3 }, player_stats);
 	current_player = player;
+
 	Item* item = new MediumHealingPotion(57);
-	item->tryUse(current_room, player);
-	cout << player->getStats() << endl;
-	Position pos{ 2,1 };
-	Field* pickup = new Pickup(pos, item);
-	current_room->addField(pos, pickup);
+
+	Field* pickup = new Pickup({ 2, 1 }, item);
+	current_room->addField(pickup);
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
 	window.setFramerateLimit(60);
-	sf::Event event;
+
+	UI* ui = new UI();
+	
 	//-- main loop --//
+	sf::Event event;
 	while (window.isOpen())
 	{
 		//-- get input --//
@@ -47,17 +50,15 @@ int main()
 			else if (event.type == sf::Event::KeyPressed)
 				player->processInput(event);
 			else if (event.type == sf::Event::MouseButtonPressed)
-			{
-				player->getInventory().click(event);
-			}
+				player->click(event);
 		}
 
 		window.clear(sf::Color::Black);
 		
 		current_room->draw(window);
 		player->draw(window);
-		player->getInventory().draw(window);
-	
+		//player->getInventory()->draw(window);
+		ui->draw(window);
 		window.display();
 	}
 	delete player;

@@ -7,11 +7,13 @@ class Field;
 typedef std::vector<Field*> Row;
 typedef std::vector<Row> Map;
 
-typedef struct
+struct Position
 {
-	int x_;
-	int y_;
-} Position;
+	unsigned int x_;
+	unsigned int y_;
+};
+
+extern inline Position operator+(Position first, const Position& second);
 
 std::ostream& operator<<(std::ostream& out, const Position& pos);
 

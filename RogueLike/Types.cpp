@@ -6,6 +6,14 @@ std::ostream& operator<<(std::ostream& out, const Position& pos)
 	return out;
 }
 
+inline Position operator+(Position first, const Position& second)
+{
+	first.x_ += second.x_;
+	first.y_ += second.y_;
+	return first;
+}
+
+
 std::ostream& operator<<(std::ostream& out, Stats stats)
 {
 	out << "Hitpoints:   " << stats.hp_ << endl;

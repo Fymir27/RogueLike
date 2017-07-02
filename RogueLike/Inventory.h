@@ -1,5 +1,6 @@
 #pragma once
 #include "Common.h"
+#include "Types.h"
 
 class Item;
 class Inventory
@@ -23,5 +24,5 @@ public:
 	friend std::ostream& operator<<(std::ostream& out, const Inventory* inv);
 	void removeItem(Item* item);
 	sf::Sprite & getSprite();
-	void draw(sf::RenderWindow& window);
+	void draw(sf::RenderWindow& window, Position pos = { 0,0 });
 };

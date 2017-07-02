@@ -95,14 +95,15 @@ bool Room::readRoomFromFile(const char * filename)
 			pos.x_ = 0;
 			pos.y_++;
 			break;
+
 		default:
 			break;
 		}
 
 		if (field)
 		{
-			row.push_back(field);
 			pos.x_++;
+			row.push_back(field);
 		}
 
 		cout << c;
@@ -123,9 +124,18 @@ void Room::draw(sf::RenderWindow& window)
 	}
 }
 
-void Room::addField(Position pos, Field* field)
+void Room::addField(Field* field)
 {
-	cout << "Adding field at " << pos << endl;
-	delete map_.at(pos.y_).at(pos.x_);
-	map_.at(pos.y_).at(pos.x_) = field;
+	unsigned int x = field->pos_.x_;
+	unsigned int y = field->pos_.y_;
+
+	if (y >= map_.size() || x >= map_.at(y).size())
+	{
+		cout << "Can't add a field there!" << endl;
+		return;
+	}
+
+	delete map_.at(y).at(x);
+	map_.at(y).at(x) = field;
+
 }

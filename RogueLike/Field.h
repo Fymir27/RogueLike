@@ -10,7 +10,7 @@ class Field
 
 	protected:
 		int tile_nr_;
-		Field(Position pos, int tile_nr) : tile_nr_(tile_nr), pos_(pos) {};
+		Field(Position pos, int tile_nr);
 		Position pos_;
 	public:
 		int getTileNr() const { return tile_nr_; };

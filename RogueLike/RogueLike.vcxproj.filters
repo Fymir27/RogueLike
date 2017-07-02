@@ -54,6 +54,12 @@
     <ClCompile Include="Pickup.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Field.cpp">
+      <Filter>Quelldateien\Fields</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Room.h">
@@ -87,6 +93,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Pickup.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
