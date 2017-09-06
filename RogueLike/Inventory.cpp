@@ -121,13 +121,13 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 		sprite.setPosition(pos.x_ + item->pos_.x_ * TILE_SIZE, pos.y_ + item->pos_.y_ * TILE_SIZE);
 		window.draw(sprite);
 
-		char string[3];
-		sprintf_s(string, 3, "%d", item->count_);
+		//char string[3];
+		//sprintf_s(string, 3, "%d", item->count_);
 		sf::Text& text = item->text_;
 		text.setFont(font_);
-		text.setString(string);
+		text.setString(std::to_string(item->count_));
 		text.setCharacterSize(30);
-		text.setFillColor(sf::Color::Black);
+		//text.setFillColor(sf::Color::Black);
 		text.setPosition(pos.x_ + item->pos_.x_ * TILE_SIZE + 3, pos.y_ + item->pos_.y_ * TILE_SIZE + 30);
 		window.draw(text);
 	}

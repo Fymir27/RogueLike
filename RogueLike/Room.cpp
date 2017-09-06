@@ -2,6 +2,7 @@
 #include "Field.h"
 #include "Common.h"
 #include "Types.h"
+#include "Player.h"
 
 #include <fstream>
 
@@ -26,9 +27,14 @@ Room::Room()
 	cout << "Room ctor" << endl;
 }
 
-Room::Room(const char * filename)
+Room::Room(const char * filename, Position pos) : pos_(pos)
 {
-	readRoomFromFile(filename);
+	if(!readRoomFromFile(filename))
+	{
+		cout << "[Error] Room could not be loaded!" << endl;
+		return;
+	}
+
 	cout << "Tile Nrs:" << endl;
 	for(auto row : map_)
 	{
@@ -52,13 +58,12 @@ bool Room::readRoomFromFile(const char * filename)
 	char c;
 
 	cout << "File opened successfully!" << endl;
-	cout << "Progress:" << endl;
 	bool reading = true;
+	Position pos = { 0,0 };
 	while (reading)
 	{
 		c = file.get();
 		Field* field = NULL;
-		Position pos = { 0.0 };
 
 		switch (c)
 		{
@@ -88,6 +93,32 @@ bool Room::readRoomFromFile(const char * filename)
 			field = new Lava(pos);
 			break;
 
+		/*
+		case 'E':
+			field = new Exit(pos, this);
+			break;
+		*/
+
+		case '^':
+			field = new Door(pos, UP);
+			doors_[UP] = pos;
+			break;
+
+		case '>':
+			field = new Door(pos, RIGHT);
+			doors_[RIGHT] = pos;
+			break;
+
+		case 'v':
+			field = new Door(pos, DOWN);
+			doors_[DOWN] = pos;
+			break;
+
+		case '<':
+			field = new Door(pos, LEFT);
+			doors_[LEFT] = pos;
+			break;
+
 		case '\n':
 			map_.push_back(row);
 			row.clear();
@@ -97,6 +128,7 @@ bool Room::readRoomFromFile(const char * filename)
 			break;
 
 		default:
+			cout << "[Error] Unknown Symbol!" << endl;
 			break;
 		}
 
@@ -105,8 +137,8 @@ bool Room::readRoomFromFile(const char * filename)
 			pos.x_++;
 			row.push_back(field);
 		}
-
 		cout << c;
+		//cout << pos << endl;
 	}
 	cout << endl;
 	return true;
@@ -139,3 +171,18 @@ void Room::addField(Field* field)
 	map_.at(y).at(x) = field;
 
 }
+
+Position Room::getEntryPosition(Direction last_exit)
+{
+	return entry_positions_.at(last_exit);
+}
+
+void Room::addEntryPosition(Direction dir, Position pos)
+{
+	entry_positions_.insert(pair<Direction, Position>(dir, pos));
+}
+
+void Room::movePlayerToDoor(Direction entry)
+{
+	current_player->pos_ = doors_[entry];
+};

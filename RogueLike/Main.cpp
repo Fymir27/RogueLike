@@ -1,4 +1,5 @@
 #include "Room.h"
+#include "Dungeon.h"
 #include "Field.h"
 #include "Player.h"
 #include "HealingPotion.h"
@@ -11,10 +12,18 @@
 int main()
 {
 	cout << "Welcome to RogueLike!" << endl;
+	
+	/*
 	//-- load new room from file --//
 	char* filename = "Room1.txt";
 	cout << "Instantiating new room..." << endl;
 	current_room = new Room(filename);
+	*/
+
+	//-- load new dungeon from file --//
+	char* filename = "Dungeon1.txt";
+	current_dungeon = new Dungeon();
+	current_dungeon->loadFromFile(filename);
 
 	//-- create player --//
 	Stats player_stats = {};

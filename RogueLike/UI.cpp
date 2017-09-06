@@ -35,8 +35,16 @@ void UI::draw(sf::RenderWindow& window)
 	current_player->getInventory()->draw(window, pos_inv_);
 	window.draw(stat_names_);
 
+	std::to_string(3);
+
 	Stats stats = current_player->getStats();
-	char buffer[1024];
+	//char buffer[1024];
+	string buffer = std::to_string(stats.hp_)   + '\n' +
+					std::to_string(stats.mana_) + '\n' +
+					std::to_string(stats.str_)  + '\n' +
+					std::to_string(stats.int_)  + '\n' +
+					std::to_string(stats.dex_);
+	/*
 	sprintf_s(buffer, 1024,
 		"%d\n"
 		"%d\n"
@@ -44,6 +52,7 @@ void UI::draw(sf::RenderWindow& window)
 		"%d\n"
 		"%d\n",
 		stats.hp_, stats.mana_, stats.str_, stats.int_, stats.dex_);
-	stat_values_.setString(buffer);
+		*/
+	stat_values_.setString(buffer.c_str());
 	window.draw(stat_values_);
 }

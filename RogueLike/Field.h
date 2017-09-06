@@ -4,6 +4,7 @@
 #include "Types.h"
 
 class Player;
+class Room;
 class Field
 {
 	friend class Room;
@@ -51,4 +52,22 @@ class Lava : public Field
 public:
 	Lava(Position pos) : Field(pos, 4) {};
 	virtual bool stepOn(Player* player) { return false; };
+};
+
+class Exit : public Field
+{
+private:
+	Direction dir_;
+public:
+	Exit(Position pos, Room* room);
+	virtual bool stepOn(Player* player);
+};
+
+class Door : public Field
+{
+private:
+	Direction dir_;
+public:
+	Door(Position pos, Direction dir);
+	virtual bool stepOn(Player* player);
 };

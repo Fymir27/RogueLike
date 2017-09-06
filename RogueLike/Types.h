@@ -13,7 +13,7 @@ struct Position
 	unsigned int y_;
 };
 
-extern inline Position operator+(Position first, const Position& second);
+extern Position operator+(Position first, const Position& second);
 
 std::ostream& operator<<(std::ostream& out, const Position& pos);
 
@@ -28,4 +28,12 @@ typedef struct
 
 std::ostream& operator<<(std::ostream& out, Stats stats);
 
-extern char* getStatString(Stats stats);
+//extern char* getStatString(Stats stats);
+
+enum Direction
+{
+	UP,
+	RIGHT,
+	DOWN,
+	LEFT
+};

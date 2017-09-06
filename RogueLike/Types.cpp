@@ -6,7 +6,7 @@ std::ostream& operator<<(std::ostream& out, const Position& pos)
 	return out;
 }
 
-inline Position operator+(Position first, const Position& second)
+Position operator+(Position first, const Position& second)
 {
 	first.x_ += second.x_;
 	first.y_ += second.y_;
@@ -24,6 +24,7 @@ std::ostream& operator<<(std::ostream& out, Stats stats)
 	return out;
 }
 
+/*
 char* getStatString(Stats stats)
 {
 	static char buffer[1024];
@@ -36,3 +37,4 @@ char* getStatString(Stats stats)
 		stats.hp_, stats.mana_, stats.str_, stats.int_, stats.dex_);
 	return buffer;
 }
+*/

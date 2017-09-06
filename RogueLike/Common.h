@@ -4,8 +4,8 @@
 const unsigned int TILE_SIZE = 64;
 const unsigned int WINDOW_WIDTH = 960;
 const unsigned int WINDOW_HEIGHT = 576;
-#define OS_WIN
-//#define OS_LIN
+//#define OS_WIN
+#define OS_LIN
 
 //--- SFML ---//
 #ifdef OS_WIN

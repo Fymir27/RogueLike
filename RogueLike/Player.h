@@ -4,6 +4,9 @@
 
 class Player : public Character
 {
+
+		friend class Room;
+		
 private:
 
 public:
@@ -11,6 +14,7 @@ public:
 	void processInput(const sf::Event& event);
 	void click(const sf::Event& event);
 	Inventory * getInventory();
+	void setPosition(Position pos) { pos_ = pos; };
 };
 
 extern Player* current_player;
