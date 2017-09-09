@@ -5,8 +5,8 @@
 class Player : public Character
 {
 
-		friend class Room;
-		
+friend class Room;
+
 private:
 
 public:

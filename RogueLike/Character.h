@@ -14,7 +14,7 @@ protected:
 	sf::Texture texture_;
 	sf::Sprite  sprite_;
 
-	Character(const string name, const Position pos, const Stats stats);
+	Character(const string name, const Position pos, const Stats stats, string filename);
 
 public:
 	~Character();

@@ -8,11 +8,12 @@
 #include "Types.h"
 #include "Common.h"
 #include "UI.h"
+#include "Enemy.h"
 
 int main()
 {
 	cout << "Welcome to RogueLike!" << endl;
-	
+
 	/*
 	//-- load new room from file --//
 	char* filename = "Room1.txt";
@@ -36,10 +37,12 @@ int main()
 	Player* player = new Player("Oliver", { 1, 3 }, player_stats);
 	current_player = player;
 
-	Item* item = new MediumHealingPotion(57);
-
-	Field* pickup = new Pickup({ 2, 1 }, item);
+	//place Pickup item
+	Field* pickup = new Pickup({ 2, 1 }, new MediumHealingPotion(57));
 	current_room->addField(pickup);
+
+	//spawn Enemy
+	Enemy* blob = new Enemy("Blobby", {1,4}, {10,10,1,1,1}, "../images/enemy.png");
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
@@ -62,11 +65,14 @@ int main()
 				player->click(event);
 		}
 
+		//-- Enemy movement --//
+		Enemy::moveEnemies();
+
 		window.clear(sf::Color::Black);
 		
 		current_room->draw(window);
 		player->draw(window);
-		//player->getInventory()->draw(window);
+		Enemy::drawEnemies(window);
 		ui->draw(window);
 		window.display();
 	}

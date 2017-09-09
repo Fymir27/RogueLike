@@ -12,18 +12,17 @@ std::ostream& operator<<(std::ostream& out, Character* character)
 	return out;
 }
 
-Character::Character(string name, Position pos, Stats stats) : name_(name), pos_(pos),
+Character::Character(string name, Position pos, Stats stats, string filename) : name_(name), pos_(pos),
 																															 stats_(stats), 
 																															 inventory_(new Inventory())
 {
-	if (!texture_.loadFromFile("../images/player.png"))
-		cout << "Failed to load player texture!" << endl;
+	if (!texture_.loadFromFile(filename))
+		cout << "Failed to load character texture!" << endl;
 
 	sprite_.setTexture(texture_);
 
 	cout << this;
 }
-
 
 Character::~Character()
 {

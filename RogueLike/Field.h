@@ -15,7 +15,8 @@ class Field
 		Position pos_;
 	public:
 		int getTileNr() const { return tile_nr_; };
-		virtual bool stepOn(Player* player) = 0;
+		virtual bool stepOn(Player* player) { return true; };
+		virtual bool stepOff() { return true; };
 		virtual void draw(sf::RenderWindow& window) {};
 };
 
@@ -30,7 +31,6 @@ class Floor : public Field
 {
 	public:
 	Floor(Position pos) :Field(pos, 1) {};
-	virtual bool stepOn(Player* player) { return true; };
 };
 
 class Tree : public Field
@@ -44,7 +44,6 @@ class Water : public Field
 {
 public:
 	Water(Position pos) : Field(pos, 3) {};
-	virtual bool stepOn(Player* player) { return true; };
 };
 
 class Lava : public Field
