@@ -8,11 +8,11 @@ Pickup::Pickup(Position pos, Item * item) : Field(pos, 0), item_(item)
 	
 }
 
-bool Pickup::stepOn(Player * player)
+bool Pickup::stepOn(Character* character)
 {
 	if (item_)
 	{
-		player->addItem(item_);
+		character->addItem(item_);
 		item_ = NULL;
 	}
 	return true;

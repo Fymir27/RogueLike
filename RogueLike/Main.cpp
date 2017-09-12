@@ -42,7 +42,7 @@ int main()
 	current_room->addField(pickup);
 
 	//spawn Enemy
-	Enemy* blob = new Enemy("Blobby", {1,4}, {10,10,1,1,1}, "../images/enemy.png");
+	Enemy* blob = new Enemy("Blobby", {6,6}, {10,10,1,1,1}, "../images/enemy.png");
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
@@ -66,7 +66,7 @@ int main()
 		}
 
 		//-- Enemy movement --//
-		Enemy::moveEnemies();
+		Enemy::stepAll();
 
 		window.clear(sf::Color::Black);
 		

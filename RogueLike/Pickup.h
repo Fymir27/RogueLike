@@ -10,6 +10,6 @@ class Pickup : public Field
 	Item* item_;
 	public:
 	Pickup(Position pos, Item* item);
-	bool stepOn(Player* player);
+	bool stepOn(Character* character);
 	void draw(sf::RenderWindow & window);
 };

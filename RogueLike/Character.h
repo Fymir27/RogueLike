@@ -28,6 +28,8 @@ public:
 	void damage(const int amount) { stats_.hp_ -= amount; };
 	bool addItem(Item* item)      { return inventory_->addItem(item); };
 
+	bool move(Position new_pos);
+
 	void draw(sf::RenderWindow& window);
 	friend std::ostream& operator<<(std::ostream& out, Character* character);
 };

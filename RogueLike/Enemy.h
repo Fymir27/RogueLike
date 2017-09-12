@@ -13,9 +13,9 @@ class Enemy : public Character
 		//Enemy();
 		Enemy(string name, Position pos, Stats stats, string texture);
 
-		static void moveEnemies();
+		static void stepAll();
 		static void drawEnemies(sf::RenderWindow& window);
-		virtual void move();
+		virtual void step();
 
 
 };

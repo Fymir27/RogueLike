@@ -2,8 +2,8 @@
 
 //--- Constants ---//
 const unsigned int TILE_SIZE = 64;
-const unsigned int WINDOW_WIDTH = 960;
-const unsigned int WINDOW_HEIGHT = 576;
+const unsigned int WINDOW_WIDTH = 1280;
+const unsigned int WINDOW_HEIGHT = 860;
 //#define OS_WIN
 #define OS_LIN
 
