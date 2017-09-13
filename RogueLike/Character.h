@@ -24,8 +24,9 @@ public:
 	Position getPosition() const { return pos_; };
 	Stats    getStats() const    { return stats_; };
 
-	void heal(const int amount)   { stats_.hp_ += amount; };
-	virtual void damage(const int amount) { stats_.hp_ -= amount; };
+	virtual void heal(const int amount);
+	virtual void damage(const int amount);
+	
 	bool addItem(Item* item)      { return inventory_->addItem(item); };
 
 	bool move(Position new_pos);

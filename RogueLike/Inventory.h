@@ -17,7 +17,7 @@ public:
 	Inventory();
 	~Inventory();
 
-	void click(sf::Event event);
+	void click(Position pos_clicked);
 
 	void sort() {};
 	bool addItem(Item* item, bool silent = false); //returns false when full

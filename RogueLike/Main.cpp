@@ -10,6 +10,19 @@
 #include "UI.h"
 #include "Enemy.h"
 
+void processInput(const sf::Event& event)
+{
+	auto key = event.key.code;
+	Position new_pos = current_player->getPosition();
+
+	if     (key == sf::Keyboard::Right) new_pos.x_++;
+	else if(key == sf::Keyboard::Left)  new_pos.x_--;
+	else if(key == sf::Keyboard::Up)    new_pos.y_--;
+	else if(key == sf::Keyboard::Down)  new_pos.y_++;
+
+	current_player->move(new_pos);
+}
+
 int main()
 {
 	cout << "Welcome to RogueLike!" << endl;
@@ -28,8 +41,10 @@ int main()
 
 	//-- create player --//
 	Stats player_stats = {};
-	player_stats.hp_   = 100;
-	player_stats.mana_ = 100;
+	player_stats.hp_[CUR] = 100;
+	player_stats.hp_[MAX] = 100;
+	player_stats.mana_[CUR] = 100;
+	player_stats.mana_[MAX] = 100;
 	player_stats.str_  = 10;
 	player_stats.int_  = 10;
 	player_stats.dex_  = 10;
@@ -42,7 +57,7 @@ int main()
 	current_room->addField(pickup);
 
 	//spawn Enemy
-	Enemy* blob = new Enemy("Blobby", {6,6}, {10,10,1,1,1}, "../images/enemy.png");
+	Enemy* blob = new Enemy("Blobby", {6,6}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
@@ -60,9 +75,9 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 			else if (event.type == sf::Event::KeyPressed)
-				player->processInput(event);
+				processInput(event);
 			else if (event.type == sf::Event::MouseButtonPressed)
-				player->click(event);
+				ui->click(event);
 		}
 
 		//-- Game Logic --//
@@ -80,4 +95,5 @@ int main()
 	delete player;
 	return 0;
 }
+
 

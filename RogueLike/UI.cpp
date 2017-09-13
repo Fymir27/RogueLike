@@ -15,10 +15,10 @@ UI::UI()
 	pos_stats_ = pos_inv_ + offset;
 	stat_names_.setPosition(pos_stats_.x_, pos_stats_.y_);
 	stat_names_.setString("Hitpoints\n"
-												"Mana\n"
-												"Str\n"
-												"Int\n"
-												"Dex\n");
+							"Mana\n"
+							"Str\n"
+							"Int\n"
+							"Dex\n");
 
 	stat_values_.setFont(font_);
 	stat_values_.setPosition(pos_stats_.x_ + TILE_SIZE *2, pos_stats_.y_);
@@ -30,6 +30,12 @@ UI::~UI()
 {
 }
 
+void UI::click(const sf::Event& event)
+{
+	Position pos_clicked = { event.mouseButton.x, event.mouseButton.y };
+	current_player->getInventory()->click(pos_clicked);
+}
+
 void UI::draw(sf::RenderWindow& window)
 {
 	current_player->getInventory()->draw(window, pos_inv_);
@@ -39,8 +45,8 @@ void UI::draw(sf::RenderWindow& window)
 
 	Stats stats = current_player->getStats();
 	//char buffer[1024];
-	string buffer = std::to_string(stats.hp_)   + '\n' +
-					std::to_string(stats.mana_) + '\n' +
+	string buffer = std::to_string(stats.hp_[CUR])   + " of " + std::to_string(stats.hp_[MAX]) + '\n' +
+					std::to_string(stats.mana_[CUR]) + " of " + std::to_string(stats.mana_[MAX]) + '\n' +
 					std::to_string(stats.str_)  + '\n' +
 					std::to_string(stats.int_)  + '\n' +
 					std::to_string(stats.dex_);

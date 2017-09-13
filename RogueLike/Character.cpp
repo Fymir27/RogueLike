@@ -15,8 +15,8 @@ std::ostream& operator<<(std::ostream& out, Character* character)
 }
 
 Character::Character(string name, Position pos, Stats stats, string filename) : name_(name), pos_(pos),
-																															 stats_(stats), 
-																															 inventory_(new Inventory())
+																				 stats_(stats), 
+																				 inventory_(new Inventory())
 {
 	if (!texture_.loadFromFile(filename))
 		cout << "Failed to load character texture!" << endl;
@@ -36,6 +36,22 @@ void Character::draw(sf::RenderWindow & window)
 {
 	sprite_.setPosition(sf::Vector2f(pos_.x_ * TILE_SIZE, pos_.y_ * TILE_SIZE));
 	window.draw(sprite_);
+}
+
+void Character::heal(const int amount)
+{
+	unsigned int new_value = stats_.hp_[CUR] + amount;
+	if(new_value > stats_.hp_[MAX])
+		new_value = stats_.hp_[MAX];
+	stats_.hp_[CUR] = new_value;
+}
+
+void Character::damage(const int amount)
+{
+	unsigned int new_value = stats_.hp_[CUR] - amount;
+	if(new_value < 0)
+		new_value = 0;
+	stats_.hp_[CUR] = new_value;
 }
 
 bool Character::move(Position new_pos)

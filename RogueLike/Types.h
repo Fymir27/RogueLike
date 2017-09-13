@@ -14,14 +14,18 @@ struct Position
 };
 
 extern Position operator+(Position first, const Position& second);
+extern Position operator-(Position first, const Position& second);
 extern bool operator==(const Position& first, const Position& second);
 
 std::ostream& operator<<(std::ostream& out, const Position& pos);
 
+#define CUR 0
+#define MAX 1
+
 typedef struct
 {
-	int hp_;  //Hitpoints
-	int mana_;//Mana
+	int hp_[2];  //Hitpoints
+	int mana_[2];//Mana
 	int str_; //Strength
 	int int_; //Intelligence
 	int dex_; //Dexterity

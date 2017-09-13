@@ -12,10 +12,11 @@ private:
 	unsigned int invincibility_frames = 0;
 
 public:
+
 	Player(const string name, const Position pos, const Stats stats);
-	void processInput(const sf::Event& event);
-	void click(const sf::Event& event);
+	
 	Inventory * getInventory();
+
 	void setPosition(Position pos) { pos_ = pos; };
 	void step();
 	void damage(const int amount);

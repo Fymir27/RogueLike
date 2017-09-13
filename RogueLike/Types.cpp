@@ -13,6 +13,13 @@ Position operator+(Position first, const Position& second)
 	return first;
 }
 
+Position operator-(Position first, const Position& second)
+{
+	first.x_ -= second.x_;
+	first.y_ -= second.y_;
+	return first;
+}
+
 bool operator==(const Position& first, const Position& second)
 {
 	return (first.x_ == second.x_ && first.y_ == second.y_);
@@ -21,8 +28,8 @@ bool operator==(const Position& first, const Position& second)
 
 std::ostream& operator<<(std::ostream& out, Stats stats)
 {
-	out << "Hitpoints:   " << stats.hp_ << endl;
-	out << "Mana:        " << stats.mana_ << endl;
+	out << "Hitpoints:   " << stats.hp_[CUR] << "|" << stats.hp_[MAX] << endl;
+	out << "Hitpoints:   " << stats.mana_[CUR] << "|" << stats.mana_[MAX] << endl;
 	out << "Strength:    " << stats.str_ << endl;
 	out << "Intelligence:" << stats.int_ << endl;
 	out << "Dexterity:   " << stats.dex_ << endl;

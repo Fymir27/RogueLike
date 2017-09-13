@@ -145,11 +145,10 @@ Inventory::~Inventory()
 	items_.clear();
 }
 
-void Inventory::click(sf::Event event)
+void Inventory::click(Position pos_clicked)
 {
 	Position origin = { sprite_.getPosition().x, sprite_.getPosition().y };
 	cout << "origin: " << origin << endl;
-	Position pos_clicked = { event.mouseButton.x, event.mouseButton.y };
 	cout << "pos_clicked: " << pos_clicked << endl;
 	unsigned int x = (pos_clicked.x_ - origin.x_) / TILE_SIZE;
 	unsigned int y = (pos_clicked.y_ - origin.y_) / TILE_SIZE;
