@@ -6,6 +6,7 @@
 
 #include "Common.h"
 
+class Enemy;
 class TileMap;
 class Room
 {
@@ -20,6 +21,8 @@ class Room
 		Position doors_[4];
 		//-- maps last exit direction to entry position --//
 		map<Direction, Position> entry_positions_;
+
+		vector<Enemy*> enemies_;
 
 
 	public:
@@ -37,6 +40,9 @@ class Room
 		void     addEntryPosition(Direction dir, Position pos);
 
 		void movePlayerToDoor(Direction entry);
+
+		void addEnemy(Enemy* enemy);
+		void stepEnemies();
 };
 
 extern Room* current_room;

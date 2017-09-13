@@ -30,3 +30,24 @@ Inventory* Player::getInventory()
 {
 	return inventory_;
 }
+
+void Player::step()
+{
+	if(invincible)
+	{
+		if(--invincibility_frames == 0)
+		{
+			invincible = false;
+		}
+	}
+}
+
+void Player::damage(const int amount)
+{
+	if(!invincible)
+	{
+		stats_.hp_ -= amount;
+		invincible = true;
+		invincibility_frames = 40;
+	}
+}

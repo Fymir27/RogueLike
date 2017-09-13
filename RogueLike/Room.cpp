@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "Types.h"
 #include "Player.h"
+#include "Enemy.h"
 
 #include <fstream>
 
@@ -154,6 +155,10 @@ void Room::draw(sf::RenderWindow& window)
 			field->draw(window);
 		}
 	}
+	for(auto enemy : enemies_)
+	{
+		enemy->draw(window);
+	}
 }
 
 void Room::addField(Field* field)
@@ -185,4 +190,17 @@ void Room::addEntryPosition(Direction dir, Position pos)
 void Room::movePlayerToDoor(Direction entry)
 {
 	current_player->pos_ = doors_[entry];
-};
+}
+
+void Room::addEnemy(Enemy* enemy)
+{
+	enemies_.push_back(enemy);
+}
+
+void Room::stepEnemies() //called appr. 63 times a second
+{
+	for(Enemy* enemy : enemies_)
+	{
+		enemy->step();
+	}
+}

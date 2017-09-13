@@ -65,14 +65,15 @@ int main()
 				player->click(event);
 		}
 
-		//-- Enemy movement --//
-		Enemy::stepAll();
+		//-- Game Logic --//
+	    current_player->step();
+		current_room->stepEnemies();
+
 
 		window.clear(sf::Color::Black);
 		
 		current_room->draw(window);
 		player->draw(window);
-		Enemy::drawEnemies(window);
 		ui->draw(window);
 		window.display();
 	}

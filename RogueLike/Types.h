@@ -14,6 +14,7 @@ struct Position
 };
 
 extern Position operator+(Position first, const Position& second);
+extern bool operator==(const Position& first, const Position& second);
 
 std::ostream& operator<<(std::ostream& out, const Position& pos);
 

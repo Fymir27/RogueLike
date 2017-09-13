@@ -13,6 +13,11 @@ Position operator+(Position first, const Position& second)
 	return first;
 }
 
+bool operator==(const Position& first, const Position& second)
+{
+	return (first.x_ == second.x_ && first.y_ == second.y_);
+}
+
 
 std::ostream& operator<<(std::ostream& out, Stats stats)
 {
