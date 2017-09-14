@@ -22,7 +22,7 @@ class Room
 		//-- maps last exit direction to entry position --//
 		map<Direction, Position> entry_positions_;
 
-		vector<Enemy*> enemies_;
+		list<Enemy*> enemies_;
 
 
 	public:
@@ -42,6 +42,7 @@ class Room
 		void movePlayerToDoor(Direction entry);
 
 		void addEnemy(Enemy* enemy);
+		void removeEnemy(Enemy* enemy);
 		void stepEnemies();
 };
 

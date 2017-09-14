@@ -10,6 +10,8 @@ class Enemy : public Character
 		//-ctors-//
 		Enemy(string name, Position pos, Stats stats, string texture);
 
+		~Enemy();
+
 		virtual void step();
 
 

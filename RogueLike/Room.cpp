@@ -94,12 +94,6 @@ bool Room::readRoomFromFile(const char * filename)
 			field = new Lava(pos);
 			break;
 
-		/*
-		case 'E':
-			field = new Exit(pos, this);
-			break;
-		*/
-
 		case '^':
 			field = new Door(pos, UP);
 			doors_[UP] = pos;
@@ -195,6 +189,11 @@ void Room::movePlayerToDoor(Direction entry)
 void Room::addEnemy(Enemy* enemy)
 {
 	enemies_.push_back(enemy);
+}
+
+void Room::removeEnemy(Enemy* enemy)
+{
+	enemies_.remove(enemy);
 }
 
 void Room::stepEnemies() //called appr. 63 times a second

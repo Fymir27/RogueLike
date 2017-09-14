@@ -5,24 +5,35 @@
 
 UI::UI()
 {
-	if (!font_.loadFromFile("../fonts/Arcade.ttf"))
+	//-- load font --//
+	if (!font_.loadFromFile("../fonts/8bitOperatorPlus-Regular.ttf"))
 		cout << "Failed to load UI font!" << endl;
-	
-	pos_inv_ = { static_cast<unsigned int>(current_room->getColCount() * TILE_SIZE), 0 };
 
+	//-- set font --//
 	stat_names_.setFont(font_);
-	Position offset = { 4, TILE_SIZE * 3 };
-	pos_stats_ = pos_inv_ + offset;
-	stat_names_.setPosition(pos_stats_.x_, pos_stats_.y_);
-	stat_names_.setString("Hitpoints\n"
-							"Mana\n"
-							"Str\n"
-							"Int\n"
-							"Dex\n");
-
 	stat_values_.setFont(font_);
-	stat_values_.setPosition(pos_stats_.x_ + TILE_SIZE *2, pos_stats_.y_);
+	bottom_text_.setFont(font_);
 
+	//-- set size --//
+	stat_names_.setCharacterSize(font_size_);
+	stat_values_.setCharacterSize(font_size_);
+	bottom_text_.setCharacterSize(font_size_);
+	
+	//-- set Positions --//
+	pos_inv_   =       { 15 * TILE_SIZE + 10, 0                  };
+	pos_stats_ =       { 15 * TILE_SIZE + 14, TILE_SIZE * 3      };
+	pos_bottom_text_ = { 10                 , TILE_SIZE * 7 + 10 };
+
+	stat_names_.setPosition(pos_stats_.x_, pos_stats_.y_);
+	stat_values_.setPosition(pos_stats_.x_ + TILE_SIZE *2, pos_stats_.y_);
+	bottom_text_.setPosition(pos_bottom_text_.x_, pos_bottom_text_.y_);
+
+	//-- set fixed Text --//
+	stat_names_.setString("Hitpoints\n"
+						  "Mana\n"
+						  "Str\n"
+						  "Int\n"
+						  "Dex\n");
 
 }
 
@@ -38,27 +49,23 @@ void UI::click(const sf::Event& event)
 
 void UI::draw(sf::RenderWindow& window)
 {
+	//-- draw inventory --//
 	current_player->getInventory()->draw(window, pos_inv_);
+
+	//-- draw stats --//
 	window.draw(stat_names_);
 
-	std::to_string(3);
-
 	Stats stats = current_player->getStats();
-	//char buffer[1024];
-	string buffer = std::to_string(stats.hp_[CUR])   + " of " + std::to_string(stats.hp_[MAX]) + '\n' +
-					std::to_string(stats.mana_[CUR]) + " of " + std::to_string(stats.mana_[MAX]) + '\n' +
+	string buffer = std::to_string(stats.hp_[CUR])   + "/" + std::to_string(stats.hp_[MAX]) + '\n' +
+					std::to_string(stats.mana_[CUR]) + "/" + std::to_string(stats.mana_[MAX]) + '\n' +
 					std::to_string(stats.str_)  + '\n' +
 					std::to_string(stats.int_)  + '\n' +
 					std::to_string(stats.dex_);
-	/*
-	sprintf_s(buffer, 1024,
-		"%d\n"
-		"%d\n"
-		"%d\n"
-		"%d\n"
-		"%d\n",
-		stats.hp_, stats.mana_, stats.str_, stats.int_, stats.dex_);
-		*/
 	stat_values_.setString(buffer.c_str());
 	window.draw(stat_values_);
+
+	//-- draw bottom text --//
+	bottom_text_.setString("Hello World!");
+	window.draw(bottom_text_);
+	
 }

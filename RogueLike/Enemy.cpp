@@ -36,3 +36,8 @@ Enemy::Enemy(string name, Position pos, Stats stats, string texture) : Character
 {
 	current_room->addEnemy(this);
 }
+
+Enemy::~Enemy()
+{
+	current_room->removeEnemy(this);
+}
