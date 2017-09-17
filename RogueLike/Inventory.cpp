@@ -118,7 +118,7 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 	for (auto item : items_)
 	{
 		sf::Sprite& sprite = item->getSprite();
-		sprite.setPosition(pos.x_ + item->pos_.x_ * TILE_SIZE, pos.y_ + item->pos_.y_ * TILE_SIZE);
+		sprite.setPosition(pos.x_ + item->pos_.x_ * 64, pos.y_ + item->pos_.y_ * 64);
 		window.draw(sprite);
 
 		//char string[3];
@@ -128,7 +128,7 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 		text.setString(std::to_string(item->count_));
 		text.setCharacterSize(30);
 		//text.setFillColor(sf::Color::Black);
-		text.setPosition(pos.x_ + item->pos_.x_ * TILE_SIZE + 3, pos.y_ + item->pos_.y_ * TILE_SIZE + 30);
+		text.setPosition(pos.x_ + item->pos_.x_ * 64 + 3, pos.y_ + item->pos_.y_ * 64 + 30);
 		window.draw(text);
 	}
 }

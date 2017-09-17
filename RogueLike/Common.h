@@ -1,9 +1,9 @@
 #pragma once
 
 //--- Constants ---//
-const unsigned int TILE_SIZE = 64;
-const unsigned int WINDOW_WIDTH = 1280;
-const unsigned int WINDOW_HEIGHT = 640;
+const unsigned int TILE_SIZE = 32;
+const unsigned int WINDOW_WIDTH = 860;
+const unsigned int WINDOW_HEIGHT = 480;
 //#define OS_WIN
 #define OS_LIN
 

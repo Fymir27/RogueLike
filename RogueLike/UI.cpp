@@ -21,11 +21,11 @@ UI::UI()
 	
 	//-- set Positions --//
 	pos_inv_   =       { 15 * TILE_SIZE + 10, 0                  };
-	pos_stats_ =       { 15 * TILE_SIZE + 14, TILE_SIZE * 3      };
+	pos_stats_ =       { 15 * TILE_SIZE + 14, 200                };
 	pos_bottom_text_ = { 10                 , TILE_SIZE * 7 + 10 };
 
 	stat_names_.setPosition(pos_stats_.x_, pos_stats_.y_);
-	stat_values_.setPosition(pos_stats_.x_ + TILE_SIZE *2, pos_stats_.y_);
+	stat_values_.setPosition(pos_stats_.x_ + 130, pos_stats_.y_);
 	bottom_text_.setPosition(pos_bottom_text_.x_, pos_bottom_text_.y_);
 
 	//-- set fixed Text --//

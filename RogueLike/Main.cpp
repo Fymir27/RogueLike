@@ -53,11 +53,11 @@ int main()
 	current_player = player;
 
 	//place Pickup item
-	Field* pickup = new Pickup({ 2, 1 }, new MediumHealingPotion(57));
-	current_room->addField(pickup);
+	//Field* pickup = new Pickup({ 2, 1 }, new MediumHealingPotion(57));
+	//current_room->addField(pickup);
 
 	//spawn Enemy
-	//Enemy* blob = new Enemy("Blobby", {6,6}, player_stats, "../images/enemy.png");
+	Enemy* blob = new Enemy("Blobby", {9,3}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
