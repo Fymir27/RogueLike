@@ -10,7 +10,7 @@ class UI
 	~UI();
 
 	void draw(sf::RenderWindow & window);
-	void click(const sf::Event& event);
+	//void click(const sf::Event& event);
 
 	private:
 	Position pos_inv_;

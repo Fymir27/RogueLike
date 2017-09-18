@@ -18,7 +18,7 @@ protected:
 	Character(const string name, const Position pos, const Stats stats, string filename);
 
 public:
-	~Character();
+	virtual ~Character();
 
 	//--- Getters ---//
 	string   getName() const     { return name_; };

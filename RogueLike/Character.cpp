@@ -35,6 +35,7 @@ Character::Character(string name, Position pos, Stats stats, string filename) : 
 Character::~Character()
 {
 	cout << name_ << " ded." << endl << endl;
+	current_room->stepOff(pos_, this, UP);
 	delete inventory_;
 }
 
@@ -54,7 +55,7 @@ void Character::heal(const int amount)
 
 void Character::damage(const int amount)
 {
-	cout << name_ << " got hit for " << amount << " damage." << endl;
+	//cout << name_ << " got hit for " << amount << " damage." << endl;
 	int new_value = stats_.hp_[CUR] - amount;
 	if(new_value < 0)
 		new_value = 0;

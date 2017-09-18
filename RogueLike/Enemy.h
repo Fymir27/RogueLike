@@ -12,7 +12,7 @@ class Enemy : public Character
 
 		~Enemy();
 
-		virtual void step();
+		virtual bool step(); //returns false when the enemy is dead
 
 
 };

@@ -41,11 +41,13 @@ UI::~UI()
 {
 }
 
+/*
 void UI::click(const sf::Event& event)
 {
 	Position pos_clicked = { event.mouseButton.x, event.mouseButton.y };
 	current_player->getInventory()->click(pos_clicked);
 }
+*/
 
 void UI::draw(sf::RenderWindow& window)
 {

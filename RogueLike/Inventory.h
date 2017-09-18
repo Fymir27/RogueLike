@@ -7,7 +7,7 @@ class Inventory
 {
 private:
 	vector<Item*> items_;
-	vector<int> count_;
+	vector<size_t> count_;
 	size_t limit_;
 	size_t rows_;
 	sf::Texture background_;

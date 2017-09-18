@@ -12,6 +12,7 @@ bool Pickup::stepOn(Character* character)
 {
 	if (item_)
 	{
+		cout << "Found " << item_->getName() << " x" << count_ << "!" << endl;
 		character->addItem(item_, count_);
 		item_ = NULL; 
 	}

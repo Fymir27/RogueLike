@@ -37,7 +37,11 @@ void processInput(const sf::Event& event)
 
 int main()
 {
-	cout << "Welcome to RogueLike!" << endl;
+	cout << endl;
+	cout << "#################################" << endl;
+	cout << "###-- Welcome to RogueLike! --###" << endl;
+	cout << "#################################" << endl;
+	cout << endl;
 
 	/*
 	//-- load new room from file --//
@@ -47,9 +51,8 @@ int main()
 	*/
 
 	//-- load new dungeon from file --//
-	char* filename = "Dungeon1.txt";
 	current_dungeon = new Dungeon();
-	current_dungeon->loadFromFile(filename);
+	current_dungeon->loadFromFile("Dungeon1.txt");
 
 	//-- create player --//
 	Stats player_stats = {};
@@ -77,7 +80,13 @@ int main()
 
 	UI* ui = new UI();
 	
-	cout << "//--- We are up and running, starting main game loop... ---//" << endl;
+	cout << endl;
+	cout << "////////////////////////////////////////////////////////" << endl;
+	cout << "//    The game is fully loaded and will start now.    //" << endl; 
+	cout << "//                  Good Luck!                        //" << endl;
+	cout << "////////////////////////////////////////////////////////" << endl;
+	cout << endl;
+
 	//-- main loop --//
 	sf::Event event;
 	while (window.isOpen())
@@ -89,8 +98,6 @@ int main()
 				window.close();
 			else if (event.type == sf::Event::KeyPressed)
 				processInput(event);
-			else if (event.type == sf::Event::MouseButtonPressed)
-				ui->click(event);
 		}
 
 		//-- Game Logic --//
@@ -105,7 +112,9 @@ int main()
 		ui->draw(window);
 		window.display();
 	}
-	delete player;
+	delete current_player;
+	delete ui;
+	delete current_dungeon;
 	return 0;
 }
 

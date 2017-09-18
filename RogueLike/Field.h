@@ -16,6 +16,7 @@ class Field
 		bool occupied_;
 		Character* character_; //Character standing on that field
 	public:
+		virtual ~Field();
 		int getTileNr() const { return tile_nr_; };
 		virtual bool stepOn(Character* who);
 		virtual bool stepOff();

@@ -24,7 +24,6 @@ void Item::decreaseCount(const int amount)
 
 bool Item::tryUse(Room* room, Character* character)
 {
-	cout << "Item used: " << name_ << endl;
 	if (usable_)
 	{
 		use(room, character);

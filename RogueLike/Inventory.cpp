@@ -19,16 +19,14 @@ Inventory::Inventory() : limit_(9), rows_(3)
 
 bool Inventory::addItem(Item* new_item, unsigned int new_count)
 {
-	cout << "Adding " << new_item->name_ << " x" << new_count << " to Inventory." << endl;
-	int max_count = new_item->getMaxCount();
+	size_t max_count = new_item->getMaxCount();		
+
 	for(size_t i = 0; i < items_.size(); i++)
 	{
-		cout << "i = " << i << endl;
 		if(items_[i] != NULL)
 		{
 			if (new_item->name_.compare(items_[i]->name_) == 0)
 			{
-				cout << "Found same Item to stack" << endl;
 
 				if(count_[i] == max_count)
 					continue;
@@ -47,7 +45,7 @@ bool Inventory::addItem(Item* new_item, unsigned int new_count)
 		}
 		else
 		{
-			cout << "Empty space" << endl;
+
 			if(new_count <= max_count)
 			{
 				items_[i] = new_item;
@@ -81,7 +79,7 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 	sprite_.setPosition(pos.x_, pos.y_);
 	window.draw(sprite_);
 
-	for(int i = 0; i < items_.size(); i++)
+	for(size_t i = 0; i < items_.size(); i++)
 	{
 		if(!items_[i])
 			break;
@@ -105,7 +103,6 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 
 Inventory::~Inventory()
 {
-	cout << "Deleting Inventory" << endl;
 	items_.clear();
 }
 

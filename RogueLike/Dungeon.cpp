@@ -56,10 +56,7 @@ void Dungeon::loadFromFile(string filename)
 
 void Dungeon::changeRoom(Direction dir)
 {
-	cout << "Changing Room in direction " << dir << endl;
 	Position pos = current_room->pos_;
-	cout << "Current pos of Room: " << pos << endl;
-
 	Direction entry; //Entry point of char
 
 	switch(dir)

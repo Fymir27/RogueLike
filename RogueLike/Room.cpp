@@ -43,7 +43,7 @@ bool Room::stepOff(Position pos, Character* character, Direction dir)
 
 Room::Room()
 {
-	cout << "Room ctor" << endl;
+	
 }
 
 Room::Room(const char * filename, Position pos) : pos_(pos)
@@ -212,12 +212,22 @@ void Room::addEnemy(Enemy* enemy)
 void Room::removeEnemy(Enemy* enemy)
 {
 	enemies_.remove(enemy);
+	//dead_enemies_.push_back(enemy);
 }
 
 void Room::stepEnemies() //called appr. 63 times a second
 {
+	vector<Enemy*> dead_enemies;
 	for(Enemy* enemy : enemies_)
 	{
-		enemy->step();
+		if(!enemy->step())
+		{
+			dead_enemies.push_back(enemy);
+		}
+	}
+	for(auto enemy : dead_enemies)
+	{
+		enemies_.remove(enemy);
+		delete enemy;
 	}
 }

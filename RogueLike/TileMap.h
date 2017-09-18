@@ -17,5 +17,5 @@ private:
 public:
 	TileMap();
 	bool load(const char* filename, const Map& map, 
-			  int tile_size, int width, int height);
+			  size_t tile_size, size_t width, size_t height);
 };

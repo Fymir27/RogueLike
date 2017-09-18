@@ -7,11 +7,16 @@ Field::Field(Position pos, int tile_nr) : tile_nr_(tile_nr), pos_(pos), occupied
 	
 }
 
+Field::~Field()
+{
+
+}
+
 bool Field::stepOn(Character* who)
 {
 	if(occupied_)
 	{
-		cout << who->getName() << " is attacking " << character_->getName() << '!' << endl;
+		cout << who->getName() << " hits!" << endl;
 		character_->damage(10); //TODO: get attacker's damage
 		return false;
 	}
