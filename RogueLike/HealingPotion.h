@@ -17,7 +17,7 @@ public:
 class SmallHealingPotion : public HealingPotion
 {
 public:
-	SmallHealingPotion(int count = 1) : HealingPotion("Small Healing Potion", count, 20, "TEMP") {};
+	SmallHealingPotion(int count = 1) : HealingPotion("Small Healing Potion", count, 20, "../images/item_small_healing_potion.png") {};
 };
 
 class MediumHealingPotion : public HealingPotion

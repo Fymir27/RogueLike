@@ -13,18 +13,22 @@ class Field
 		int tile_nr_;
 		Field(Position pos, int tile_nr);
 		Position pos_;
+		bool occupied_;
+		Character* character_; //Character standing on that field
 	public:
 		int getTileNr() const { return tile_nr_; };
-		virtual bool stepOn(Character* character) { return true; };
-		virtual bool stepOff() { return true; };
+		virtual bool stepOn(Character* who);
+		virtual bool stepOff();
+		virtual bool isSolid() { return false; };
 		virtual void draw(sf::RenderWindow& window) {};
+
 };
 
 class Wall : public Field
 {
 	public:
 	Wall(Position pos) :Field(pos, 0) {};
-	virtual bool stepOn(Character* character) { return false; };
+	virtual bool isSolid() { return true; };
 };
 
 class Floor : public Field
@@ -37,7 +41,7 @@ class Tree : public Field
 {
 public:
 	Tree(Position pos) : Field(pos, 2) {};
-	virtual bool stepOn(Character* character) { return false; };
+	virtual bool isSolid() { return true; };
 };
 
 class Water : public Field
@@ -50,16 +54,7 @@ class Lava : public Field
 {
 public:
 	Lava(Position pos) : Field(pos, 4) {};
-	virtual bool stepOn(Character* character) { return false; };
-};
-
-class Exit : public Field
-{
-private:
-	Direction dir_;
-public:
-	Exit(Position pos, Room* room);
-	virtual bool stepOn(Character* character);
+	virtual bool isSolid() { return true; };
 };
 
 class Door : public Field
@@ -68,5 +63,5 @@ private:
 	Direction dir_;
 public:
 	Door(Position pos, Direction dir);
-	virtual bool stepOn(Character* character);
+	virtual bool stepOn(Character* who);
 };

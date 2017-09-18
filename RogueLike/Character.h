@@ -30,6 +30,7 @@ public:
 	bool addItem(Item* item)      { return inventory_->addItem(item); };
 
 	bool move(Position new_pos);
+	bool isSolid(Position pos);
 
 	void draw(sf::RenderWindow& window);
 	friend std::ostream& operator<<(std::ostream& out, Character* character);

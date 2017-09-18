@@ -40,7 +40,7 @@ void Character::draw(sf::RenderWindow & window)
 
 void Character::heal(const int amount)
 {
-	unsigned int new_value = stats_.hp_[CUR] + amount;
+	int new_value = stats_.hp_[CUR] + amount;
 	if(new_value > stats_.hp_[MAX])
 		new_value = stats_.hp_[MAX];
 	stats_.hp_[CUR] = new_value;
@@ -48,7 +48,8 @@ void Character::heal(const int amount)
 
 void Character::damage(const int amount)
 {
-	unsigned int new_value = stats_.hp_[CUR] - amount;
+	cout << name_ << " got hit for " << amount << " damage." << endl;
+	int new_value = stats_.hp_[CUR] - amount;
 	if(new_value < 0)
 		new_value = 0;
 	stats_.hp_[CUR] = new_value;
@@ -56,19 +57,19 @@ void Character::damage(const int amount)
 
 bool Character::move(Position new_pos)
 {
-	Field* field = current_room->getField(pos_.x_, pos_.y_);
+	//cout << name_ << " is moving!" << endl;
 
-	if(!field->stepOff())
+	if(!current_room->stepOn(new_pos, this, UP))
 		return false;
 
-	field = current_room->getField(new_pos.x_, new_pos.y_);
-
-	if(field == NULL)
-		return false;
-
-	if(!field->stepOn(this))
+	if(!current_room->stepOff(pos_, this, UP))
 		return false;
 
 	pos_ = new_pos;
 	return true;
+}
+
+bool Character::isSolid(Position pos)
+{
+	return current_room->getField(pos.x_, pos.y_)->isSolid();
 }

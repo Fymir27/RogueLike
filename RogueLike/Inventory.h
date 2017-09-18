@@ -23,6 +23,7 @@ public:
 	bool addItem(Item* item, bool silent = false); //returns false when full
 	friend std::ostream& operator<<(std::ostream& out, const Inventory* inv);
 	void removeItem(Item* item);
+	void useItem(int slot);
 	sf::Sprite & getSprite();
 	void draw(sf::RenderWindow& window, Position pos = { 0,0 });
 };

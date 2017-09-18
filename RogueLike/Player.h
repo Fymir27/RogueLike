@@ -19,7 +19,7 @@ public:
 
 	void setPosition(Position pos) { pos_ = pos; };
 	void step();
-	void damage(const int amount);
+	//void damage(const int amount);
 };
 
 extern Player* current_player;

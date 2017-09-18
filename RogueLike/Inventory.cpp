@@ -118,7 +118,8 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 	for (auto item : items_)
 	{
 		sf::Sprite& sprite = item->getSprite();
-		sprite.setPosition(pos.x_ + item->pos_.x_ * 64, pos.y_ + item->pos_.y_ * 64);
+		sprite.setScale(sf::Vector2f(1.5f,1.5f));
+		sprite.setPosition(pos.x_ + item->pos_.x_ * 64 + 10, pos.y_ + item->pos_.y_ * 64 + 10);
 		window.draw(sprite);
 
 		//char string[3];
@@ -160,6 +161,24 @@ void Inventory::click(Position pos_clicked)
 			item->tryUse(current_room, current_player);
 			break;
 		}
+	}
+}
+
+void Inventory::useItem(int slot)
+{
+	try
+	{
+		auto it = items_.begin();
+		for(int i = 1; i < slot; i++);
+		{
+			it++;
+		}
+
+		(*it)->tryUse(current_room, current_player);
+	}
+		catch (std::exception e)
+	{
+		cout << "Invalid Field!" << endl;
 	}
 }
 

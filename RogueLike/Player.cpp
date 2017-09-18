@@ -24,6 +24,7 @@ void Player::step()
 	}
 }
 
+/*
 void Player::damage(const int amount)
 {
 	if(!invincible)
@@ -38,3 +39,4 @@ void Player::damage(const int amount)
 		invincibility_frames = 40;
 	}
 }
+*/

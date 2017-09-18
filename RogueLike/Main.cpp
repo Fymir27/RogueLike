@@ -12,15 +12,26 @@
 
 void processInput(const sf::Event& event)
 {
+	//cout << "Input detected!" << endl;
 	auto key = event.key.code;
 	Position new_pos = current_player->getPosition();
+	int item_slot = 0;
 
 	if     (key == sf::Keyboard::Right) new_pos.x_++;
 	else if(key == sf::Keyboard::Left)  new_pos.x_--;
 	else if(key == sf::Keyboard::Up)    new_pos.y_--;
 	else if(key == sf::Keyboard::Down)  new_pos.y_++;
+	else if(key == sf::Keyboard::Num1)  item_slot = 1;
+	else if(key == sf::Keyboard::Num2)  item_slot = 2;
+	else if(key == sf::Keyboard::Num3)  item_slot = 3;
 
-	current_player->move(new_pos);
+	if(item_slot > 0)
+		current_player->getInventory()->useItem(item_slot);
+
+	if(!current_room->isSolid(new_pos) && item_slot == 0) //dont move when item is used
+		current_player->move(new_pos);
+
+	current_room->stepEnemies();
 }
 
 int main()
@@ -53,11 +64,11 @@ int main()
 	current_player = player;
 
 	//place Pickup item
-	//Field* pickup = new Pickup({ 2, 1 }, new MediumHealingPotion(57));
-	//current_room->addField(pickup);
+	Field* pickup = new Pickup({ 5, 2 }, new SmallHealingPotion(17));
+	current_room->addField(pickup);
 
 	//spawn Enemy
-	Enemy* blob = new Enemy("Blobby", {9,3}, player_stats, "../images/enemy.png");
+	Enemy* blob = new Enemy("Blobby", {10,4}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
@@ -65,6 +76,7 @@ int main()
 
 	UI* ui = new UI();
 	
+	cout << "//--- We are up and running, starting main game loop... ---//" << endl;
 	//-- main loop --//
 	sf::Event event;
 	while (window.isOpen())
@@ -81,8 +93,8 @@ int main()
 		}
 
 		//-- Game Logic --//
-	    current_player->step();
-		current_room->stepEnemies();
+	    //current_player->step();
+		//current_room->stepEnemies();
 
 
 		window.clear(sf::Color::Black);

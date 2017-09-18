@@ -23,6 +23,21 @@ Field* Room::getField(int x, int y)
 	return NULL;
 }
 
+bool Room::isSolid(Position pos)
+{
+	return getField(pos.x_, pos.y_)->isSolid();
+}
+
+bool Room::stepOn (Position pos, Character* character, Direction dir)
+{
+	return getField(pos.x_, pos.y_)->stepOn(character);
+}
+
+bool Room::stepOff(Position pos, Character* character, Direction dir)
+{
+	return getField(pos.x_, pos.y_)->stepOff();
+}
+
 Room::Room()
 {
 	cout << "Room ctor" << endl;

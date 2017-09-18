@@ -30,8 +30,13 @@ class Room
 		Field* getField(int x, int y);
 		size_t getColCount() { return map_.front().size(); };
 		size_t getRowCount() { return map_.size(); };
+		bool isSolid(Position pos);
+		bool stepOn (Position pos, Character* character, Direction dir);
+		bool stepOff(Position pos, Character* character, Direction dir);
+
 		Room();
 		Room(const char* filename, Position pos = {0,0});
+
 		bool readRoomFromFile(const char* filename);
 		void draw(sf::RenderWindow& window);
 		void addField(Field * field);
