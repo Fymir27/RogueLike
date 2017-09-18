@@ -3,6 +3,7 @@
 #include "Inventory.h"
 #include "Types.h"
 
+class Item;
 class Character
 {
 protected:
@@ -27,7 +28,7 @@ public:
 	virtual void heal(const int amount);
 	virtual void damage(const int amount);
 	
-	bool addItem(Item* item)      { return inventory_->addItem(item); };
+	bool addItem(Item* item, unsigned int count);
 
 	bool move(Position new_pos);
 	bool isSolid(Position pos);

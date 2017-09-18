@@ -13,95 +13,61 @@ Inventory::Inventory() : limit_(9), rows_(3)
 	if (!font_.loadFromFile("../fonts/Arcade.ttf"))
 		cout << "Failed to load Inventory font!" << endl;
 
+	items_.resize(limit_);
+	count_.resize(limit_);
 }
 
-std::ostream& operator<<(std::ostream& out, const Inventory* inv)
+bool Inventory::addItem(Item* new_item, unsigned int new_count)
 {
-	out << endl;
-	out << "# --- Inventory --- #" << endl;
-	for (Item* item : inv->items_)
-		out << item << endl;
-	out << "# ----------------- #" << endl << endl;
-	return out;
-}
-
-bool Inventory::addItem(Item* new_item, bool silent)
-{
-	if (!silent)
+	cout << "Adding " << new_item->name_ << " x" << new_count << " to Inventory." << endl;
+	int max_count = new_item->getMaxCount();
+	for(size_t i = 0; i < items_.size(); i++)
 	{
-		cout << endl;
-		cout << "Adding to Inventory:" << endl;
-		cout << new_item << endl;
-	}
-
-	int old_count;
-	int new_count = new_item->getCount();
-	string old_name;
-	string new_name = new_item->getName();
-	for (Item* item : items_)
-	{
-		old_count = item->getCount();
-		old_name = item->getName();
-		if (new_name.compare(old_name) == 0)
+		cout << "i = " << i << endl;
+		if(items_[i] != NULL)
 		{
-			//cout << "Found same Item; Trying to stack or fill up" << endl;
-			if (old_count + new_count <= item->getMaxCount())
+			if (new_item->name_.compare(items_[i]->name_) == 0)
 			{
-				//cout << "Stacking!" << endl;
-				item->increaseCount(new_count);
-				delete new_item;
-				return true;
-			}
-			else if (old_count < item->getMaxCount())
-			{
-				//cout << "Filling up" << endl;
-				int space = item->getMaxCount() - old_count;
-				item->increaseCount(space);
-				new_item->decreaseCount(space);
-				//cout << "Storing the Rest" << endl;
-				return addItem(new_item, true);
-			}
-		}
-	}
-	if (items_.size() < limit_)
-	{
-		//cout << "Adding Item on new spot" << endl;
-		int overflow = new_item->getCount() - new_item->getMaxCount();
-		if (overflow > 0)
-		{
-			Item* overflowItem = new_item->duplicate();
-			overflowItem->decreaseCount(new_item->getMaxCount());
+				cout << "Found same Item to stack" << endl;
 
-			new_item->decreaseCount(overflow);
-			new_item->associateWithInventory(this);
-			size_t new_count = items_.size();
-			new_item->pos_.x_ = new_count % rows_;
-			new_item->pos_.y_ = new_count / rows_;
-			items_.push_back(new_item);
+				if(count_[i] == max_count)
+					continue;
 
-			addItem(overflowItem, true);
+				if((count_[i] + new_count) <= max_count)
+				{
+					count_[i] += new_count;
+					return true;
+				}
+				else
+				{
+					count_[i] = max_count;
+					return addItem(new_item, new_count - max_count);
+				}
+			}
 		}
 		else
 		{
-			new_item->associateWithInventory(this);
-			size_t new_count = items_.size();
-			new_item->pos_.x_ = new_count % rows_;
-			new_item->pos_.y_ = new_count / rows_;
-			items_.push_back(new_item);
+			cout << "Empty space" << endl;
+			if(new_count <= max_count)
+			{
+				items_[i] = new_item;
+				count_[i] = new_count;
+				return true;
+			}
+			else
+			{
+				items_[i] = new_item;
+				count_[i] = max_count;
+				return addItem(new_item, new_count - max_count);
+			}
 		}
-
-		return true;
-	}
-	else
-	{
-		cout << "No Inventory space left!" << endl;
 	}
 	return false;
 }
 
 void Inventory::removeItem(Item* item)
 {
-	items_.remove(item);
+	//items_.remove(item);
 }
 
 sf::Sprite& Inventory::getSprite()
@@ -115,21 +81,24 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 	sprite_.setPosition(pos.x_, pos.y_);
 	window.draw(sprite_);
 
-	for (auto item : items_)
+	for(int i = 0; i < items_.size(); i++)
 	{
+		if(!items_[i])
+			break;
+		Item* item = items_[i];
 		sf::Sprite& sprite = item->getSprite();
 		sprite.setScale(sf::Vector2f(1.5f,1.5f));
-		sprite.setPosition(pos.x_ + item->pos_.x_ * 64 + 10, pos.y_ + item->pos_.y_ * 64 + 10);
+		sprite.setPosition(pos.x_ + i % rows_ * 64 + 10, pos.y_ + i / rows_ * 64 + 10);
 		window.draw(sprite);
 
 		//char string[3];
 		//sprintf_s(string, 3, "%d", item->count_);
 		sf::Text& text = item->text_;
 		text.setFont(font_);
-		text.setString(std::to_string(item->count_));
+		text.setString(std::to_string(count_[i]));
 		text.setCharacterSize(30);
 		//text.setFillColor(sf::Color::Black);
-		text.setPosition(pos.x_ + item->pos_.x_ * 64 + 3, pos.y_ + item->pos_.y_ * 64 + 30);
+		text.setPosition(pos.x_ + i % rows_ * 64 + 3, pos.y_ + i / rows_ * 64 + 30);
 		window.draw(text);
 	}
 }
@@ -137,17 +106,13 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 Inventory::~Inventory()
 {
 	cout << "Deleting Inventory" << endl;
-
-	for (Item* item : items_)
-	{
-		cout << item << endl;
-		delete item;
-	}
 	items_.clear();
 }
 
+
 void Inventory::click(Position pos_clicked)
 {
+	/*
 	Position origin = { sprite_.getPosition().x, sprite_.getPosition().y };
 	cout << "origin: " << origin << endl;
 	cout << "pos_clicked: " << pos_clicked << endl;
@@ -162,19 +127,24 @@ void Inventory::click(Position pos_clicked)
 			break;
 		}
 	}
+	*/
 }
+
 
 void Inventory::useItem(int slot)
 {
 	try
 	{
-		auto it = items_.begin();
-		for(int i = 1; i < slot; i++);
+		if(items_.at(--slot) == NULL)
 		{
-			it++;
+			cout << "There is no Item!" << endl;
+			return;
 		}
 
-		(*it)->tryUse(current_room, current_player);
+		items_.at(slot)->tryUse(current_room, current_player);
+		count_.at(slot)--;
+		if(count_.at(slot) == 0)
+			items_.at(slot) = NULL;
 	}
 		catch (std::exception e)
 	{

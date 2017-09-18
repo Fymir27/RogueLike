@@ -25,7 +25,10 @@ Field* Room::getField(int x, int y)
 
 bool Room::isSolid(Position pos)
 {
-	return getField(pos.x_, pos.y_)->isSolid();
+	Field* field = getField(pos.x_, pos.y_);
+	if(!field)
+		return true;
+	return field->isSolid();
 }
 
 bool Room::stepOn (Position pos, Character* character, Direction dir)

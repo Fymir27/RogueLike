@@ -1,6 +1,7 @@
 #pragma once
 #include "Common.h"
 #include "Types.h"
+#include "Singleton.h"
 
 using std::string;
 
@@ -8,7 +9,7 @@ class Inventory;
 class Room;
 class Character;
 
-class Item
+class Item : public Singleton<Item>
 {
 	friend class Inventory;
 
@@ -28,6 +29,7 @@ protected:
 
 public:
 	Item(string name, int count, const char* teture_file);
+	Item();
 	virtual ~Item() {};
 
 	virtual const int getMaxCount() { return 0; };

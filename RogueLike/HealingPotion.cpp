@@ -1,9 +1,12 @@
 #include "HealingPotion.h"
 #include "Character.h"
 
-HealingPotion::HealingPotion(string name, int count, int heal_amount, const char* texture_file) : Item(name, count, texture_file), heal_amount_(heal_amount)
+HealingPotion::HealingPotion(string name, int count, int heal_amount, const char* texture_file) : heal_amount_(heal_amount)
 {
-
+	name_ = name;
+	if (!texture_.loadFromFile(texture_file))
+		cout << "Couldn't load texture for " << name << endl;
+	sprite_.setTexture(texture_);
 }
 
 void HealingPotion::use(Room* room, Character* character)

@@ -1,6 +1,7 @@
 #include "Character.h"
 #include "Field.h"
 #include "Room.h"
+#include "Item.h"
 
 std::ostream& operator<<(std::ostream& out, Character* character)
 {
@@ -12,6 +13,11 @@ std::ostream& operator<<(std::ostream& out, Character* character)
 	out << string(character->name_.size() + 20, '#') << endl;
 
 	return out;
+}
+
+bool Character::addItem(Item* item, unsigned int count)
+{ 
+	return inventory_->addItem(item, count); 
 }
 
 Character::Character(string name, Position pos, Stats stats, string filename) : name_(name), pos_(pos),
@@ -57,15 +63,18 @@ void Character::damage(const int amount)
 
 bool Character::move(Position new_pos)
 {
-	//cout << name_ << " is moving!" << endl;
-
-	if(!current_room->stepOn(new_pos, this, UP))
+	Room* room = current_room;
+	Position old_pos = pos_;
+	
+	if(!room->stepOn(new_pos, this, UP))
 		return false;
 
-	if(!current_room->stepOff(pos_, this, UP))
+	if(!room->stepOff(old_pos, this, UP))
 		return false;
 
-	pos_ = new_pos;
+	if(room == current_room)
+		pos_ = new_pos;
+
 	return true;
 }
 

@@ -3,7 +3,7 @@
 #include "Item.h"
 #include "Room.h"
 
-Pickup::Pickup(Position pos, Item * item) : Field(pos, 0), item_(item)
+Pickup::Pickup(Position pos, Item* item, unsigned int count) : Field(pos, 0), item_(item), count_(count)
 {
 	
 }
@@ -12,8 +12,8 @@ bool Pickup::stepOn(Character* character)
 {
 	if (item_)
 	{
-		character->addItem(item_);
-		item_ = NULL;
+		character->addItem(item_, count_);
+		item_ = NULL; 
 	}
 	return true;
 }

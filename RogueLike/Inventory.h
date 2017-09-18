@@ -6,7 +6,8 @@ class Item;
 class Inventory
 {
 private:
-	list<Item*> items_;
+	vector<Item*> items_;
+	vector<int> count_;
 	size_t limit_;
 	size_t rows_;
 	sf::Texture background_;
@@ -20,8 +21,7 @@ public:
 	void click(Position pos_clicked);
 
 	void sort() {};
-	bool addItem(Item* item, bool silent = false); //returns false when full
-	friend std::ostream& operator<<(std::ostream& out, const Inventory* inv);
+	bool addItem(Item* item, unsigned int new_count); //returns false when full
 	void removeItem(Item* item);
 	void useItem(int slot);
 	sf::Sprite & getSprite();

@@ -24,11 +24,10 @@ void Item::decreaseCount(const int amount)
 
 bool Item::tryUse(Room* room, Character* character)
 {
+	cout << "Item used: " << name_ << endl;
 	if (usable_)
 	{
 		use(room, character);
-		decreaseCount(1);
-		cout << "Item has " << count_ << " charges left" << endl;
 	}
 	return usable_;
 }
@@ -36,4 +35,9 @@ bool Item::tryUse(Room* room, Character* character)
 sf::Sprite& Item::getSprite()
 {
 	return sprite_;
+}
+
+Item::Item()
+{
+
 }

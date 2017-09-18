@@ -28,10 +28,11 @@ void processInput(const sf::Event& event)
 	if(item_slot > 0)
 		current_player->getInventory()->useItem(item_slot);
 
-	if(!current_room->isSolid(new_pos) && item_slot == 0) //dont move when item is used
+	if(!(new_pos == current_player->getPosition()) && !current_room->isSolid(new_pos))
+	{
 		current_player->move(new_pos);
-
-	current_room->stepEnemies();
+		current_room->stepEnemies();
+	}	
 }
 
 int main()
@@ -64,7 +65,7 @@ int main()
 	current_player = player;
 
 	//place Pickup item
-	Field* pickup = new Pickup({ 5, 2 }, new SmallHealingPotion(17));
+	Field* pickup = new Pickup({ 5, 2 }, new SmallHealingPotion(), 17);
 	current_room->addField(pickup);
 
 	//spawn Enemy

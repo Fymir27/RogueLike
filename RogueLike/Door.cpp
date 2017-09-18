@@ -11,5 +11,5 @@ bool Door::stepOn(Character* character)
 {
 	cout << "Stepped on a Door!" << endl;
 	current_dungeon->changeRoom(dir_);
-	return false;
+	return true;
 }
