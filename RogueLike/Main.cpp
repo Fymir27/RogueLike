@@ -24,6 +24,13 @@ void processInput(const sf::Event& event)
 	else if(key == sf::Keyboard::Num1)  item_slot = 1;
 	else if(key == sf::Keyboard::Num2)  item_slot = 2;
 	else if(key == sf::Keyboard::Num3)  item_slot = 3;
+	else if(key == sf::Keyboard::Num4)  item_slot = 4;
+	else if(key == sf::Keyboard::Num5)  item_slot = 5;
+	else if(key == sf::Keyboard::Num6)  item_slot = 6;
+	else if(key == sf::Keyboard::Num7)  item_slot = 7;
+	else if(key == sf::Keyboard::Num8)  item_slot = 8;
+	else if(key == sf::Keyboard::Num9)  item_slot = 9;
+	else if(key == sf::Keyboard::Space) current_room->stepEnemies(); //wait a turn
 
 	if(item_slot > 0)
 		current_player->getInventory()->useItem(item_slot);
