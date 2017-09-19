@@ -2,6 +2,9 @@
 #include "Types.h"
 #include "Room.h"
 #include "Player.h"
+#include "Textbox.h"
+
+Textbox* UI::textbox_ = NULL;
 
 UI::UI()
 {
@@ -12,12 +15,10 @@ UI::UI()
 	//-- set font --//
 	stat_names_.setFont(font_);
 	stat_values_.setFont(font_);
-	bottom_text_.setFont(font_);
 
 	//-- set size --//
 	stat_names_.setCharacterSize(font_size_);
 	stat_values_.setCharacterSize(font_size_);
-	bottom_text_.setCharacterSize(font_size_);
 	
 	//-- set Positions --//
 	pos_inv_   =       { 15 * TILE_SIZE + 10, 0                  };
@@ -26,7 +27,6 @@ UI::UI()
 
 	stat_names_.setPosition(pos_stats_.x_, pos_stats_.y_);
 	stat_values_.setPosition(pos_stats_.x_ + 130, pos_stats_.y_);
-	bottom_text_.setPosition(pos_bottom_text_.x_, pos_bottom_text_.y_);
 
 	//-- set fixed Text --//
 	stat_names_.setString("Hitpoints\n"
@@ -34,6 +34,10 @@ UI::UI()
 						  "Str\n"
 						  "Int\n"
 						  "Dex\n");
+
+	textbox_ = new Textbox(3, 20, font_, 
+		    pos_bottom_text_, 400, 80,
+		    5, 5, sf::Color(100, 100, 100), sf::Color(50,50,50));
 
 }
 
@@ -65,9 +69,10 @@ void UI::draw(sf::RenderWindow& window)
 					std::to_string(stats.dex_);
 	stat_values_.setString(buffer.c_str());
 	window.draw(stat_values_);
+	textbox_->draw(window);
+}
 
-	//-- draw bottom text --//
-	bottom_text_.setString("Hello World!");
-	window.draw(bottom_text_);
-	
+void UI::displayText(string text)
+{
+	textbox_->displayText(text);
 }

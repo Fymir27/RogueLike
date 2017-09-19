@@ -1,6 +1,7 @@
 #include "Field.h"
 #include "Room.h"
 #include "Character.h"
+#include "UI.h"
 
 Field::Field(Position pos, int tile_nr) : tile_nr_(tile_nr), pos_(pos), occupied_(false)
 {
@@ -16,6 +17,7 @@ bool Field::stepOn(Character* who)
 {
 	if(occupied_)
 	{
+		UI::displayText(who->getName() + " hits!");
 		cout << who->getName() << " hits!" << endl;
 		character_->damage(10); //TODO: get attacker's damage
 		return false;

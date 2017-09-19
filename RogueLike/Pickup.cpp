@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Item.h"
 #include "Room.h"
+#include "UI.h"
 
 Pickup::Pickup(Position pos, Item* item, unsigned int count) : Field(pos, 0), item_(item), count_(count)
 {
@@ -12,6 +13,7 @@ bool Pickup::stepOn(Character* character)
 {
 	if (item_)
 	{
+		UI::displayText("Found " + item_->getName() + " x" + std::to_string(count_) + "!");
 		cout << "Found " << item_->getName() << " x" << count_ << "!" << endl;
 		character->addItem(item_, count_);
 		item_ = NULL; 

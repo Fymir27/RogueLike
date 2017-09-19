@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "Types.h"
 
+class Textbox;
 class UI
 {
 	public:
@@ -11,6 +12,8 @@ class UI
 
 	void draw(sf::RenderWindow & window);
 	//void click(const sf::Event& event);
+	//
+	static void displayText(string text);
 
 	private:
 	Position pos_inv_;
@@ -22,7 +25,8 @@ class UI
 
 	sf::Text stat_names_;
 	sf::Text stat_values_;
-	sf::Text bottom_text_;
+
+	static Textbox* textbox_;
 
 	sf::Texture tex_inv_;
 };
