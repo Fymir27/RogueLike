@@ -125,15 +125,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Dungeon.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Field.cpp" />
-    <ClCompile Include="Floor.cpp" />
     <ClCompile Include="HealingPotion.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Room.cpp" />
+    <ClCompile Include="Textbox.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Types.cpp" />
     <ClCompile Include="UI.cpp" />
@@ -142,19 +144,24 @@
   <ItemGroup>
     <ClInclude Include="Character.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Door.h" />
+    <ClInclude Include="Dungeon.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="HealingPotion.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
-    <ClInclude Include="Pickup.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Textbox.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Dungeon1.txt" />
     <Text Include="Room1.txt" />
+    <Text Include="Room2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

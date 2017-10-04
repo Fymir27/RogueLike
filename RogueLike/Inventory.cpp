@@ -10,53 +10,58 @@ Inventory::Inventory() : limit_(9), rows_(3)
 	if (!background_.loadFromFile("../images/inventory_background.png"))
 		cout << "Failed to load Inventory background!" << endl;
 
-	if (!font_.loadFromFile("../fonts/Arcade.ttf"))
+	if (!font_.loadFromFile("../fonts/8bitOperatorPlus-Regular.ttf"))
 		cout << "Failed to load Inventory font!" << endl;
 
 	items_.resize(limit_);
 	count_.resize(limit_);
 }
 
-bool Inventory::addItem(Item* new_item, unsigned int new_count)
+bool Inventory::addItem(Item* new_item)
 {
-	size_t max_count = new_item->getMaxCount();		
-
+	size_t max_count = new_item->max_count_;		
+	size_t new_count = new_item->count_;
+	Item* cur_item = NULL;
+	
 	for(size_t i = 0; i < items_.size(); i++)
 	{
-		if(items_[i] != NULL)
+		cur_item = items_[i];
+		if(cur_item != NULL)
 		{
-			if (new_item->name_.compare(items_[i]->name_) == 0)
+			if (new_item->name_.compare(cur_item->name_) == 0)
 			{
-
-				if(count_[i] == max_count)
+				if(cur_item->count_ == max_count)
 					continue;
 
-				if((count_[i] + new_count) <= max_count)
+				int overflow = cur_item->count_ + new_count - max_count;
+
+				if(overflow <= 0)
 				{
-					count_[i] += new_count;
+					cur_item->count_ += new_count;
+					delete new_item;
 					return true;
 				}
 				else
 				{
-					count_[i] = max_count;
-					return addItem(new_item, new_count - max_count);
+					cur_item->count_ = max_count;
+					new_item->count_ = overflow;
+					return addItem(new_item);
 				}
 			}
 		}
 		else
 		{
-
 			if(new_count <= max_count)
 			{
 				items_[i] = new_item;
-				count_[i] = new_count;
 				return true;
 			}
 			else
 			{
-				items_[i] = new_item;
-				count_[i] = max_count;
-				return addItem(new_item, new_count - max_count);
+				items_[i] = new_item->clone();
+				items_[i]->count_ = max_count;
+				new_item->count_ -= max_count;
+				return addItem(new_item);
 			}
 		}
 	}
@@ -86,17 +91,15 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 		Item* item = items_[i];
 		sf::Sprite& sprite = item->getSprite();
 		sprite.setScale(sf::Vector2f(1.5f,1.5f));
-		sprite.setPosition(pos.x_ + i % rows_ * 64 + 10, pos.y_ + i / rows_ * 64 + 10);
+		float x = pos.x_ + i % rows_ * 63 + 10;
+		float y = pos.y_ + i / rows_ * 63 + 10;
+		sprite.setPosition(x, y);
 		window.draw(sprite);
-
-		//char string[3];
-		//sprintf_s(string, 3, "%d", item->count_);
-		sf::Text& text = item->text_;
+		sf::Text text;
 		text.setFont(font_);
-		text.setString(std::to_string(count_[i]));
-		text.setCharacterSize(30);
-		//text.setFillColor(sf::Color::Black);
-		text.setPosition(pos.x_ + i % rows_ * 64 + 3, pos.y_ + i / rows_ * 64 + 30);
+		text.setCharacterSize(20);
+		text.setPosition(x, y + 30);
+		text.setString(std::to_string(item->getCount()));
 		window.draw(text);
 	}
 }
@@ -106,26 +109,6 @@ Inventory::~Inventory()
 	items_.clear();
 }
 
-
-void Inventory::click(Position pos_clicked)
-{
-	/*
-	Position origin = { sprite_.getPosition().x, sprite_.getPosition().y };
-	cout << "origin: " << origin << endl;
-	cout << "pos_clicked: " << pos_clicked << endl;
-	unsigned int x = (pos_clicked.x_ - origin.x_) / TILE_SIZE;
-	unsigned int y = (pos_clicked.y_ - origin.y_) / TILE_SIZE;
-	cout << x << "|"<< y << endl;
-	for (auto item : items_)
-	{
-		if (item->pos_.x_ == x && item->pos_.y_ == y)
-		{
-			item->tryUse(current_room, current_player);
-			break;
-		}
-	}
-	*/
-}
 
 
 void Inventory::useItem(int slot)
@@ -138,14 +121,17 @@ void Inventory::useItem(int slot)
 			return;
 		}
 
-		items_.at(slot)->tryUse(current_room, current_player);
-		count_.at(slot)--;
-		if(count_.at(slot) == 0)
+		items_.at(slot)->use(current_player);
+		size_t new_count = --items_.at(slot)->count_;
+		if (new_count == 0)
+		{
+			delete items_.at(slot);
 			items_.at(slot) = NULL;
+		}
 	}
 		catch (std::exception e)
 	{
-		cout << "Invalid Field!" << endl;
+		cout << "Invalid Item!" << endl;
 	}
 }
 

@@ -34,7 +34,7 @@ class Room
 		Position stepOn(Position new_pos, Character* who); //returns new Position of Character
 		void freeField(Position pos);
 		void occupyField(Position pos, Character* who);
-		void placeItem(Position pos, Item* item, size_t count);
+		void placeItem(Position pos, Item* item);
 
 		Room();
 		Room(const char* filename, Position pos = {0,0});

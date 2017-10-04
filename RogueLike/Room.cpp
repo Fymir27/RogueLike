@@ -75,9 +75,9 @@ void Room::occupyField(Position pos, Character* who)
 	getField(pos.x_, pos.y_)->occupy(who);
 }
 
-void Room::placeItem(Position pos, Item* item, size_t count)
+void Room::placeItem(Position pos, Item* item)
 {
-	getField(pos.x_, pos.y_)->placeItem(item, count);
+	getField(pos.x_, pos.y_)->placeItem(item);
 }
 
 Room::Room()

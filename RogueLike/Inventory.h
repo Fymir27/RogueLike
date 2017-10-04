@@ -19,7 +19,7 @@ public:
 	~Inventory();
 
 	void sort() {}; //not implemented
-	bool addItem(Item* item, unsigned int new_count); //returns false when full
+	bool addItem(Item* item); //returns false when full
 	void removeItem(Item* item);
 	void useItem(int slot);
 	sf::Sprite & getSprite();

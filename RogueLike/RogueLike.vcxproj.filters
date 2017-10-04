@@ -45,19 +45,25 @@
     <ClCompile Include="Wall.cpp">
       <Filter>Quelldateien\Fields</Filter>
     </ClCompile>
-    <ClCompile Include="Floor.cpp">
-      <Filter>Quelldateien\Fields</Filter>
-    </ClCompile>
     <ClCompile Include="TileMap.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Pickup.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Field.cpp">
       <Filter>Quelldateien\Fields</Filter>
     </ClCompile>
     <ClCompile Include="UI.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Dungeon.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Textbox.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,15 +98,30 @@
     <ClInclude Include="Common.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="Pickup.h">
+    <ClInclude Include="UI.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
+    <ClInclude Include="Dungeon.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Textbox.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Room1.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
+    <Text Include="Dungeon1.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
+    <Text Include="Room2.txt">
       <Filter>Ressourcendateien</Filter>
     </Text>
   </ItemGroup>

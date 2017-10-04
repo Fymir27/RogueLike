@@ -28,7 +28,7 @@ public:
 	virtual void heal(const int amount);
 	virtual void damage(const int amount);
 	
-	bool addItem(Item* item, unsigned int count);
+	bool addItem(Item* item);
 
 	bool move(Position new_pos); //returns if the move was valid
 	void attack(Character* target);

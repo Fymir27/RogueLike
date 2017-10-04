@@ -16,9 +16,9 @@ std::ostream& operator<<(std::ostream& out, Character* character)
 	return out;
 }
 
-bool Character::addItem(Item* item, unsigned int count)
+bool Character::addItem(Item* item)
 { 
-	return inventory_->addItem(item, count); 
+	return inventory_->addItem(item); 
 }
 
 Character::Character(string name, Position pos, Stats stats, string filename) : name_(name), pos_(pos),

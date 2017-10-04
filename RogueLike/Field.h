@@ -35,12 +35,12 @@ class Field
 
 		void free();
 		void occupy(Character* character);
-		void placeItem(Item* item, size_t count);
+		void placeItem(Item* item);
 		void pickUpItem(Character* character);
 
 		virtual Position trigger(Character* who) { cout << "[Error] No trigger available!" << endl; return Position(0,0); };
 
-		virtual void draw(sf::RenderWindow& window) {};
+		virtual void draw(sf::RenderWindow& window);
 
 };
 

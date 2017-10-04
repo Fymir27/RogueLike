@@ -26,19 +26,28 @@ void Field::occupy(Character* character)
 	status_ = OCCUPIED;
 }
 
-void Field::placeItem(Item* item, size_t count)
+void Field::placeItem(Item* item)
 {
 	item_ = item;
-	count_ = count;
 	status_ = PICKUP;
 }
 
 void Field::pickUpItem(Character* character)
 {
-	UI::displayText("Found " + item_->getName() + " x" + std::to_string(count_) + "!");
-	character->addItem(item_, count_);
+	UI::displayText("Found " + item_->getName() + " x" + std::to_string(item_->getCount()) + "!");
+	character->addItem(item_);
 	item_ = NULL;
 	count_ = 0; 
+}
+
+void Field::draw(sf::RenderWindow & window)
+{
+	if (status_ == PICKUP)
+	{
+		sf::Sprite& sprite = item_->getSprite();
+		sprite.setPosition(pos_.x_ * TILE_SIZE, pos_.y_ * TILE_SIZE);
+		window.draw(sprite);
+	}
 }
 
 /*

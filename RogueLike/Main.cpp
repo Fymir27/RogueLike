@@ -77,7 +77,7 @@ int main()
 	current_player = player;
 
 	//place Pickup item
-	current_room->placeItem({5,2}, SmallHealingPotion::get(), 3);
+	current_room->placeItem({5,2}, new SmallHealingPotion(33));
 	//Field* pickup = new Pickup({ 5, 3 }, new SmallHealingPotion(), 17);
 	//current_room->addField(pickup);
 
