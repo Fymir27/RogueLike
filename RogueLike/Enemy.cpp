@@ -13,22 +13,59 @@ bool Enemy::step()
 	}
 	steps = 0;
 	*/
-
 	if(stats_.hp_[CUR] <= 0)
 		return false;
 
-	static int x_delta[4] = {0,1,0,-1};
-	static int y_delta[4] = {-1,0,1,0};
-	static int i = 1;
+	cout << "Enemy moving." << endl;
 
-	Position new_pos = {pos_.x_ + x_delta[i], pos_.y_ + y_delta[i]};
+	static vector<Position> path_to_player;
 
-	while(current_room->isSolid(new_pos)) //look for direction to move
+	path_to_player = current_room->getShortestPath(pos_, current_player->getPosition());
+	if(!path_to_player.empty())
+		move(*path_to_player.begin());
+
+	/*
+	Position player_pos = current_player->getPosition();
+	const int X = 0;
+	const int Y = 1;
+	Position delta[2];
+	delta[X] = { player_pos.x_ - pos_.x_, 0 };
+	delta[Y] = { 0, player_pos.y_ - pos_.y_ };
+	int move_to = Y;
+
+	cout << "delta X: " << delta[X] << endl;
+	cout << "delta Y: " << delta[Y] << endl;
+
+	if(abs(delta[X].x_) > abs(delta[Y].y_))
+		move_to = X;
+
+	cout << "Decision: " << ((bool)move_to ? "Y" : "X") << endl;
+
+	//normalize
+	if(delta[X].x_ != 0)
+		delta[X].x_ /= abs(delta[X].x_);
+	if(delta[Y].y_ != 0)
+		delta[Y].y_ /= abs(delta[Y].y_);
+
+	cout << "Norm. delta X: " << delta[X] << endl;
+	cout << "Norm. delta Y: " << delta[Y] << endl;
+
+	if(move(pos_ + delta[move_to]))
 	{
-		i = (i+1) % 4;
-		new_pos = {pos_.x_ + x_delta[i], pos_.y_ + y_delta[i]};
+		
+		cout << "New pos: " << pos_ << endl;
 	}
-	move(new_pos);
+	else
+	{
+		move_to = (move_to + 1) % 2;
+		cout << "Decision: " << ((bool)move_to ? "Y" : "X") << endl;
+		if(!current_room->isSolid(pos_ + delta[move_to]))
+		{
+			move(pos_ + delta[move_to]);
+			cout << "New pos: " << pos_ << endl;
+		}
+	}
+	*/
 	return true;
 }
 

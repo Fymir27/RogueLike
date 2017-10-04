@@ -3,24 +3,43 @@
 #include "Common.h"
 #include "Types.h"
 
+enum FIELD_STATUS
+{
+	SOLID,
+	FREE,
+	TRIGGER,
+	OCCUPIED,
+	PICKUP
+};
+
 class Character;
 class Room;
+class Item;
 class Field
 {
 	friend class Room;
 
 	protected:
 		int tile_nr_;
-		Field(Position pos, int tile_nr);
+		Field(Position pos, int tile_nr, FIELD_STATUS);
 		Position pos_;
-		bool occupied_;
-		Character* character_; //Character standing on that field
+		FIELD_STATUS status_;
+		Character* character_ = NULL;   //Character standing on that field
+		Item*      item_      = NULL;   //Item lying on that field
+		size_t     count_     = 0;      //number of Items
 	public:
 		virtual ~Field();
-		int getTileNr() const { return tile_nr_; };
-		virtual bool stepOn(Character* who);
-		virtual bool stepOff();
-		virtual bool isSolid() { return false; };
+		int 				getTileNr() const { return tile_nr_; };
+		FIELD_STATUS 		getFieldStatus() { return status_; };
+		Character* 			getCharacter() { return character_; };
+
+		void free();
+		void occupy(Character* character);
+		void placeItem(Item* item, size_t count);
+		void pickUpItem(Character* character);
+
+		virtual Position trigger(Character* who) { cout << "[Error] No trigger available!" << endl; return Position(0,0); };
+
 		virtual void draw(sf::RenderWindow& window) {};
 
 };
@@ -28,34 +47,31 @@ class Field
 class Wall : public Field
 {
 	public:
-	Wall(Position pos) :Field(pos, 0) {};
-	virtual bool isSolid() { return true; };
+	Wall(Position pos) : Field(pos, 0, SOLID) {};
 };
 
 class Floor : public Field
 {
-	public:
-	Floor(Position pos) :Field(pos, 1) {};
+public:
+	Floor(Position pos) :Field(pos, 1, FREE) {};
 };
 
 class Tree : public Field
 {
 public:
-	Tree(Position pos) : Field(pos, 2) {};
-	virtual bool isSolid() { return true; };
+	Tree(Position pos) : Field(pos, 2, SOLID) {};
 };
 
 class Water : public Field
 {
 public:
-	Water(Position pos) : Field(pos, 3) {};
+	Water(Position pos) : Field(pos, 3, FREE) {};
 };
 
 class Lava : public Field
 {
 public:
-	Lava(Position pos) : Field(pos, 4) {};
-	virtual bool isSolid() { return true; };
+	Lava(Position pos) : Field(pos, 4, TRIGGER) {};
 };
 
 class Door : public Field
@@ -64,5 +80,5 @@ private:
 	Direction dir_;
 public:
 	Door(Position pos, Direction dir);
-	virtual bool stepOn(Character* who);
+	virtual Position trigger(Character* who);
 };

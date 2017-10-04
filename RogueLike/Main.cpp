@@ -35,10 +35,12 @@ void processInput(const sf::Event& event)
 	if(item_slot > 0)
 		current_player->getInventory()->useItem(item_slot);
 
-	if(!(new_pos == current_player->getPosition()) && !current_room->isSolid(new_pos))
+	if(!(new_pos == current_player->getPosition())) 
 	{
-		current_player->move(new_pos);
-		current_room->stepEnemies();
+		if(current_player->move(new_pos)) //valid move?
+		{
+			current_room->stepEnemies();
+		}
 	}	
 }
 
@@ -71,12 +73,13 @@ int main()
 	player_stats.int_  = 10;
 	player_stats.dex_  = 10;
 
-	Player* player = new Player("Oliver", { 1, 3 }, player_stats);
+	Player* player = new Player("Oliver", { 1, 1 }, player_stats);
 	current_player = player;
 
 	//place Pickup item
-	Field* pickup = new Pickup({ 5, 2 }, new SmallHealingPotion(), 17);
-	current_room->addField(pickup);
+	current_room->placeItem({5,2}, SmallHealingPotion::get(), 3);
+	//Field* pickup = new Pickup({ 5, 3 }, new SmallHealingPotion(), 17);
+	//current_room->addField(pickup);
 
 	//spawn Enemy
 	Enemy* blob = new Enemy("Blobby", {10,4}, player_stats, "../images/enemy.png");

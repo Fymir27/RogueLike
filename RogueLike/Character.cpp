@@ -2,6 +2,7 @@
 #include "Field.h"
 #include "Room.h"
 #include "Item.h"
+#include "UI.h"
 
 std::ostream& operator<<(std::ostream& out, Character* character)
 {
@@ -30,12 +31,14 @@ Character::Character(string name, Position pos, Stats stats, string filename) : 
 	sprite_.setTexture(texture_);
 
 	cout << this;
+
+	current_room->occupyField(pos_, this);
 }
 
 Character::~Character()
 {
 	cout << name_ << " ded." << endl << endl;
-	current_room->stepOff(pos_, this, UP);
+	current_room->freeField(pos_);
 	delete inventory_;
 }
 
@@ -62,24 +65,20 @@ void Character::damage(const int amount)
 	stats_.hp_[CUR] = new_value;
 }
 
+void Character::attack(Character* target)
+{
+	UI::displayText(name_ + " attacks " + target->getName() + ".");
+}
+
 bool Character::move(Position new_pos)
 {
-	Room* room = current_room;
-	Position old_pos = pos_;
+	//Position old_pos = pos_;
 	
-	if(!room->stepOn(new_pos, this, UP))
-		return false;
+	pos_ = current_room->stepOn(new_pos, this);
 
-	if(!room->stepOff(old_pos, this, UP))
-		return false;
+	if(pos_ == new_pos)
+		return true;
 
-	if(room == current_room)
-		pos_ = new_pos;
-
-	return true;
+	return false;
 }
 
-bool Character::isSolid(Position pos)
-{
-	return current_room->getField(pos.x_, pos.y_)->isSolid();
-}

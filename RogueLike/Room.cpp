@@ -23,22 +23,61 @@ Field* Room::getField(int x, int y)
 	return NULL;
 }
 
-bool Room::isSolid(Position pos)
+Position Room::stepOn(Position new_pos, Character* who)
 {
-	Field* field = getField(pos.x_, pos.y_);
-	if(!field)
-		return true;
-	return field->isSolid();
+	Position old_pos = who->getPosition();
+	Field* new_field = getField(new_pos.x_, new_pos.y_);
+	Field* old_field = getField(old_pos.x_, old_pos.y_);
+
+	if(new_field == NULL)
+		return old_pos;
+
+	switch(new_field->status_)
+	{
+		case SOLID:
+		return old_pos;
+
+		case FREE:
+		new_field->occupy(who);
+		old_field->free();
+		return new_pos;
+
+		case OCCUPIED:
+		who->attack(new_field->getCharacter());
+		return old_pos;
+
+		case TRIGGER:
+		return new_field->trigger(who);
+
+		case PICKUP:
+		new_field->occupy(who);
+		new_field->pickUpItem(who);
+		old_field->free();
+		return new_pos;
+	}
+	return old_pos;
 }
 
-bool Room::stepOn (Position pos, Character* character, Direction dir)
+vector<Position> Room::getShortestPath(Position from, Position to)
 {
-	return getField(pos.x_, pos.y_)->stepOn(character);
+	vector<Position> tmp;
+	tmp.push_back({0,0});
+	return tmp;
 }
 
-bool Room::stepOff(Position pos, Character* character, Direction dir)
+void Room::freeField(Position pos)
 {
-	return getField(pos.x_, pos.y_)->stepOff();
+	getField(pos.x_, pos.y_)->free();
+}
+
+void Room::occupyField(Position pos, Character* who)
+{
+	getField(pos.x_, pos.y_)->occupy(who);
+}
+
+void Room::placeItem(Position pos, Item* item, size_t count)
+{
+	getField(pos.x_, pos.y_)->placeItem(item, count);
 }
 
 Room::Room()
@@ -114,22 +153,22 @@ bool Room::readRoomFromFile(const char * filename)
 
 		case '^':
 			field = new Door(pos, UP);
-			doors_[UP] = pos;
+			entries_[UP] = (pos + Position(0,1));
 			break;
 
 		case '>':
 			field = new Door(pos, RIGHT);
-			doors_[RIGHT] = pos;
+			entries_[RIGHT] = (pos + Position(-1,0));
 			break;
 
 		case 'v':
 			field = new Door(pos, DOWN);
-			doors_[DOWN] = pos;
+			entries_[DOWN] = (pos + Position(0,-1));
 			break;
 
 		case '<':
 			field = new Door(pos, LEFT);
-			doors_[LEFT] = pos;
+			entries_[LEFT] = (pos + Position(1,0));
 			break;
 
 		case '\n':
@@ -189,19 +228,19 @@ void Room::addField(Field* field)
 
 }
 
-Position Room::getEntryPosition(Direction last_exit)
+Position Room::getEntryPosition(Direction entry)
 {
-	return entry_positions_.at(last_exit);
+	return entries_[entry];
 }
 
 void Room::addEntryPosition(Direction dir, Position pos)
 {
-	entry_positions_.insert(pair<Direction, Position>(dir, pos));
+	entries_[dir] = pos;
 }
 
 void Room::movePlayerToDoor(Direction entry)
 {
-	current_player->pos_ = doors_[entry];
+	//current_player->pos_ = doors_[entry];
 }
 
 void Room::addEnemy(Enemy* enemy)

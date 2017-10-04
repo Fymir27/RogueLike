@@ -4,7 +4,7 @@
 #include "Room.h"
 #include "UI.h"
 
-Pickup::Pickup(Position pos, Item* item, unsigned int count) : Field(pos, 0), item_(item), count_(count)
+Pickup::Pickup(Position pos, Item* item, unsigned int count) : Field(pos, 0, TRIGGER), item_(item), count_(count)
 {
 	
 }

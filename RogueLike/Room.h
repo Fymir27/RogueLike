@@ -8,6 +8,7 @@
 
 class Enemy;
 class TileMap;
+class Item;
 class Room
 {
 	friend class Dungeon;
@@ -15,24 +16,25 @@ class Room
 	private:
 		TileMap* tile_map_;
 		Map map_; //Fields
+		Field* getField(int x, int y);
 		string name;
 		Position pos_; //Position in Dungeon
 
-		Position doors_[4];
-		//-- maps last exit direction to entry position --//
-		map<Direction, Position> entry_positions_;
+		Position entries_[4];
 
 		list<Enemy*> enemies_;
 
 
 	public:
 		std::string getName() { return name; };
-		Field* getField(int x, int y);
 		size_t getColCount() { return map_.front().size(); };
 		size_t getRowCount() { return map_.size(); };
-		bool isSolid(Position pos);
-		bool stepOn (Position pos, Character* character, Direction dir);
-		bool stepOff(Position pos, Character* character, Direction dir);
+
+		vector<Position> getShortestPath(Position from, Position to);
+		Position stepOn(Position new_pos, Character* who); //returns new Position of Character
+		void freeField(Position pos);
+		void occupyField(Position pos, Character* who);
+		void placeItem(Position pos, Item* item, size_t count);
 
 		Room();
 		Room(const char* filename, Position pos = {0,0});
@@ -41,7 +43,7 @@ class Room
 		void draw(sf::RenderWindow& window);
 		void addField(Field * field);
 
-		Position getEntryPosition(Direction last_exit);
+		Position getEntryPosition(Direction entry);
 		void     addEntryPosition(Direction dir, Position pos);
 
 		void movePlayerToDoor(Direction entry);

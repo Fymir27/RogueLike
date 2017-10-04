@@ -30,8 +30,8 @@ public:
 	
 	bool addItem(Item* item, unsigned int count);
 
-	bool move(Position new_pos);
-	bool isSolid(Position pos);
+	bool move(Position new_pos); //returns if the move was valid
+	void attack(Character* target);
 
 	void draw(sf::RenderWindow& window);
 	friend std::ostream& operator<<(std::ostream& out, Character* character);

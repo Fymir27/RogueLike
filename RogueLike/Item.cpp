@@ -1,42 +1,15 @@
 #include "Item.h"
-#include "Inventory.h"
 
-std::ostream& operator<<(std::ostream& out, const Item* item)
+Item::Item(string name, string descr, size_t count, size_t max_count const char* texture_file) : 
+name_(name), description_(descr), max_count_(max_count), count_(count), texture_file_(texture_file)
 {
-	out << "# " << item->name_ << " (" << item->count_ << "x)";
-	return out;
-};
-
-Item::Item(string name, int count, const char* texture_file) : name_(name), count_(count), texture_file_(texture_file)
-{
+	cout << name << " x" << count << " created." << endl;
 	if (!texture_.loadFromFile(texture_file))
-		cout << "Couldn't load texture for " << name << endl;
+		cout << "Couldn't load texture" << texture_file << endl;
 	sprite_.setTexture(texture_);
 }
-void Item::decreaseCount(const int amount)
-{
-	count_ -= amount;
-	if (count_ == 0)
-	{
-		inventory_->removeItem(this);
-	}
-}
 
-bool Item::tryUse(Room* room, Character* character)
-{
-	if (usable_)
-	{
-		use(room, character);
-	}
-	return usable_;
-}
-
-sf::Sprite& Item::getSprite()
-{
-	return sprite_;
-}
-
-Item::Item()
+Item::Item(const Item& orig)
 {
 
 }

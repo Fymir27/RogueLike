@@ -18,9 +18,7 @@ public:
 	Inventory();
 	~Inventory();
 
-	void click(Position pos_clicked);
-
-	void sort() {};
+	void sort() {}; //not implemented
 	bool addItem(Item* item, unsigned int new_count); //returns false when full
 	void removeItem(Item* item);
 	void useItem(int slot);

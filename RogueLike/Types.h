@@ -9,8 +9,9 @@ typedef std::vector<Row> Map;
 
 struct Position
 {
-	unsigned int x_;
-	unsigned int y_;
+	int x_;
+	int y_;
+	Position(int x = 0, int y = 0);
 };
 
 extern Position operator+(Position first, const Position& second);

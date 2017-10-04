@@ -5,45 +5,46 @@
 
 using std::string;
 
+typedef enum ITEM_TYPE
+{
+	USEABLE,
+	EQUIP,
+	QUEST
+} ItemType;
+
 class Inventory;
 class Room;
 class Character;
 
-class Item : public Singleton<Item>
+class Item
 {
 	friend class Inventory;
 
 protected:
-	Position pos_; //position relative to inventory
+
 	string name_;
 	string description_;
-	int count_;
-	Item* self_;
-	Inventory* inventory_;
-	bool usable_ = true;
+	size_t count_;
+	size_t max_count_;
+	ItemType type_
 
 	string texture_file_;
 	sf::Texture texture_;
 	sf::Sprite sprite_;
-	sf::Text text_;
 
 public:
-	Item(string name, int count, const char* teture_file);
-	Item();
+	Item(string name, string descr, size_t count, size_t max_count, const char* teture_file);
+	Item(const Item& orig);
 	virtual ~Item() {};
 
-	virtual const int getMaxCount() { return 0; };
-	int getCount() const { return count_; };
-	void increaseCount(const int amount) { count_ += amount; };
-	void decreaseCount(const int amount);
+	size_t getMaxCount()     const { return max_count_; };
+	size_t getCount()        const { return count_; };
+	string getName()         const { return name_; };
+	string getDescription()  const { return description_; };
+	sf::Sprite & getSprite() const { return sprite_; };
 
-	void associateWithInventory(Inventory* inventory) { inventory_ = inventory; };
-	string getName() const { return name_; };
-	friend std::ostream& operator<<(std::ostream& out, const Item* item);
-	bool tryUse(Room* room, Character* character);
-	sf::Sprite & getSprite();
-	virtual void use(Room* room, Character* character) { cout << "Trying to use base class Item"; };
-	virtual Item* duplicate() { return new Item(name_, count_, texture_file_.c_str()); };
+	void increaseCount(const size_t amount) { count_ += amount; };
+	void decreaseCount(const size_t amount) { count_ -= amount; };
 
-	void setPosition(Position p) { pos_ = p; };
+	virtual void use(Character* who) {};
 };

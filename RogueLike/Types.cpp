@@ -1,5 +1,10 @@
 #include "Types.h"
 
+Position::Position(int x, int y) : x_(x), y_(y)
+{
+	
+}
+
 std::ostream& operator<<(std::ostream& out, const Position& pos)
 {
 	out << "(" << pos.x_ << "|" << pos.y_ << ")";

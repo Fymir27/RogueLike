@@ -36,6 +36,8 @@ using std::map;
 using std::pair;
 using std::string;
 
+inline size_t absolute(int i) { return i > 0 ? i : i*(-1); };
+
 
 //---  ---//
 
