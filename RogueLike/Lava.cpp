@@ -8,3 +8,9 @@ Position Lava::trigger(Character* who)
 	UI::displayText("You stepped into Lava. Ouch!");
 	return pos_;
 }
+
+void Lava::free()
+{
+	status_ = TRIGGER;
+	character_ = NULL;
+}

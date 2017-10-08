@@ -36,7 +36,7 @@ class Field
 		Character* 			getCharacter() { return character_; };
 		size_t          getDistanceToPlayer() { return distance_to_player_; };
 
-		void free();
+		virtual void free();
 		void occupy(Character* character);
 		void placeItem(Item* item);
 		void pickUpItem(Character* character);
@@ -76,6 +76,7 @@ class Lava : public Field
 public:
 	Lava(Position pos) : Field(pos, 4, TRIGGER) {};
 	Position trigger(Character * who);
+	void free();
 };
 
 class Door : public Field

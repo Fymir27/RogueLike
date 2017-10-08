@@ -38,19 +38,21 @@ Field* Room::getField(Position pos)
 }
 
 
-bool Room::stepOn(Position to, Character* who, Position* new_pos)
+bool Room::stepOn(Position to, Character* who, Position& new_pos)
 {
 	Position old_pos = who->getPosition();
 	Field* new_field = getField(to.x_, to.y_);
 	Field* old_field = getField(old_pos.x_, old_pos.y_);
 	Room* old_room = current_room;
 
+	/*
 	for (auto line : map_)
 	{
 		for (auto field : line)
 			cout << field->status_;
 		cout << endl;
 	}
+	*/
 
 	if (new_field == NULL)
 	{
@@ -66,34 +68,31 @@ bool Room::stepOn(Position to, Character* who, Position* new_pos)
 		return false;
 
 		case FREE:
-		new_field->occupy(who);
 		old_field->free();
-		*new_pos = to;
+		new_field->occupy(who);
+		new_pos = to;
 		return true;
 
 		case OCCUPIED:
-			cout << "Field occupied by: " << new_field->getCharacter()->getName() << endl;
 		who->attack(new_field->getCharacter());
-		*new_pos = who->getPosition();
+		new_pos = who->getPosition();
 		return true;
 
 		case TRIGGER:
-			*new_pos = new_field->trigger(who);
+			old_field->free();
+			new_pos = new_field->trigger(who);
+			new_field = current_room->getField(new_pos);
+			new_field->occupy(who);
 			if (current_room == old_room)
 				return true;
 			else
-			{
-				cout << "Trigger changed Room!" << endl;
-				current_room->getField(*new_pos)->occupy(who);
-				old_field->free();
 				return false; //register as non valid move so enemies dont move as well
-			}
 
 		case PICKUP:
+		old_field->free();
 		new_field->occupy(who);
 		new_field->pickUpItem(who);
-		old_field->free();
-		*new_pos = to;
+		new_pos = to;
 		return true;
 	}
 	return false;
@@ -235,7 +234,7 @@ void Room::updateDistanceToPlayer()
 		for (auto field : line)
 		{
 			field->distance_to_player_ = abs(field->pos_.x_ - player_pos.x_) + abs(field->pos_.y_ - player_pos.y_);
-			printf_s("%3ld", field->distance_to_player_);
+			printf_s("%3zd", field->distance_to_player_);
 		}
 		cout << endl;
 	}
