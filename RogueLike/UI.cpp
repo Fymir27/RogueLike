@@ -36,7 +36,7 @@ UI::UI()
 						  "Dex\n");
 
 	textbox_ = new Textbox(3, 20, font_, 
-		    pos_bottom_text_, 400, 80,
+		    pos_bottom_text_, 420, 80,
 		    5, 5, sf::Color(100, 100, 100), sf::Color(50,50,50));
 
 }

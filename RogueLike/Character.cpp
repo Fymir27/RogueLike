@@ -37,7 +37,7 @@ Character::Character(string name, Position pos, Stats stats, string filename) : 
 
 Character::~Character()
 {
-	cout << name_ << " ded." << endl << endl;
+	UI::displayText(name_ + " defeated.");
 	current_room->freeField(pos_);
 	delete inventory_;
 }
@@ -67,7 +67,9 @@ void Character::damage(const int amount)
 
 void Character::attack(Character* target)
 {
-	UI::displayText(name_ + " attacks " + target->getName() + ".");
+	size_t damage = stats_.str_ + stats_.dex_/2;
+	UI::displayText(name_ + " attacks " + target->getName() + " for " + std::to_string(damage) + " damage.");
+	target->damage(damage);
 }
 
 bool Character::move(Position new_pos)

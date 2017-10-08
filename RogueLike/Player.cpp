@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Room.h"
+#include "UI.h"
 
 Player* current_player = NULL;
 
@@ -28,7 +29,11 @@ bool Player::move(Position new_pos)
 {
 	if (Character::move(new_pos)) //check if move is valid
 	{
-		//current_room->updateDistanceToPlayer();
+		if (stats_.hp_[CUR] <= 0)
+		{
+
+			//current_room->updateDistanceToPlayer();
+		}
 		return true;
 	}
 	return false;

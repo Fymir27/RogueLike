@@ -41,7 +41,7 @@ void processInput(const sf::Event& event)
 		{
 			current_room->stepEnemies();
 		}
-	}	
+	}
 }
 
 int main()
@@ -113,7 +113,12 @@ int main()
 		//-- Game Logic --//
 	    //current_player->step();
 		//current_room->stepEnemies();
-
+		if (current_player->getStats().hp_[CUR] <= 0)
+		{
+			UI::displayText("");
+			UI::displayText("    Game Over");
+			UI::displayText("");
+		}
 
 		window.clear(sf::Color::Black);
 		
@@ -121,8 +126,25 @@ int main()
 		player->draw(window);
 		ui->draw(window);
 		window.display();
+
+		if (current_player->getStats().hp_[CUR] <= 0)
+		{
+			delete current_player;
+			current_player = NULL;
+			break;
+		}
 	}
-	delete current_player;
+
+	while (window.isOpen())
+	{
+		//-- Game over; waiting for the User to quit --//
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+	}
+
 	delete ui;
 	delete current_dungeon;
 	return 0;
