@@ -72,13 +72,9 @@ void Character::attack(Character* target)
 
 bool Character::move(Position new_pos)
 {
-	//Position old_pos = pos_;
-	
-	pos_ = current_room->stepOn(new_pos, this);
-
-	if(pos_ == new_pos)
-		return true;
-
-	return false;
+	cout << name_ << " moving from " << pos_ << " to " << new_pos << endl;
+	bool valid = current_room->stepOn(new_pos, this, &pos_);
+	cout << "Result: " << pos_ << endl;
+	return valid;
 }
 

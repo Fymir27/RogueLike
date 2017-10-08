@@ -4,6 +4,7 @@
 
 bool Enemy::step()
 {
+	cout << "Enemy::step()" << endl;
 	/* 
 	static int steps = 0;
 	if (steps < 63)
@@ -16,13 +17,13 @@ bool Enemy::step()
 	if(stats_.hp_[CUR] <= 0)
 		return false;
 
-	cout << "Enemy moving." << endl;
+	vector<Position> path_to_player;
 
-	static vector<Position> path_to_player;
+	path_to_player = current_room->getShortestPath(pos_, current_player->getPosition()); //path is backwards!
+	
+	cout << "Path to player:" << endl;
 
-	path_to_player = current_room->getShortestPath(pos_, current_player->getPosition());
-	if(!path_to_player.empty())
-		move(*path_to_player.begin());
+	move(path_to_player.back());
 
 	/*
 	Position player_pos = current_player->getPosition();

@@ -23,46 +23,184 @@ Field* Room::getField(int x, int y)
 	return NULL;
 }
 
-Position Room::stepOn(Position new_pos, Character* who)
+Field* Room::getField(Position pos)
 {
+	try
+	{
+		return map_.at(pos.y_).at(pos.x_);
+	}
+	catch (std::exception e)
+	{
+		cout << "Invalid Field!" << endl;
+		std::cout << e.what();
+	}
+	return NULL;
+}
+
+
+bool Room::stepOn(Position to, Character* who, Position* new_pos)
+{
+	for (auto line : map_)
+	{
+		for (auto field : line)
+			cout << field->status_;
+		cout << endl;
+	}
+
 	Position old_pos = who->getPosition();
-	Field* new_field = getField(new_pos.x_, new_pos.y_);
+	Field* new_field = getField(to.x_, to.y_);
 	Field* old_field = getField(old_pos.x_, old_pos.y_);
 
-	if(new_field == NULL)
-		return old_pos;
+	if (new_field == NULL)
+	{
+		cout << "new_field == NULL!" << endl;
+		return false;
+	}
+
+	cout << "Field status: " << new_field->status_ << endl;
 
 	switch(new_field->status_)
 	{
 		case SOLID:
-		return old_pos;
+		return false;
 
 		case FREE:
 		new_field->occupy(who);
 		old_field->free();
-		return new_pos;
+		*new_pos = to;
+		return true;
 
 		case OCCUPIED:
+			cout << "Field occupied by: " << new_field->getCharacter()->getName() << endl;
 		who->attack(new_field->getCharacter());
-		return old_pos;
+		*new_pos = who->getPosition();
+		return true;
 
 		case TRIGGER:
-		return new_field->trigger(who);
+		*new_pos = new_field->trigger(who);
+		return true;
 
 		case PICKUP:
 		new_field->occupy(who);
 		new_field->pickUpItem(who);
 		old_field->free();
-		return new_pos;
+		*new_pos = to;
+		return true;
 	}
-	return old_pos;
+	return false;
 }
 
+struct Node
+{
+	Position pos;
+	bool visited = false;
+	size_t distance = std::numeric_limits<size_t>::max();
+	Node* prev = NULL;
+};
+
+std::ostream& operator<<(std::ostream& out, const Node& node)
+{
+	out << node.pos << "[" << node.visited << "], " << node.distance << endl;
+	return out;
+};
+
+//--- returns path from "from" to "to" (backwards!!) ---//
 vector<Position> Room::getShortestPath(Position from, Position to)
 {
-	vector<Position> tmp;
-	tmp.push_back({0,0});
-	return tmp;
+	size_t width = getColCount();
+	size_t height = getRowCount();
+	vector<vector<Node>> nodes(height);
+
+	size_t x;
+	size_t y;
+	for (y = 0; y < height; y++)
+	{
+		nodes.at(y).resize(width);
+		for (x = 0; x < width; x++)
+		{
+			Node* node = &nodes.at(y).at(x);
+			node->pos = Position(x, y);
+		}
+	}
+
+	static Position delta[4] = { Position(0, -1), Position(1, 0), Position(0, 1), Position(-1, 0) }; //order to look for neighbours
+
+	//-- init --//
+	Node* start = &nodes.at(from.y_).at(from.x_);
+	start->distance = 0;
+
+	while (true)
+	{
+		/*
+		for (auto& line : nodes)
+			for (auto& node : line)
+				cout << node;
+				*/
+		
+
+		//-- find node with shortest distance to from--//
+		size_t shortest_distance = std::numeric_limits<size_t>::max();
+		Node* new_node = NULL;
+
+		for (y = 0; y < nodes.size(); y++)
+		{
+			for (x = 0; x < nodes.at(y).size(); x++)
+			{
+				Node* cur = &nodes.at(y).at(x);
+				if (cur->visited)
+				{
+					continue;
+				}
+				else if (getField(x, y)->status_ == SOLID)
+				{
+					cur->visited = true;
+				}
+				else if (cur->distance < shortest_distance)
+				{
+					shortest_distance = cur->distance;
+					new_node = cur;
+				}
+			} //for x
+		} //for y
+
+		if (new_node == NULL)
+		{
+			cout << "[Error] No path found!" << endl;
+			return vector<Position>();
+		}
+
+		new_node->visited = true;
+
+		//-- target reached; building path backwards --//
+		if (new_node->pos == to)
+		{
+			vector<Position> path;
+			while (new_node->prev != NULL)
+			{
+				path.push_back(new_node->pos);
+				new_node = new_node->prev;
+			}
+			for (auto pos : path)
+				cout << pos;
+			cout << endl;
+			return path;
+		}
+
+		//-- update distance for neighbours --//
+		Position tmp;
+		for (size_t i = 0; i < 4; i++)
+		{
+			tmp = new_node->pos + delta[i];
+			Node* node = &nodes.at(tmp.y_).at(tmp.x_);
+			if (!node->visited)
+			{
+				node->distance = new_node->distance + 1;
+				node->prev = new_node;
+			}
+		}
+	} //while
+
+	return vector<Position>();
 }
 
 void Room::freeField(Position pos)
@@ -257,6 +395,7 @@ void Room::removeEnemy(Enemy* enemy)
 void Room::stepEnemies() //called appr. 63 times a second
 {
 	vector<Enemy*> dead_enemies;
+	cout << "Room::stepEnemies()" << endl;
 	for(Enemy* enemy : enemies_)
 	{
 		if(!enemy->step())
@@ -269,4 +408,5 @@ void Room::stepEnemies() //called appr. 63 times a second
 		enemies_.remove(enemy);
 		delete enemy;
 	}
+	cout << endl;
 }

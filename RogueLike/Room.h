@@ -17,6 +17,7 @@ class Room
 		TileMap* tile_map_;
 		Map map_; //Fields
 		Field* getField(int x, int y);
+		Field* getField(Position pos);
 		string name;
 		Position pos_; //Position in Dungeon
 
@@ -31,7 +32,7 @@ class Room
 		size_t getRowCount() { return map_.size(); };
 
 		vector<Position> getShortestPath(Position from, Position to);
-		Position stepOn(Position new_pos, Character* who); //returns new Position of Character
+		bool stepOn(Position to, Character* who, Position* new_pos); //returns new Position of Character
 		void freeField(Position pos);
 		void occupyField(Position pos, Character* who);
 		void placeItem(Position pos, Item* item);
