@@ -32,6 +32,7 @@ class Room
 		size_t getRowCount() { return map_.size(); };
 
 		vector<Position> getShortestPath(Position from, Position to);
+		void updateDistanceToPlayer();
 		bool stepOn(Position to, Character* who, Position* new_pos); //returns new Position of Character
 		void freeField(Position pos);
 		void occupyField(Position pos, Character* who);

@@ -40,16 +40,17 @@ Field* Room::getField(Position pos)
 
 bool Room::stepOn(Position to, Character* who, Position* new_pos)
 {
+	Position old_pos = who->getPosition();
+	Field* new_field = getField(to.x_, to.y_);
+	Field* old_field = getField(old_pos.x_, old_pos.y_);
+	Room* old_room = current_room;
+
 	for (auto line : map_)
 	{
 		for (auto field : line)
 			cout << field->status_;
 		cout << endl;
 	}
-
-	Position old_pos = who->getPosition();
-	Field* new_field = getField(to.x_, to.y_);
-	Field* old_field = getField(old_pos.x_, old_pos.y_);
 
 	if (new_field == NULL)
 	{
@@ -77,8 +78,16 @@ bool Room::stepOn(Position to, Character* who, Position* new_pos)
 		return true;
 
 		case TRIGGER:
-		*new_pos = new_field->trigger(who);
-		return true;
+			*new_pos = new_field->trigger(who);
+			if (current_room == old_room)
+				return true;
+			else
+			{
+				cout << "Trigger changed Room!" << endl;
+				current_room->getField(*new_pos)->occupy(who);
+				old_field->free();
+				return false; //register as non valid move so enemies dont move as well
+			}
 
 		case PICKUP:
 		new_field->occupy(who);
@@ -107,100 +116,129 @@ std::ostream& operator<<(std::ostream& out, const Node& node)
 //--- returns path from "from" to "to" (backwards!!) ---//
 vector<Position> Room::getShortestPath(Position from, Position to)
 {
-	size_t width = getColCount();
-	size_t height = getRowCount();
-	vector<vector<Node>> nodes(height);
-
-	size_t x;
-	size_t y;
-	for (y = 0; y < height; y++)
+	cout << "//-- Path finding start --//" << endl;
+	try
 	{
-		nodes.at(y).resize(width);
-		for (x = 0; x < width; x++)
+		size_t width = getColCount();
+		size_t height = getRowCount();
+		vector<vector<Node>> nodes(height);
+
+		size_t x;
+		size_t y;
+		for (y = 0; y < height; y++)
 		{
-			Node* node = &nodes.at(y).at(x);
-			node->pos = Position(x, y);
+			nodes.at(y).resize(width);
+			for (x = 0; x < width; x++)
+			{
+				Node* node = &nodes.at(y).at(x);
+				node->pos = Position(x, y);
+			}
 		}
+
+		static Position delta[4] = { Position(0, -1), Position(1, 0), Position(0, 1), Position(-1, 0) }; //order to look for neighbours
+
+		//-- init --//
+		Node* start = &nodes.at(from.y_).at(from.x_);
+		start->distance = 0;
+
+		while (true)
+		{
+			/*
+			for (auto& line : nodes)
+				for (auto& node : line)
+					cout << node;
+			*/
+
+
+			//-- find node with shortest distance to from--//
+			size_t shortest_distance = std::numeric_limits<size_t>::max();
+			Node* new_node = NULL;
+
+			for (y = 0; y < nodes.size(); y++)
+			{
+				for (x = 0; x < nodes.at(y).size(); x++)
+				{
+					Node* cur = &nodes.at(y).at(x);
+					if (cur->visited)
+					{
+						continue;
+					}
+					else if (getField(x, y)->status_ == SOLID)
+					{
+						cur->visited = true;
+					}
+					else if (cur->distance < shortest_distance)
+					{
+						shortest_distance = cur->distance;
+						new_node = cur;
+					}
+				} //for x
+			} //for y
+
+			if (new_node == NULL)
+			{
+				cout << "[Error] No path found!" << endl;
+				return vector<Position>();
+			}
+
+			new_node->visited = true;
+
+			//-- target reached; building path backwards --//
+			if (new_node->pos == to)
+			{
+				cout << "Path found!" << endl;
+				vector<Position> path;
+				while (new_node->prev != NULL)
+				{
+					path.push_back(new_node->pos);
+					new_node = new_node->prev;
+				}
+				for (auto pos : path)
+					cout << pos;
+				cout << endl;
+				return path;
+			}
+			 
+			//-- update distance for neighbours --//
+			Position tmp;
+			for (size_t i = 0; i < 4; i++)
+			{
+				tmp = new_node->pos + delta[i];
+				if (tmp.x_ < 0)
+					tmp.x_ = 0;
+				if (tmp.y_ < 0)
+					tmp.y_ = 0;
+				Node* node = &nodes.at(tmp.y_).at(tmp.x_);
+				if (!node->visited)
+				{
+					node->distance = new_node->distance + 1;
+					node->prev = new_node;
+				}
+			}
+		} //while
+
+		return vector<Position>();
 	}
-
-	static Position delta[4] = { Position(0, -1), Position(1, 0), Position(0, 1), Position(-1, 0) }; //order to look for neighbours
-
-	//-- init --//
-	Node* start = &nodes.at(from.y_).at(from.x_);
-	start->distance = 0;
-
-	while (true)
+	catch (std::out_of_range& e)
 	{
-		/*
-		for (auto& line : nodes)
-			for (auto& node : line)
-				cout << node;
-				*/
-		
+		cout << "Path finding error" << endl;
+		cout << e.what();
+	}
+}
 
-		//-- find node with shortest distance to from--//
-		size_t shortest_distance = std::numeric_limits<size_t>::max();
-		Node* new_node = NULL;
-
-		for (y = 0; y < nodes.size(); y++)
+void Room::updateDistanceToPlayer()
+{
+	cout << "Updating distance to player:" << endl;
+	Position player_pos = current_player->getPosition();
+	for (auto line : map_)
+	{
+		for (auto field : line)
 		{
-			for (x = 0; x < nodes.at(y).size(); x++)
-			{
-				Node* cur = &nodes.at(y).at(x);
-				if (cur->visited)
-				{
-					continue;
-				}
-				else if (getField(x, y)->status_ == SOLID)
-				{
-					cur->visited = true;
-				}
-				else if (cur->distance < shortest_distance)
-				{
-					shortest_distance = cur->distance;
-					new_node = cur;
-				}
-			} //for x
-		} //for y
-
-		if (new_node == NULL)
-		{
-			cout << "[Error] No path found!" << endl;
-			return vector<Position>();
+			field->distance_to_player_ = abs(field->pos_.x_ - player_pos.x_) + abs(field->pos_.y_ - player_pos.y_);
+			printf_s("%3ld", field->distance_to_player_);
 		}
-
-		new_node->visited = true;
-
-		//-- target reached; building path backwards --//
-		if (new_node->pos == to)
-		{
-			vector<Position> path;
-			while (new_node->prev != NULL)
-			{
-				path.push_back(new_node->pos);
-				new_node = new_node->prev;
-			}
-			for (auto pos : path)
-				cout << pos;
-			cout << endl;
-			return path;
-		}
-
-		//-- update distance for neighbours --//
-		Position tmp;
-		for (size_t i = 0; i < 4; i++)
-		{
-			tmp = new_node->pos + delta[i];
-			Node* node = &nodes.at(tmp.y_).at(tmp.x_);
-			if (!node->visited)
-			{
-				node->distance = new_node->distance + 1;
-				node->prev = new_node;
-			}
-		}
-	} //while
-
-	return vector<Position>();
+		cout << endl;
+	}
 }
 
 void Room::freeField(Position pos)

@@ -27,18 +27,21 @@ class Field
 		Character* character_ = NULL;   //Character standing on that field
 		Item*      item_      = NULL;   //Item lying on that field
 		size_t     count_     = 0;      //number of Items
+		size_t distance_to_player_ = std::numeric_limits<size_t>::max();
+
 	public:
 		virtual ~Field();
-		int 				getTileNr() const { return tile_nr_; };
+		int 				    getTileNr() const { return tile_nr_; };
 		FIELD_STATUS 		getFieldStatus() { return status_; };
 		Character* 			getCharacter() { return character_; };
+		size_t          getDistanceToPlayer() { return distance_to_player_; };
 
 		void free();
 		void occupy(Character* character);
 		void placeItem(Item* item);
 		void pickUpItem(Character* character);
 
-		virtual Position trigger(Character* who) { cout << "[Error] No trigger available!" << endl; return Position(0,0); };
+		virtual Position trigger(Character* who) { cout << "[Error] No trigger available!" << endl; return pos_; };
 
 		virtual void draw(sf::RenderWindow& window);
 
@@ -72,6 +75,7 @@ class Lava : public Field
 {
 public:
 	Lava(Position pos) : Field(pos, 4, TRIGGER) {};
+	Position trigger(Character * who);
 };
 
 class Door : public Field

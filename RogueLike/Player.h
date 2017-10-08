@@ -19,6 +19,7 @@ public:
 
 	void setPosition(Position pos) { pos_ = pos; };
 	void step();
+	virtual bool move(Position new_pos);
 	//void damage(const int amount);
 };
 

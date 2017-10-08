@@ -5,15 +5,7 @@
 bool Enemy::step()
 {
 	cout << "Enemy::step()" << endl;
-	/* 
-	static int steps = 0;
-	if (steps < 63)
-	{
-		steps++;
-		return;
-	}
-	steps = 0;
-	*/
+
 	if(stats_.hp_[CUR] <= 0)
 		return false;
 

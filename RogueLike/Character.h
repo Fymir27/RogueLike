@@ -30,7 +30,7 @@ public:
 	
 	bool addItem(Item* item);
 
-	bool move(Position new_pos); //returns if the move was valid
+	virtual bool move(Position new_pos); //returns if the move was valid
 	void attack(Character* target);
 
 	void draw(sf::RenderWindow& window);

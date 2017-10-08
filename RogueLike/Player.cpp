@@ -24,6 +24,18 @@ void Player::step()
 	}
 }
 
+bool Player::move(Position new_pos)
+{
+	if (Character::move(new_pos)) //check if move is valid
+	{
+		//current_room->updateDistanceToPlayer();
+		return true;
+	}
+	return false;
+}
+
+
+
 /*
 void Player::damage(const int amount)
 {

@@ -66,6 +66,9 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Lava.cpp">
+      <Filter>Quelldateien\Fields</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Room.h">
