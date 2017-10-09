@@ -51,13 +51,6 @@ int main()
 	cout << "#################################" << endl;
 	cout << endl;
 
-	/*
-	//-- load new room from file --//
-	char* filename = "Room1.txt";
-	cout << "Instantiating new room..." << endl;
-	current_room = new Room(filename);
-	*/
-
 	//-- load new dungeon from file --//
 	current_dungeon = new Dungeon();
 	current_dungeon->loadFromFile("Dungeon1.txt");
@@ -97,6 +90,10 @@ int main()
 	cout << "////////////////////////////////////////////////////////" << endl;
 	cout << endl;
 
+	srand(42);
+	cout << "Dungeon Layout:" << endl;
+	current_dungeon->generateLayout(20, 13);
+
 	//-- main loop --//
 	sf::Event event;
 	while (window.isOpen())
@@ -116,7 +113,7 @@ int main()
 		if (current_player->getStats().hp_[CUR] <= 0)
 		{
 			UI::displayText("");
-			UI::displayText("    Game Over");
+			UI::displayText("Game Over");
 			UI::displayText("");
 		}
 

@@ -4,8 +4,10 @@
 const unsigned int TILE_SIZE = 32;
 const unsigned int WINDOW_WIDTH = 860;
 const unsigned int WINDOW_HEIGHT = 480;
+const int DELTA_X[4] = { 0, 1, 0, -1 };
+const int DELTA_Y[4] = { -1, 0, 1, 0 };
 //#define OS_WIN
-#define OS_LIN
+#define OS_WIN
 
 //--- SFML ---//
 #ifdef OS_WIN
@@ -37,8 +39,10 @@ using std::pair;
 using std::string;
 
 inline size_t absolute(int i) { return i > 0 ? i : i*(-1); };
+inline bool roll(size_t count, size_t out_of) {return ((rand() % out_of) < count);}
 
 
-//---  ---//
+//--- Utility ---//
+#include <cstdlib>
 
 //---  ---//
