@@ -234,7 +234,7 @@ void Room::updateDistanceToPlayer()
 		for (auto field : line)
 		{
 			field->distance_to_player_ = abs(field->pos_.x_ - player_pos.x_) + abs(field->pos_.y_ - player_pos.y_);
-			printf_s("%3zd", field->distance_to_player_);
+			//printf_s("%3zd", field->distance_to_player_);
 		}
 		cout << endl;
 	}

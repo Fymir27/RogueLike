@@ -3,7 +3,6 @@
 #include "Field.h"
 #include "Player.h"
 #include "HealingPotion.h"
-#include "Pickup.h"
 #include "Item.h"
 #include "Types.h"
 #include "Common.h"
@@ -82,7 +81,8 @@ int main()
 	//current_room->addField(pickup);
 
 	//spawn Enemy
-	Enemy* blob = new Enemy("Blobby", {10,4}, player_stats, "../images/enemy.png");
+	Enemy* blob = new Enemy("Blobby", {10,3}, player_stats, "../images/enemy.png");
+	//Enemy* blob2 = new Enemy("Blobby2", {9,4}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
