@@ -7,6 +7,19 @@ class Field;
 typedef std::vector<Field*> Row;
 typedef std::vector<Row> Map;
 
+template<class T>
+void print(const std::vector<std::vector<T>>& v)
+{
+	for (const std::vector<T>& row : v)
+	{
+		for (const T& element : row)
+		{
+			std::cout << element << " ";
+		}
+		std::cout << std::endl;
+	}
+}
+
 struct Position
 {
 	int x_;

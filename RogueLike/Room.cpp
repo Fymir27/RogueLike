@@ -255,10 +255,13 @@ void Room::placeItem(Position pos, Item* item)
 	getField(pos.x_, pos.y_)->placeItem(item);
 }
 
+/*
 Room::Room()
 {
-	
+	tile_map_ = new TileMap();
+	tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int)getColCount(), (int)getRowCount());
 }
+*/
 
 Room::Room(const char * filename, Position pos) : pos_(pos)
 {

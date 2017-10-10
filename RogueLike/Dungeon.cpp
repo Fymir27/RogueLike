@@ -54,18 +54,29 @@ void Dungeon::loadFromFile(string filename)
 	current_room = loaded_rooms_[starting_room];
 }
 
+Room** Dungeon::getRoom(size_t x, size_t y)
+{
+	return &layout_test_.at(y).at(x);
+}
+
+void Dungeon::connect(Room* from, Direction dir, Room* to)
+{
+	from->neighbours_[dir] = to;
+	to->neighbours_[(dir + 2) % 4] = from;
+}
+
 void Dungeon::generateLayout(size_t width, size_t height)
 {
 	cout << "Generating Dungeon... (" << width << "x" << height << ")" << endl;
 
 	//-- Setting the size --//
-	layout_char_.resize(height);
-	for (auto& row : layout_char_)
+	layout_test_.resize(height);
+	for (auto& row : layout_test_)
 	{
 		row.resize(width);
-		for (char room : row)
+		for (auto& room : row)
 		{
-			room = ' ';     //no rooms anywhere
+			room = NULL;     //no rooms anywhere
 		}
 	}
 	
@@ -76,9 +87,16 @@ void Dungeon::generateLayout(size_t width, size_t height)
 
 	cout << "Margins (hor/ver): " << margin_hor << "/" << margin_ver << endl;
 
+	Room** tmp = NULL;
+
 	for (size_t y = 0; y < height; y++)
 	{
-		layout_char_.at(y).at(margin_hor) = '#';  //vertical line
+		tmp = getRoom(margin_hor, y);            //vertical line
+		*tmp = new Room();
+		if (y > 0)
+		{
+			connect(*tmp, UP, *getRoom(margin_hor, y - 1));
+		}
 		int dir_grow = roll(1, 2) ? 1 : -1;       //branch left or right
 		size_t stack_count = 1;
 		while (roll(1, 2)) //grow branch
@@ -88,80 +106,84 @@ void Dungeon::generateLayout(size_t width, size_t height)
 			if ((x < 0) || (x >= width))
 				break; //too far
 
-			layout_char_.at(y).at(x) = '#';
+			tmp = getRoom(x, y);
+			if (*tmp == NULL)
+				*tmp = new Room();
+			connect(*tmp, (dir_grow == 1 ? LEFT : RIGHT), *getRoom(x + (dir_grow * -1), y));
 			stack_count++;
 		}
 	}
 
 	for (size_t x = 0; x < width; x++)
 	{
-		layout_char_.at(margin_ver).at(x) = '#';  //horizontal line
+		tmp = getRoom(x, margin_ver);            //horizontal line
+		if(*tmp == NULL)
+			*tmp = new Room();
+		if (x > 0)
+		{
+			connect(*tmp, LEFT, *getRoom(x - 1, margin_ver));
+		}
 		int dir_grow = roll(1, 2) ? 1 : -1;       //branch up or down
 		size_t stack_count = 1;
 		while (roll(1, 2)) //grow branch
 		{
 			size_t y = margin_ver + stack_count * dir_grow;
 
-			if ((y < 0) || (y >= height)) 
-				break; //grew too far
-			
-			layout_char_.at(y).at(x) = '#';
+			if ((y < 0) || (y >= height))
+				break; //too far
+
+			tmp = getRoom(x, y);
+			if (*tmp == NULL)
+				*tmp = new Room();
+			connect(*tmp, (dir_grow == 1 ? UP : DOWN), *getRoom(x, y + (dir_grow * -1)));
+
 			stack_count++;
 		}
 	}
 
-	//-- create Doors between Rooms using randomized floodfill-algorithm --//
-	//TODO: implementation!
+	/*
+	for (auto row : layout_test_)
+	{
+		for (auto room : row)
+			if (room == NULL)
+				cout << ' ';
+			else
+				cout << '#';
+		cout << endl;
+	}
+	*/
 
 	//-- DEBUG --//
-	for (auto& row : layout_char_)
+	for (auto& row : layout_test_)
 	{
-		for (char room : row)
+		for (Room* room : row)
 		{
-			cout << room;
-			cout << " ";
+			if (room != NULL)
+				cout << ' ' << (char)(room->neighbours_[UP] ? '|' : ' ') << ' ';
+			else
+				cout << "...";
+		}
+		cout << endl;
+		for (auto room : row)
+		{
+			if (room != NULL)
+				cout << (char)(room->neighbours_[LEFT] ? '-' : ' ') << '#' << (char)(room->neighbours_[RIGHT] ? '-' : ' ');
+			else
+				cout << "...";
+		}
+		cout << endl;
+		for (auto room : row)
+		{
+			if (room)
+				cout << ' ' << (char)(room->neighbours_[DOWN] ? '|' : ' ') << ' ';
+			else
+				cout << "...";
 		}
 		cout << endl;
 	}
-
 	cout << endl;
 }
 
-void Dungeon::expand(size_t x, size_t y)
-{
-	static size_t room_count = 1;
-
-	if (room_count >= 20)
-		return;
-
-	cout << "Dungeon::expand " << x << "|" << y << endl;
-
-	size_t neighbour_count = 0;
-	bool neighbours[4] = { false, false, false, false };
-
-	for (size_t i = 0; i < 4; i++)
-	{
-		if (layout_char_.at(y + DELTA_Y[i]).at(x + DELTA_X[i]) == '#') //checks for neighbours in all directions
-		{
-			neighbour_count++;
-			neighbours[i] = true;
-		}
-	}
-	for (size_t i = 0; i < 4; i++)
-	{
-		if (!neighbours[i])
-		{
-			if (roll(3 - neighbour_count, room_count/2 + 2))
-			{
-				size_t new_x = x + DELTA_X[i]; //Position of new room
-				size_t new_y = y + DELTA_Y[i];
-				layout_char_.at(new_y).at(new_x) = '#';
-				room_count++;
-				expand(new_x, new_y);
-			}
-		}
-	}
-}
 
 void Dungeon::changeRoom(Direction dir)
 {

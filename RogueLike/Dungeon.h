@@ -11,12 +11,13 @@ private:
 	unsigned int width_;
 	map<string, Room*> loaded_rooms_;
 	vector<vector<Room*>> layout_;
-	vector<vector<char>> layout_char_;
+	vector<vector<Room*>> layout_test_;
 public:
 	void changeRoom(Direction exit);
 	void loadFromFile(string filename);
+	Room** getRoom(size_t x, size_t y);
+	void connect(Room * from, Direction dir, Room * to);
 	void generateLayout(size_t width, size_t height);
-	void expand(size_t x, size_t y);
 };
 
 extern Dungeon* current_dungeon;

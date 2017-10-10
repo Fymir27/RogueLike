@@ -90,7 +90,7 @@ int main()
 	cout << "////////////////////////////////////////////////////////" << endl;
 	cout << endl;
 
-	srand(42);
+	srand(27);
 	cout << "Dungeon Layout:" << endl;
 	current_dungeon->generateLayout(20, 13);
 

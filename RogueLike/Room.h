@@ -22,6 +22,7 @@ class Room
 		Position pos_; //Position in Dungeon
 
 		Position entries_[4];
+		Room* neighbours_[4] = { NULL, NULL, NULL, NULL };
 
 		list<Enemy*> enemies_;
 
@@ -38,8 +39,7 @@ class Room
 		void occupyField(Position pos, Character* who);
 		void placeItem(Position pos, Item* item);
 
-		Room();
-		Room(const char* filename, Position pos = {0,0});
+		Room(const char* filename = "Room_generic.txt", Position pos = {0,0});
 
 		bool readRoomFromFile(const char* filename);
 		void draw(sf::RenderWindow& window);
