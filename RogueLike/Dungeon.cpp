@@ -61,8 +61,8 @@ Room** Dungeon::getRoom(size_t x, size_t y)
 
 void Dungeon::connect(Room* from, Direction dir, Room* to)
 {
-	from->neighbours_[dir] = to;
-	to->neighbours_[(dir + 2) % 4] = from;
+	from->addNeighbour(dir, to);
+	to->addNeighbour(Direction((dir + 2) % 4), from);
 }
 
 void Dungeon::generateLayout(size_t width, size_t height)
@@ -92,7 +92,7 @@ void Dungeon::generateLayout(size_t width, size_t height)
 	for (size_t y = 0; y < height; y++)
 	{
 		tmp = getRoom(margin_hor, y);            //vertical line
-		*tmp = new Room();
+		*tmp = new Room(Position(margin_hor, y));
 		if (y > 0)
 		{
 			connect(*tmp, UP, *getRoom(margin_hor, y - 1));
@@ -108,7 +108,7 @@ void Dungeon::generateLayout(size_t width, size_t height)
 
 			tmp = getRoom(x, y);
 			if (*tmp == NULL)
-				*tmp = new Room();
+				*tmp = new Room(Position(x, y));
 			connect(*tmp, (dir_grow == 1 ? LEFT : RIGHT), *getRoom(x + (dir_grow * -1), y));
 			stack_count++;
 		}
@@ -118,7 +118,7 @@ void Dungeon::generateLayout(size_t width, size_t height)
 	{
 		tmp = getRoom(x, margin_ver);            //horizontal line
 		if(*tmp == NULL)
-			*tmp = new Room();
+			*tmp = new Room(Position(x, margin_ver));
 		if (x > 0)
 		{
 			connect(*tmp, LEFT, *getRoom(x - 1, margin_ver));
@@ -134,12 +134,14 @@ void Dungeon::generateLayout(size_t width, size_t height)
 
 			tmp = getRoom(x, y);
 			if (*tmp == NULL)
-				*tmp = new Room();
+				*tmp = new Room(Position(x,y));
 			connect(*tmp, (dir_grow == 1 ? UP : DOWN), *getRoom(x, y + (dir_grow * -1)));
 
 			stack_count++;
 		}
 	}
+
+	current_room = *getRoom(6, 0);
 
 	/*
 	for (auto row : layout_test_)
@@ -218,7 +220,7 @@ void Dungeon::changeRoom(Direction dir)
 	}
 
 	cout << "New Room is at Pos. " << pos << " in Dungeon!" << endl; 
-	Room* new_room = layout_.at(pos.y_).at(pos.x_);
+	Room* new_room = layout_test_.at(pos.y_).at(pos.x_);
 	current_room = new_room;
 	current_room->movePlayerToDoor(entry);
 }

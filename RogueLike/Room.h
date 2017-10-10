@@ -39,7 +39,13 @@ class Room
 		void occupyField(Position pos, Character* who);
 		void placeItem(Position pos, Item* item);
 
-		Room(const char* filename = "Room_generic.txt", Position pos = {0,0});
+		void generate(size_t width, size_t height);
+
+		Room(Position pos);
+
+		void addNeighbour(Direction dir, Room * other);
+
+		Room(const char* filename, Position pos = {0,0});
 
 		bool readRoomFromFile(const char* filename);
 		void draw(sf::RenderWindow& window);

@@ -86,4 +86,5 @@ private:
 public:
 	Door(Position pos, Direction dir);
 	virtual Position trigger(Character* who);
+	void free();
 };

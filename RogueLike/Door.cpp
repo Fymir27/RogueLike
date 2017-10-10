@@ -18,3 +18,9 @@ Position Door::trigger(Character* character)
 	entry = (entry + 2) % 4; //opposite entry
 	return current_room->getEntryPosition((Direction)entry);
 }
+
+void Door::free()
+{
+	status_ = TRIGGER;
+	character_ = NULL;
+}

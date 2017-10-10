@@ -3,16 +3,15 @@
 
 TileMap::TileMap()
 {
-	cout << "Tilemap ctor" << endl;
+
 }
 
 bool TileMap::load(const char* filename, const Map& map, 
 				   size_t tile_size, size_t width, size_t height)
 {
-	cout << "Loading tileset from file:" << filename << endl;
 	if(!tileset_.loadFromFile(filename))
 	{
-		cout << "FAILED" << endl;
+		cout << "Loading " << filename << " FAILED" << endl;
 	}
 
 	//cout << width << 'x' << height << ',' << tile_size << endl;

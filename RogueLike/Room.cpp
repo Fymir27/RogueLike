@@ -255,13 +255,61 @@ void Room::placeItem(Position pos, Item* item)
 	getField(pos.x_, pos.y_)->placeItem(item);
 }
 
-/*
-Room::Room()
+void Room::generate(size_t width, size_t height)
 {
+	if (!readRoomFromFile("Room_generic.txt"))
+	{
+		cout << "[Error] Room could not be loaded!" << endl;
+		return;
+	}
 	tile_map_ = new TileMap();
 	tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int)getColCount(), (int)getRowCount());
 }
-*/
+
+Room::Room(Position pos) : pos_(pos)
+{
+	generate(10, 7);
+}
+
+void Room::addNeighbour(Direction dir, Room* other)
+{
+	neighbours_[dir] = other;
+	Position pos;
+	Position entry;
+	switch (dir)
+	{
+	case UP:
+		pos.x_ = getColCount() / 2;
+		pos.y_ = 0;
+		entry = pos;
+		entry.y_ += 1;
+		break;
+
+	case RIGHT:
+		pos.x_ = getColCount() - 1;
+		pos.y_ = getRowCount() / 2;
+		entry = pos;
+		entry.x_ -= 1;
+		break;
+
+	case DOWN:
+		pos.x_ = getColCount() / 2;
+		pos.y_ = getRowCount() - 1;
+		entry = pos;
+		entry.y_ -= 1;
+		break;
+
+	case LEFT:
+		pos.x_ = 0;
+		pos.y_ = getRowCount() / 2;
+		entry = pos;
+		entry.x_ += 1;
+		break;
+	}
+	map_.at(pos.y_).at(pos.x_) = new Door(pos, dir);
+	entries_[dir] = entry;
+	tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int)getColCount(), (int)getRowCount());
+}
 
 Room::Room(const char * filename, Position pos) : pos_(pos)
 {
@@ -288,7 +336,10 @@ bool Room::readRoomFromFile(const char * filename)
 	name = filename;
 	std::fstream file(filename);
 	if (!file.is_open())
+	{
 		return false;
+		cout << "Failed!" << endl;
+	}
 
 	Row row;
 	char c;
@@ -367,10 +418,10 @@ bool Room::readRoomFromFile(const char * filename)
 			pos.x_++;
 			row.push_back(field);
 		}
-		cout << c;
+		//cout << c;
 		//cout << pos << endl;
 	}
-	cout << endl;
+	//cout << endl;
 	return true;
 }
 
