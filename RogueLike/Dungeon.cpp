@@ -57,18 +57,22 @@ void Dungeon::loadFromFile(string filename)
 void Dungeon::generateLayout(size_t width, size_t height)
 {
 	cout << "Generating Dungeon... (" << width << "x" << height << ")" << endl;
+
+	//-- Setting the size --//
 	layout_char_.resize(height);
 	for (auto& row : layout_char_)
 	{
 		row.resize(width);
 		for (char room : row)
 		{
-			room = '0';     //no room
+			room = ' ';     //no rooms anywhere
 		}
 	}
 	
-	size_t margin_hor = rand() % width;  //left/right
-	size_t margin_ver = rand() % height; //up/down
+	//-- Create two crossing lines and branch out from them randomly --//
+	//TODO: add more lines the bigger the room is
+	size_t margin_hor = rand() % width;  //from left
+	size_t margin_ver = rand() % height; //from top
 
 	cout << "Margins (hor/ver): " << margin_hor << "/" << margin_ver << endl;
 
@@ -77,12 +81,12 @@ void Dungeon::generateLayout(size_t width, size_t height)
 		layout_char_.at(y).at(margin_hor) = '#';  //vertical line
 		int dir_grow = roll(1, 2) ? 1 : -1;       //branch left or right
 		size_t stack_count = 1;
-		while (roll(1, 2))
+		while (roll(1, 2)) //grow branch
 		{
 			size_t x = margin_hor + stack_count * dir_grow;
 
 			if ((x < 0) || (x >= width))
-				break;//grew too far
+				break; //too far
 
 			layout_char_.at(y).at(x) = '#';
 			stack_count++;
@@ -94,22 +98,29 @@ void Dungeon::generateLayout(size_t width, size_t height)
 		layout_char_.at(margin_ver).at(x) = '#';  //horizontal line
 		int dir_grow = roll(1, 2) ? 1 : -1;       //branch up or down
 		size_t stack_count = 1;
-		while (roll(1, 2))
+		while (roll(1, 2)) //grow branch
 		{
 			size_t y = margin_ver + stack_count * dir_grow;
 
 			if ((y < 0) || (y >= height)) 
-				break;//grew too far
+				break; //grew too far
 			
 			layout_char_.at(y).at(x) = '#';
 			stack_count++;
 		}
 	}
 
+	//-- create Doors between Rooms using randomized floodfill-algorithm --//
+	//TODO: implementation!
+
+	//-- DEBUG --//
 	for (auto& row : layout_char_)
 	{
 		for (char room : row)
+		{
 			cout << room;
+			cout << " ";
+		}
 		cout << endl;
 	}
 
