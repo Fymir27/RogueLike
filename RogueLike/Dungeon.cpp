@@ -206,13 +206,13 @@ void Dungeon::readRoomPartsFromFile()
 			return;
 		}
 
-		//TODO: delete \n !
-
 		vector<string> section;
 		while (!file.eof())
 		{
 			string part = "";
+			string tmp;
 			std::getline(file, part, '-');
+			file.get(); //ignore next newline
 			//TODO: sort by height
 			cout << part;
 			section.push_back(part);
@@ -222,7 +222,7 @@ void Dungeon::readRoomPartsFromFile()
 		file.close();
 	}
 	Room* tmp = new Room(Position(0, 0));
-	string test[3] = { room_parts_[0][0][0], room_parts_[0][1][0], room_parts_[0][2][0] };
+	string test[3] = { room_parts_[0][0][2], room_parts_[0][1][1], room_parts_[0][2][2] };
 	tmp->generateFromParts(test);
 }
 
