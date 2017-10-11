@@ -186,6 +186,46 @@ void Dungeon::generateLayout(size_t width, size_t height)
 	cout << endl;
 }
 
+void Dungeon::readRoomPartsFromFile()
+{
+	string filename[3];
+	filename[0] = "room_parts_left.txt";
+	filename[1] = "room_parts_middle.txt";
+	filename[2] = "room_parts_right.txt";
+
+	room_parts_.resize(1);
+
+	std::ifstream file;
+	for (size_t i = 0; i < 3; i++)
+	{
+		file.open(filename[i]);
+		if (!file.is_open())
+		{
+			file.close();
+			cout << "[Error] " << filename[i] << " couln't be opened." << endl;
+			return;
+		}
+
+		//TODO: delete \n !
+
+		vector<string> section;
+		while (!file.eof())
+		{
+			string part = "";
+			std::getline(file, part, '-');
+			//TODO: sort by height
+			cout << part;
+			section.push_back(part);
+		}	
+		room_parts_.at(0).push_back(section);
+		cout << "--------------" << endl;
+		file.close();
+	}
+	Room* tmp = new Room(Position(0, 0));
+	string test[3] = { room_parts_[0][0][0], room_parts_[0][1][0], room_parts_[0][2][0] };
+	tmp->generateFromParts(test);
+}
+
 
 void Dungeon::changeRoom(Direction dir)
 {

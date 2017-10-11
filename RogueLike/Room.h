@@ -26,11 +26,6 @@ class Room
 
 		list<Enemy*> enemies_;
 
-		static vector<vector<string>> left_;
-		static vector<vector<string>> middle_;
-		static vector<vector<string>> right_;
-
-
 	public:
 		std::string getName() { return name; };
 		size_t getColCount() { return map_.front().size(); };
@@ -44,6 +39,7 @@ class Room
 		void placeItem(Position pos, Item* item);
 
 		void generate(size_t width, size_t height);
+		void generateFromParts(string parts[3]);
 
 		Room(Position pos);
 

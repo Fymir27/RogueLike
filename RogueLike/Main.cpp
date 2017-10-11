@@ -94,6 +94,8 @@ int main()
 	cout << "Dungeon Layout:" << endl;
 	current_dungeon->generateLayout(20, 13);
 
+	current_dungeon->readRoomPartsFromFile();
+
 	//-- main loop --//
 	sf::Event event;
 	while (window.isOpen())
