@@ -130,5 +130,14 @@
     <Text Include="Room_generic.txt">
       <Filter>Ressourcendateien</Filter>
     </Text>
+    <Text Include="room_parts_left.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
+    <Text Include="room_parts_middle.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
+    <Text Include="room_parts_right.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
   </ItemGroup>
 </Project>

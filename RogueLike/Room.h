@@ -26,6 +26,10 @@ class Room
 
 		list<Enemy*> enemies_;
 
+		static vector<vector<string>> left_;
+		static vector<vector<string>> middle_;
+		static vector<vector<string>> right_;
+
 
 	public:
 		std::string getName() { return name; };

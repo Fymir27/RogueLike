@@ -167,6 +167,9 @@
     <Text Include="Room1.txt" />
     <Text Include="Room2.txt" />
     <Text Include="Room_generic.txt" />
+    <Text Include="room_parts_left.txt" />
+    <Text Include="room_parts_middle.txt" />
+    <Text Include="room_parts_right.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
