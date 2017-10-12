@@ -92,9 +92,9 @@ int main()
 
 	srand(27);
 	cout << "Dungeon Layout:" << endl;
+	current_dungeon->readRoomPartsFromFile();
 	current_dungeon->generateLayout(20, 13);
 
-	current_dungeon->readRoomPartsFromFile();
 
 	//-- main loop --//
 	sf::Event event;

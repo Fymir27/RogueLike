@@ -65,6 +65,15 @@ void Dungeon::connect(Room* from, Direction dir, Room* to)
 	to->addNeighbour(Direction((dir + 2) % 4), from);
 }
 
+string* Dungeon::getRandomRoomParts()
+{
+	string* str = new string[3];
+	str[0] = room_parts_[0][0][rand() % 3];
+	str[1] = room_parts_[0][1][rand() % 3];
+	str[2] = room_parts_[0][2][rand() % 3];
+	return str;
+}
+
 void Dungeon::generateLayout(size_t width, size_t height)
 {
 	cout << "Generating Dungeon... (" << width << "x" << height << ")" << endl;
@@ -93,6 +102,7 @@ void Dungeon::generateLayout(size_t width, size_t height)
 	{
 		tmp = getRoom(margin_hor, y);            //vertical line
 		*tmp = new Room(Position(margin_hor, y));
+		(*tmp)->generateFromParts(getRandomRoomParts());
 		if (y > 0)
 		{
 			connect(*tmp, UP, *getRoom(margin_hor, y - 1));
@@ -108,7 +118,10 @@ void Dungeon::generateLayout(size_t width, size_t height)
 
 			tmp = getRoom(x, y);
 			if (*tmp == NULL)
+			{
 				*tmp = new Room(Position(x, y));
+				(*tmp)->generateFromParts(getRandomRoomParts());
+			}
 			connect(*tmp, (dir_grow == 1 ? LEFT : RIGHT), *getRoom(x + (dir_grow * -1), y));
 			stack_count++;
 		}
@@ -117,8 +130,11 @@ void Dungeon::generateLayout(size_t width, size_t height)
 	for (size_t x = 0; x < width; x++)
 	{
 		tmp = getRoom(x, margin_ver);            //horizontal line
-		if(*tmp == NULL)
+		if (*tmp == NULL)
+		{
 			*tmp = new Room(Position(x, margin_ver));
+			(*tmp)->generateFromParts(getRandomRoomParts());
+		}
 		if (x > 0)
 		{
 			connect(*tmp, LEFT, *getRoom(x - 1, margin_ver));
@@ -134,7 +150,10 @@ void Dungeon::generateLayout(size_t width, size_t height)
 
 			tmp = getRoom(x, y);
 			if (*tmp == NULL)
-				*tmp = new Room(Position(x,y));
+			{
+				*tmp = new Room(Position(x, y));
+				(*tmp)->generateFromParts(getRandomRoomParts());
+			}
 			connect(*tmp, (dir_grow == 1 ? UP : DOWN), *getRoom(x, y + (dir_grow * -1)));
 
 			stack_count++;

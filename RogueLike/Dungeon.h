@@ -20,6 +20,7 @@ public:
 	void loadFromFile(string filename);
 	Room** getRoom(size_t x, size_t y);
 	void connect(Room * from, Direction dir, Room * to);
+	string * getRandomRoomParts();
 	void generateLayout(size_t width, size_t height);
 	void readRoomPartsFromFile();
 };

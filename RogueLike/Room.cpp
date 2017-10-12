@@ -285,7 +285,7 @@ void Room::generateFromParts(string parts[3])
 		for (size_t i = 0; i < 3; i++)
 		{
 			c = '#';
-			for (pos = map_.size() * 10; c != (char)10; pos++)
+			for (pos = map_.size() * 8 /*TODO:DONT HARDCODE*/; c != (char)10; pos++)
 			{
 				//printf_s("(%2zd)", pos);
 				c = parts[i].at(pos);
@@ -313,7 +313,7 @@ void Room::generateFromParts(string parts[3])
 
 Room::Room(Position pos) : pos_(pos)
 {
-	generate(10, 7);
+	
 }
 
 void Room::addNeighbour(Direction dir, Room* other)
@@ -353,7 +353,7 @@ void Room::addNeighbour(Direction dir, Room* other)
 	}
 	map_.at(pos.y_).at(pos.x_) = new Door(pos, dir);
 	entries_[dir] = entry;
-	tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int)getColCount(), (int)getRowCount());
+	//tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int)getColCount(), (int)getRowCount());
 }
 
 Room::Room(const char * filename, Position pos) : pos_(pos)
@@ -472,6 +472,11 @@ bool Room::readRoomFromFile(const char * filename)
 
 void Room::draw(sf::RenderWindow& window)
 {
+	if (!tile_map_)
+	{
+		tile_map_ = new TileMap();
+		tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int)getColCount(), (int)getRowCount());
+	}
 	window.draw(*tile_map_);
 	for (auto row : map_)
 	{
