@@ -94,8 +94,6 @@ void Dungeon::generateLayout(size_t width, size_t height)
 	size_t margin_hor = rand() % width;  //from left
 	size_t margin_ver = rand() % height; //from top
 
-	cout << "Margins (hor/ver): " << margin_hor << "/" << margin_ver << endl;
-
 	Room** tmp = NULL;
 
 	for (size_t y = 0; y < height; y++)
@@ -160,8 +158,9 @@ void Dungeon::generateLayout(size_t width, size_t height)
 		}
 	}
 
-	current_room = *getRoom(6, 0);
-
+	//random starting room
+	while (current_room == NULL)
+		current_room = *getRoom(rand() % width, rand() % height);
 	/*
 	for (auto row : layout_test_)
 	{
@@ -175,6 +174,7 @@ void Dungeon::generateLayout(size_t width, size_t height)
 	*/
 
 	//-- DEBUG --//
+	cout << "Margins (hor/ver): " << margin_hor << "/" << margin_ver << endl;
 	for (auto& row : layout_test_)
 	{
 		for (Room* room : row)
