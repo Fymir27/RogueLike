@@ -14,6 +14,7 @@ private:
 	vector<vector<Room*>> layout_;
 	vector<vector<Room*>> layout_test_; //currently used
 	/*static*/ vector<vector<vector<string>>> room_parts_;  // room_parts[height][section][random index]
+	//map<size_t, array<vector<string>, 3>> room_parts_;
 
 public:
 	void changeRoom(Direction exit);

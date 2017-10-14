@@ -53,7 +53,11 @@ int main()
 
 	//-- load new dungeon from file --//
 	current_dungeon = new Dungeon();
-	current_dungeon->loadFromFile("Dungeon1.txt");
+	srand(42);
+	cout << "Dungeon Layout:" << endl;
+	current_dungeon->readRoomPartsFromFile();
+	current_dungeon->generateLayout(20, 13);
+	//current_dungeon->loadFromFile("Dungeon1.txt");
 
 	//-- create player --//
 	Stats player_stats = {};
@@ -69,12 +73,12 @@ int main()
 	current_player = player;
 
 	//place Pickup item
-	current_room->placeItem({5,2}, new SmallHealingPotion(33));
+	//current_room->placeItem({5,2}, new SmallHealingPotion(33));
 	//Field* pickup = new Pickup({ 5, 3 }, new SmallHealingPotion(), 17);
 	//current_room->addField(pickup);
 
 	//spawn Enemy
-	Enemy* blob = new Enemy("Blobby", {10,3}, player_stats, "../images/enemy.png");
+	//Enemy* blob = new Enemy("Blobby", {10,4}, player_stats, "../images/enemy.png");
 	//Enemy* blob2 = new Enemy("Blobby2", {9,4}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
@@ -90,10 +94,7 @@ int main()
 	cout << "////////////////////////////////////////////////////////" << endl;
 	cout << endl;
 
-	srand(27);
-	cout << "Dungeon Layout:" << endl;
-	current_dungeon->readRoomPartsFromFile();
-	current_dungeon->generateLayout(20, 13);
+	
 
 
 	//-- main loop --//

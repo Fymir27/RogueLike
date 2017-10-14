@@ -88,11 +88,21 @@ void Dungeon::generateLayout(size_t width, size_t height)
 			room = NULL;     //no rooms anywhere
 		}
 	}
+
+	width_ = width;
+	height_ = height;
 	
 	//-- Create two crossing lines and branch out from them randomly --//
 	//TODO: add more lines the bigger the room is
-	size_t margin_hor = rand() % width;  //from left
-	size_t margin_ver = rand() % height; //from top
+	size_t margin_hor  = 0; //from left
+	size_t margin_ver =  0; //from top
+
+	while(margin_hor < 2 || margin_hor > width - 2)
+		margin_hor =  rand() % width;
+	while(margin_ver < 2 || margin_ver > width - 2)
+		margin_ver =  rand() % height;
+
+
 
 	cout << "Margins (hor/ver): " << margin_hor << "/" << margin_ver << endl;
 
@@ -160,7 +170,8 @@ void Dungeon::generateLayout(size_t width, size_t height)
 		}
 	}
 
-	current_room = *getRoom(6, 0);
+	while(current_room == NULL)
+		current_room = *getRoom(rand() % width, rand() % height);
 
 	/*
 	for (auto row : layout_test_)

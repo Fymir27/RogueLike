@@ -14,7 +14,7 @@ class Room
 	friend class Dungeon;
 
 	private:
-		TileMap* tile_map_;
+		TileMap* tile_map_ = NULL;
 		Map map_; //Fields
 		Field* getField(int x, int y);
 		Field* getField(Position pos);
