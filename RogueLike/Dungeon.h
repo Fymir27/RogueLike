@@ -4,6 +4,10 @@
 
 class Room;
 
+typedef vector<string> RoomPart;
+typedef vector<RoomPart> RoomSection;
+typedef array<RoomSection, 3> RoomHeightClass;
+
 class Dungeon
 {
 private:
@@ -13,17 +17,17 @@ private:
 	map<string, Room*> loaded_rooms_;
 	vector<vector<Room*>> layout_;
 	vector<vector<Room*>> layout_test_; //currently used
-	///*static*/ vector<vector<vector<string>>> room_parts_;  // room_parts[height][section][random index]
-	map<size_t, array<vector<vector<string>>, 3>> room_parts_;  // room_parts[height][section][random index][row]
+	map<size_t, RoomHeightClass> room_parts_;  // room_parts[height][section][random index][row]
 
 public:
 	void changeRoom(Direction exit);
 	void loadFromFile(string filename);
 	Room*& getRoom(size_t x, size_t y);
 	void connect(Room * from, Direction dir, Room * to);
+	Room * generateRoom(size_t x, size_t y, size_t height = 0); // 0 = random
+	size_t getRandomRoomHeight();
 	//string * getRandomRoomParts();
-	Room* Dungeon::generateRoom(size_t height)
-	void generateLayout(size_t width, size_t height);
+	void generate(size_t width, size_t height);
 	void readRoomPartsFromFile();
 };
 

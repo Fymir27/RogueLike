@@ -55,7 +55,7 @@ int main()
 	current_dungeon = new Dungeon();	
 	current_dungeon->readRoomPartsFromFile();
 	cout << "Dungeon Layout:" << endl;
-	current_dungeon->generateLayout(20, 13);
+	current_dungeon->generate(20, 13);
 
 	//-- create player --//
 	Stats player_stats = {};

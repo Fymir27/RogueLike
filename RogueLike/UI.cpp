@@ -21,9 +21,9 @@ UI::UI()
 	stat_values_.setCharacterSize(font_size_);
 	
 	//-- set Positions --//
-	pos_inv_   =       { 22 * TILE_SIZE + 10, 0                  };
-	pos_stats_ =       { 22 * TILE_SIZE + 14, 200                };
-	pos_bottom_text_ = { 10                 , TILE_SIZE * 7 + 10 };
+	pos_inv_   =       { 23 * TILE_SIZE + 10, 0                  };
+	pos_stats_ =       { 23 * TILE_SIZE + 14, 200                };
+	pos_bottom_text_ = { 10                 , TILE_SIZE * 9 + 10 };
 
 	stat_names_.setPosition(pos_stats_.x_, pos_stats_.y_);
 	stat_values_.setPosition(pos_stats_.x_ + 130, pos_stats_.y_);
