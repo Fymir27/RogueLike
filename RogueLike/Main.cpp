@@ -53,7 +53,7 @@ int main()
 
 	//-- load new dungeon from file --//
 	current_dungeon = new Dungeon();
-	srand(42);
+	srand(752);
 	cout << "Dungeon Layout:" << endl;
 	current_dungeon->readRoomPartsFromFile();
 	current_dungeon->generateLayout(20, 13);

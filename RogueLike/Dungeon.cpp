@@ -54,9 +54,9 @@ void Dungeon::loadFromFile(string filename)
 	current_room = loaded_rooms_[starting_room];
 }
 
-Room** Dungeon::getRoom(size_t x, size_t y)
+Room*& Dungeon::getRoom(size_t x, size_t y)
 {
-	return &layout_test_.at(y).at(x);
+	return layout_test_.at(y).at(x);
 }
 
 void Dungeon::connect(Room* from, Direction dir, Room* to)
@@ -65,13 +65,19 @@ void Dungeon::connect(Room* from, Direction dir, Room* to)
 	to->addNeighbour(Direction((dir + 2) % 4), from);
 }
 
-string* Dungeon::getRandomRoomParts()
+Room* Dungeon::generateRoom(size_t height)
 {
-	string* str = new string[3];
-	str[0] = room_parts_[0][0][rand() % 3];
-	str[1] = room_parts_[0][1][rand() % 3];
-	str[2] = room_parts_[0][2][rand() % 3];
-	return str;
+	for(size_t i = 0; i < 3; i++)
+	{
+		size_t r = rand() % room_parts[height][i].size();
+		for(size_t y = 0; y < height; y++)
+		{
+			for(const char& c : room_parts_[height][i][r][y])
+			{
+				//Blubb
+			}
+		}
+	}
 }
 
 void Dungeon::generateLayout(size_t width, size_t height)
@@ -106,16 +112,16 @@ void Dungeon::generateLayout(size_t width, size_t height)
 
 	cout << "Margins (hor/ver): " << margin_hor << "/" << margin_ver << endl;
 
-	Room** tmp = NULL;
+	Room*& tmp = getRoom(0,0);
 
 	for (size_t y = 0; y < height; y++)
 	{
 		tmp = getRoom(margin_hor, y);            //vertical line
-		*tmp = new Room(Position(margin_hor, y));
-		(*tmp)->generateFromParts(getRandomRoomParts());
+		tmp = new Room(Position(margin_hor, y));
+		tmp->generateFromParts(getRandomRoomParts());
 		if (y > 0)
 		{
-			connect(*tmp, UP, *getRoom(margin_hor, y - 1));
+			connect(tmp, UP, getRoom(margin_hor, y - 1));
 		}
 		int dir_grow = roll(1, 2) ? 1 : -1;       //branch left or right
 		size_t stack_count = 1;
@@ -127,12 +133,12 @@ void Dungeon::generateLayout(size_t width, size_t height)
 				break; //too far
 
 			tmp = getRoom(x, y);
-			if (*tmp == NULL)
+			if (tmp == NULL)
 			{
-				*tmp = new Room(Position(x, y));
-				(*tmp)->generateFromParts(getRandomRoomParts());
+				tmp = new Room(Position(x, y));
+				tmp->generateFromParts(getRandomRoomParts());
 			}
-			connect(*tmp, (dir_grow == 1 ? LEFT : RIGHT), *getRoom(x + (dir_grow * -1), y));
+			connect(tmp, (dir_grow == 1 ? LEFT : RIGHT), getRoom(x + (dir_grow * -1), y));
 			stack_count++;
 		}
 	}
@@ -140,14 +146,14 @@ void Dungeon::generateLayout(size_t width, size_t height)
 	for (size_t x = 0; x < width; x++)
 	{
 		tmp = getRoom(x, margin_ver);            //horizontal line
-		if (*tmp == NULL)
+		if (tmp == NULL)
 		{
-			*tmp = new Room(Position(x, margin_ver));
-			(*tmp)->generateFromParts(getRandomRoomParts());
+			tmp = new Room(Position(x, margin_ver));
+			tmp->generateFromParts(getRandomRoomParts());
 		}
 		if (x > 0)
 		{
-			connect(*tmp, LEFT, *getRoom(x - 1, margin_ver));
+			connect(tmp, LEFT, getRoom(x - 1, margin_ver));
 		}
 		int dir_grow = roll(1, 2) ? 1 : -1;       //branch up or down
 		size_t stack_count = 1;
@@ -159,19 +165,19 @@ void Dungeon::generateLayout(size_t width, size_t height)
 				break; //too far
 
 			tmp = getRoom(x, y);
-			if (*tmp == NULL)
+			if (tmp == NULL)
 			{
-				*tmp = new Room(Position(x, y));
-				(*tmp)->generateFromParts(getRandomRoomParts());
+				tmp = new Room(Position(x, y));
+				tmp->generateFromParts(getRandomRoomParts());
 			}
-			connect(*tmp, (dir_grow == 1 ? UP : DOWN), *getRoom(x, y + (dir_grow * -1)));
+			connect(tmp, (dir_grow == 1 ? UP : DOWN), getRoom(x, y + (dir_grow * -1)));
 
 			stack_count++;
 		}
 	}
 
 	while(current_room == NULL)
-		current_room = *getRoom(rand() % width, rand() % height);
+		current_room = getRoom(rand() % width, rand() % height);
 
 	/*
 	for (auto row : layout_test_)
@@ -218,16 +224,17 @@ void Dungeon::generateLayout(size_t width, size_t height)
 
 void Dungeon::readRoomPartsFromFile()
 {
+	cout << "Reading parts from file" << endl;
+
 	string filename[3];
 	filename[0] = "room_parts_left.txt";
 	filename[1] = "room_parts_middle.txt";
 	filename[2] = "room_parts_right.txt";
 
-	room_parts_.resize(1);
-
 	std::ifstream file;
 	for (size_t i = 0; i < 3; i++)
 	{
+		std::array<vector<vector<string>>, 3> height_class;
 		file.open(filename[i]);
 		if (!file.is_open())
 		{
@@ -236,24 +243,35 @@ void Dungeon::readRoomPartsFromFile()
 			return;
 		}
 
-		vector<string> section;
+		vector<string> part;
+		vector<vector<string>> section;
 		while (!file.eof())
 		{
-			string part = "";
-			string tmp;
-			std::getline(file, part, '-');
-			file.get(); //ignore next newline
-			//TODO: sort by height
-			cout << part;
-			section.push_back(part);
+			part.clear();
+			while((file.peek() != '-') && !file.eof())
+			{
+				//cout << "Reading line..." << endl;
+				string line;
+				std::getline(file, line, '\n');
+				part.push_back(line);
+			}
+
+			file.get(); //discard '-'
+			file.get(); //discard '\n'
+
+			//room_parts_.insert();
+
+			for(auto line : part)
+				cout << line << endl;	
+
+			room_parts_[part.size()][i].push_back(part);
+	
 		}	
-		room_parts_.at(0).push_back(section);
-		cout << "--------------" << endl;
 		file.close();
 	}
-	Room* tmp = new Room(Position(0, 0));
-	string test[3] = { room_parts_[0][0][2], room_parts_[0][1][1], room_parts_[0][2][2] };
-	tmp->generateFromParts(test);
+	//Room* tmp = new Room(Position(0, 0));
+	//string test[3] = { room_parts_[0][0][2], room_parts_[0][1][1], room_parts_[0][2][2] };
+	//tmp->generateFromParts(test);
 }
 
 
