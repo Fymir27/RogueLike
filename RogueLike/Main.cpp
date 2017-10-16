@@ -71,10 +71,12 @@ int main()
 	current_player = player;
 
 	//place Pickup item
-	current_room->placeItem({5,2}, new SmallHealingPotion(33));
+	//current_room->placeItem({5,2}, new SmallHealingPotion(33));
+	//Field* pickup = new Pickup({ 5, 3 }, new SmallHealingPotion(), 17);
+	//current_room->addField(pickup);
 
-	//spawn Enemies
-	Enemy* blob = new Enemy("Blobby", {10,3}, player_stats, "../images/enemy.png");
+	//spawn Enemy
+	//Enemy* blob = new Enemy("Blobby", {10,4}, player_stats, "../images/enemy.png");
 	//Enemy* blob2 = new Enemy("Blobby2", {9,4}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
