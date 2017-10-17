@@ -137,6 +137,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Lava.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Minimap.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="Textbox.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="HealingPotion.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="Minimap.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Textbox.h" />
     <ClInclude Include="TileMap.h" />

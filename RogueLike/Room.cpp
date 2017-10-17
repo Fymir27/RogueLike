@@ -61,8 +61,6 @@ bool Room::stepOn(Position to, Character* who, Position& new_pos)
 		return false;
 	}
 
-	cout << "Field status: " << new_field->status_ << endl;
-
 	switch(new_field->status_)
 	{
 		case SOLID:
@@ -536,7 +534,7 @@ void Room::removeEnemy(Enemy* enemy)
 void Room::stepEnemies() //called appr. 63 times a second
 {
 	vector<Enemy*> dead_enemies;
-	cout << "Room::stepEnemies()" << endl;
+	//cout << "Room::stepEnemies()" << endl;
 	for(Enemy* enemy : enemies_)
 	{
 		if(!enemy->step())
@@ -549,5 +547,4 @@ void Room::stepEnemies() //called appr. 63 times a second
 		enemies_.remove(enemy);
 		delete enemy;
 	}
-	cout << endl;
 }

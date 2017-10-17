@@ -74,9 +74,9 @@ void Character::attack(Character* target)
 
 bool Character::move(Position new_pos)
 {
-	cout << name_ << " moving from " << pos_ << " to " << new_pos << endl;
+	//cout << name_ << " moving from " << pos_ << " to " << new_pos << endl;
 	bool valid = current_room->stepOn(new_pos, this, pos_);
-	cout << "Result: " << pos_ << endl;
+	//cout << "Result: " << pos_ << endl;
 	return valid;
 }
 

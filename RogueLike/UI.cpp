@@ -3,6 +3,7 @@
 #include "Room.h"
 #include "Player.h"
 #include "Textbox.h"
+#include "Minimap.h"
 
 Textbox* UI::textbox_ = NULL;
 
@@ -70,6 +71,7 @@ void UI::draw(sf::RenderWindow& window)
 	stat_values_.setString(buffer.c_str());
 	window.draw(stat_values_);
 	textbox_->draw(window);
+	Minimap::draw(window);
 }
 
 void UI::displayText(string text)

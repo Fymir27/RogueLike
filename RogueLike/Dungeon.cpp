@@ -1,5 +1,6 @@
 #include "Dungeon.h"
 #include "Room.h"
+#include "Minimap.h"
 
 #include <fstream>
 
@@ -67,7 +68,7 @@ void Dungeon::connect(Room* from, Direction dir, Room* to)
 
 Room* Dungeon::generateRoom(size_t x, size_t y, size_t height)
 {
-	cout << "Randomly generating Room" << Position(x, y) << endl;
+	//cout << "Randomly generating Room" << Position(x, y) << endl;
 	if (height == 0) height = getRandomRoomHeight();
 	Room* room = new Room(Position(x,y));
 	room->map_.resize(height);
@@ -81,7 +82,7 @@ Room* Dungeon::generateRoom(size_t x, size_t y, size_t height)
 			for(size_t x = 0; x < part[y].size(); x++)
 			{
 				char c = line.at(x);
-				cout << c;
+				//cout << c;
 				switch (c)
 				{
 				case '#':
@@ -93,7 +94,7 @@ Room* Dungeon::generateRoom(size_t x, size_t y, size_t height)
 					break;
 				}
 			}
-			cout << endl;
+			//cout << endl;
 		}
 	}
 	layout_test_.at(y).at(x) = room;
@@ -137,8 +138,6 @@ void Dungeon::generate(size_t width, size_t height)
 		margin_hor =  rand() % width;
 	while(margin_ver < 2 || margin_ver > width - 2)
 		margin_ver =  rand() % height;
-
-
 
 	cout << "Margins (hor/ver): " << margin_hor << "/" << margin_ver << endl;
 
@@ -204,6 +203,8 @@ void Dungeon::generate(size_t width, size_t height)
 	//random starting room
 	while (current_room == NULL)
 		current_room = getRoom(rand() % width, rand() % height);
+
+	Minimap::init(width_, height_, current_room->pos_);
 	/*
 	for (auto row : layout_test_)
 	{
@@ -217,7 +218,6 @@ void Dungeon::generate(size_t width, size_t height)
 	*/
 
 	//-- DEBUG --//
-	cout << "Margins (hor/ver): " << margin_hor << "/" << margin_ver << endl;
 	for (auto& row : layout_test_)
 	{
 		for (Room* room : row)
@@ -336,4 +336,5 @@ void Dungeon::changeRoom(Direction dir)
 	Room* new_room = layout_test_.at(pos.y_).at(pos.x_);
 	current_room = new_room;
 	current_room->movePlayerToDoor(entry);
+	Minimap::setActiveRoom(current_room->pos_);
 }
