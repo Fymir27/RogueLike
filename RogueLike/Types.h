@@ -3,9 +3,10 @@
 #include "Common.h"
 
 class Field;
-
 typedef std::vector<Field*> Row;
 typedef std::vector<Row> Map;
+
+
 
 template<class T>
 void print(const std::vector<std::vector<T>>& v)

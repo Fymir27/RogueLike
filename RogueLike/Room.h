@@ -1,10 +1,9 @@
 #pragma once
-
+#include "Common.h"
 #include "Field.h"
 #include "Types.h"
 #include "TileMap.h"
 
-#include "Common.h"
 
 class Enemy;
 class TileMap;
@@ -14,17 +13,16 @@ class Room
 	friend class Dungeon;
 
 	private:
-		TileMap* tile_map_ = NULL;
-		Map map_; //Fields
+		TileMap*     tile_map_ = NULL;
+		Map          map_; //Fields
+		list<Enemy*> enemies_;
+		string       name;
+		Position     pos_; //Position in Dungeon
+		Position     entries_[4];
+		Room*        neighbours_[4] = { NULL, NULL, NULL, NULL };
+
 		Field* getField(int x, int y);
 		Field* getField(Position pos);
-		string name;
-		Position pos_; //Position in Dungeon
-
-		Position entries_[4];
-		Room* neighbours_[4] = { NULL, NULL, NULL, NULL };
-
-		list<Enemy*> enemies_;
 
 	public:
 		std::string getName() { return name; };
@@ -38,8 +36,6 @@ class Room
 		void occupyField(Position pos, Character* who);
 		void placeItem(Position pos, Item* item);
 
-		void generate(size_t width, size_t height);
-		void generateFromParts(string parts[3]);
 
 		Room(Position pos);
 

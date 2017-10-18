@@ -45,7 +45,14 @@ void Minimap::draw(sf::RenderWindow& window)
 {
 	static Position pos(750, 400);
 	const int SIZE = 10;
-	sf::Color colors[4] = { sf::Color::Blue, sf::Color::Green, sf::Color::Red, sf::Color::Black };
+	const int BORDER_WIDTH = 10;
+
+	sf::RectangleShape border(sf::Vector2f(map_.at(0).size() * SIZE + BORDER_WIDTH*2, map_.size() * SIZE + BORDER_WIDTH*2));
+	border.setFillColor(sf::Color(50, 50, 50));
+	border.setPosition(pos.x_, pos.y_);
+	window.draw(border);
+
+	sf::Color colors[4] = { sf::Color::Blue, sf::Color(100, 100, 100), sf::Color::Black, sf::Color::Black };
 
 	for (size_t y = 0; y < map_.size(); y++)
 	{
@@ -55,7 +62,7 @@ void Minimap::draw(sf::RenderWindow& window)
 
 			sf::RectangleShape room(sf::Vector2f(SIZE, SIZE));
 			room.setFillColor(colors[s]);
-			room.setPosition(sf::Vector2f(pos.x_ + x * SIZE, pos.y_ + y * SIZE));
+			room.setPosition(sf::Vector2f(pos.x_ + BORDER_WIDTH + x * SIZE, pos.y_ + BORDER_WIDTH + y * SIZE));
 
 			window.draw(room);
 		}

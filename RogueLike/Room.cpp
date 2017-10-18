@@ -254,61 +254,6 @@ void Room::placeItem(Position pos, Item* item)
 	getField(pos.x_, pos.y_)->placeItem(item);
 }
 
-void Room::generate(size_t width, size_t height)
-{
-	if (!readRoomFromFile("Room_generic.txt"))
-	{
-		cout << "[Error] Room could not be loaded!" << endl;
-		return;
-	}
-	tile_map_ = new TileMap();
-	tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int)getColCount(), (int)getRowCount());
-}
-
-void Room::generateFromParts(string parts[3])
-{
-	cout << "Generating Room from parts..." << endl;
-	for (int i = 0; i < 3; i++)
-		cout << parts[i];
-
-	char c = '#';
-	size_t pos = 0;
-	map_.clear();
-	for(size_t y = 0;; y++)
-	{
-		if (pos == parts[2].length())
-			break;
-
-		vector<Field*> row;
-		for (size_t i = 0; i < 3; i++)
-		{
-			c = '#';
-			for (pos = map_.size() * 8 /*TODO:DONT HARDCODE*/; c != (char)10; pos++)
-			{
-				//printf_s("(%2zd)", pos);
-				c = parts[i].at(pos);
-				if (c != 10)
-					cout << c;
-				switch (c)
-				{
-				case 10:
-					break;
-
-				case '#':
-					row.push_back(new Wall(Position(row.size() + 1, y)));
-					break;
-
-				case '.':
-					row.push_back(new Floor(Position(row.size() + 1, y)));
-					break;
-				}
-			}
-		}
-		map_.push_back(row);
-		cout << endl;
-	}
-}
-
 Room::Room(Position pos) : pos_(pos)
 {
 	

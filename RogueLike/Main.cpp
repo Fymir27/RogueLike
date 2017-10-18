@@ -76,7 +76,7 @@ int main()
 	//current_room->addField(pickup);
 
 	//spawn Enemy
-	//Enemy* blob = new Enemy("Blobby", {10,4}, player_stats, "../images/enemy.png");
+	Enemy* blob = new Enemy("Blobby", {12,4}, player_stats, "../images/enemy.png");
 	//Enemy* blob2 = new Enemy("Blobby2", {9,4}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
