@@ -1,6 +1,8 @@
 #include "Dungeon.h"
 #include "Room.h"
 #include "Minimap.h"
+#include "DijkstraMap.h"
+#include "Player.h"
 
 #include <fstream>
 
@@ -204,6 +206,8 @@ void Dungeon::generate(size_t width, size_t height)
 	while (current_room == NULL)
 		current_room = getRoom(rand() % width, rand() % height);
 
+	//DM.getNextPosition(Position(1,1);
+
 	Minimap::init(width_, height_, current_room->pos_);
 	/*
 	for (auto row : layout_test_)
@@ -246,6 +250,7 @@ void Dungeon::generate(size_t width, size_t height)
 		cout << endl;
 	}
 	cout << endl;
+	DijkstraMap2D DM(current_room->getColCount(), current_room->getRowCount(), Position(1, 1));
 }
 
 void Dungeon::readRoomPartsFromFile()

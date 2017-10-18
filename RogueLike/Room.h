@@ -8,6 +8,7 @@
 class Enemy;
 class TileMap;
 class Item;
+class DijkstraMap2D;
 class Room
 {
 	friend class Dungeon;
@@ -20,6 +21,7 @@ class Room
 		Position     pos_; //Position in Dungeon
 		Position     entries_[4];
 		Room*        neighbours_[4] = { NULL, NULL, NULL, NULL };
+		DijkstraMap2D* dm_player_ = NULL;
 
 		Field* getField(int x, int y);
 		Field* getField(Position pos);
@@ -29,6 +31,9 @@ class Room
 		size_t getColCount() { return map_.front().size(); };
 		size_t getRowCount() { return map_.size(); };
 
+		FIELD_STATUS getFieldStatus(Position pos);
+
+		Position getPathToPlayer(Position from);
 		vector<Position> getShortestPath(Position from, Position to);
 		void updateDistanceToPlayer();
 		bool stepOn(Position to, Character* who, Position& new_pos); //returns new Position of Character

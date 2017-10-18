@@ -9,6 +9,10 @@ bool Enemy::step()
 	if(stats_.hp_[CUR] <= 0)
 		return false;
 
+
+	move(current_room->getPathToPlayer(pos_));
+
+	/*
 	vector<Position> path_to_player;
 
 	path_to_player = current_room->getShortestPath(pos_, current_player->getPosition()); //path is backwards!
@@ -16,6 +20,7 @@ bool Enemy::step()
 	cout << "Path to player:" << endl;
 
 	move(path_to_player.back());
+	*/
 
 	/*
 	Position player_pos = current_player->getPosition();

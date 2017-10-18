@@ -4,6 +4,7 @@
 #include "Types.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "DijkstraMap.h"
 
 #include <fstream>
 #include <sstream>
@@ -36,6 +37,19 @@ Field* Room::getField(Position pos)
 		std::cout << e.what();
 	}
 	return NULL;
+}
+
+FIELD_STATUS Room::getFieldStatus(Position pos)
+{
+	try
+	{
+		return map_.at(pos.y_).at(pos.x_)->status_;
+	}
+	catch (std::exception e)
+	{
+		cout << "Invalid Field!" << endl;
+		std::cout << e.what();
+	}
 }
 
 
@@ -110,6 +124,13 @@ std::ostream& operator<<(std::ostream& out, const Node& node)
 	out << node.pos << "[" << node.visited << "], " << node.distance << endl;
 	return out;
 };
+
+Position Room::getPathToPlayer(Position from)
+{
+	if (dm_player_ == NULL)
+		dm_player_ = new DijkstraMap2D(getColCount(), getRowCount(), current_player->getPosition());
+	return dm_player_->getNextPosition(from);
+}
 
 //--- returns path from "from" to "to" (backwards!!) ---//
 vector<Position> Room::getShortestPath(Position from, Position to)
@@ -478,6 +499,9 @@ void Room::removeEnemy(Enemy* enemy)
 
 void Room::stepEnemies() //called appr. 63 times a second
 {
+	if (!dm_player_)
+		dm_player_ = new DijkstraMap2D(getColCount(), getRowCount(), current_player->getPosition());
+	dm_player_->updateSource(current_player->getPosition());
 	vector<Enemy*> dead_enemies;
 	//cout << "Room::stepEnemies()" << endl;
 	for(Enemy* enemy : enemies_)

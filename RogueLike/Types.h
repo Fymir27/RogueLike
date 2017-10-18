@@ -34,6 +34,8 @@ extern bool operator==(const Position& first, const Position& second);
 
 std::ostream& operator<<(std::ostream& out, const Position& pos);
 
+const Position DELTA[4] = { Position(0, -1), Position(1, 0), Position(0, 1), Position(-1, 0) };
+
 #define CUR 0
 #define MAX 1
 
