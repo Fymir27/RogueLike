@@ -10,21 +10,22 @@ void DijkstraMap2D::updateNeighbours(Position pos, size_t cur)
 		int new_x = pos.x_ + DELTA_X[i];
 		int new_y = pos.y_ + DELTA_Y[i];
 
-		if (current_room->getFieldStatus(Position(new_x, new_y)) == SOLID)
-		{
-			continue;
-		}
-
 		try
 		{
 			size_t& tmp = map_.at(new_y).at(new_x);
+
+			if (current_room->getFieldStatus(Position(new_x, new_y)) == SOLID)
+			{
+				continue;
+			}
+
 			if (tmp > (cur + 1))
 			{
 				tmp = cur + 1;
 				updateNeighbours(Position(new_x, new_y), tmp);
 			}
 		}
-		catch (std::out_of_range& e)
+		catch (...)
 		{
 			continue;
 		}

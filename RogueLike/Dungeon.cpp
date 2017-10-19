@@ -108,7 +108,7 @@ size_t Dungeon::getRandomRoomHeight()
 	size_t h;
 	do
 	{
-		h = rand() % 10; //max room height 10?
+		h = (rand() % 7) + 4; //max room height 10?
 	} while (room_parts_.find(h) == room_parts_.end());
 	return h;
 }

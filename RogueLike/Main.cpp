@@ -9,6 +9,8 @@
 #include "UI.h"
 #include "Enemy.h"
 
+#include <ctime>
+
 void processInput(const sf::Event& event)
 {
 	//cout << "Input detected!" << endl;
@@ -51,7 +53,7 @@ int main()
 	cout << "#################################" << endl;
 	cout << endl;
 
-	srand(27);
+	srand(std::time(NULL));
 	current_dungeon = new Dungeon();	
 	current_dungeon->readRoomPartsFromFile();
 	cout << "Dungeon Layout:" << endl;
