@@ -39,14 +39,16 @@ const Position DELTA[4] = { Position(0, -1), Position(1, 0), Position(0, 1), Pos
 #define CUR 0
 #define MAX 1
 
-typedef struct
+struct Stats
 {
 	int hp_[2];  //Hitpoints
 	int mana_[2];//Mana
 	int str_; //Strength
 	int int_; //Intelligence
 	int dex_; //Dexterity
-} Stats;
+	Stats(int hp, int mana, int str, int intelligence, int dex);
+	Stats() {};
+};
 
 std::ostream& operator<<(std::ostream& out, Stats stats);
 

@@ -55,3 +55,12 @@ char* getStatString(Stats stats)
 	return buffer;
 }
 */
+
+Stats::Stats(int hp, int mana, int str, int intelligence, int dex) :
+	str_(str), int_(intelligence), dex_(dex)
+{
+	hp_[MAX] = hp;
+	hp_[CUR] = hp;
+	mana_[MAX] = mana;
+	mana_[CUR] = mana;
+}

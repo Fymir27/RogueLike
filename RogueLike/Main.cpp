@@ -60,7 +60,7 @@ int main()
 	current_dungeon->generate(20, 13);
 
 	//-- create player --//
-	Stats player_stats = {};
+	Stats player_stats;
 	player_stats.hp_[CUR] = 100;
 	player_stats.hp_[MAX] = 100;
 	player_stats.mana_[CUR] = 100;
@@ -69,7 +69,7 @@ int main()
 	player_stats.int_  = 10;
 	player_stats.dex_  = 10;
 
-	Player* player = new Player("Oliver", { 1, 1 }, player_stats);
+	Player* player = new Player("Oliver", { 2, 2 }, player_stats);
 	current_player = player;
 
 	//place Pickup item
@@ -78,7 +78,10 @@ int main()
 	//current_room->addField(pickup);
 
 	//spawn Enemy
-	Enemy* blob = new Enemy("Blobby", {12,4}, player_stats, "../images/enemy.png");
+	//Enemy* blob = new Enemy("Blobby", {12,4}, player_stats, "../images/enemy.png");
+	new Ghost({ 5,5 });
+	new Spider({ 6, 6 });
+	new Golem({ 7, 7 });
 	//Enemy* blob2 = new Enemy("Blobby2", {9,4}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
