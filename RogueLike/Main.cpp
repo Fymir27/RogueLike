@@ -81,7 +81,7 @@ int main()
 	//Enemy* blob = new Enemy("Blobby", {12,4}, player_stats, "../images/enemy.png");
 	new Ghost({ 5,5 });
 	new Spider({ 6, 6 });
-	new Golem({ 7, 7 });
+	new Golem({ 9, 6 });
 	//Enemy* blob2 = new Enemy("Blobby2", {9,4}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
