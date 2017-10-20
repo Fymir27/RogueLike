@@ -99,6 +99,8 @@ Room* Dungeon::generateRoom(size_t x, size_t y, size_t height)
 			//cout << endl;
 		}
 	}
+	room->width_ = room->getColCount();
+	room->height_ = room->getRowCount();
 	layout_test_.at(y).at(x) = room;
 	return room;
 }

@@ -16,6 +16,8 @@ class Room
 	private:
 		TileMap*     tile_map_ = NULL;
 		Map          map_; //Fields
+		size_t width_;
+		size_t height_;
 		list<Enemy*> enemies_;
 		string       name;
 		Position     pos_; //Position in Dungeon
@@ -32,6 +34,7 @@ class Room
 		size_t getRowCount() { return map_.size(); };
 
 		FIELD_STATUS getFieldStatus(Position pos);
+		Position getFreePosition();
 
 		Position getPathToPlayer(Position from);
 		vector<Position> getShortestPath(Position from, Position to);

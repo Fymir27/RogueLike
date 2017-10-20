@@ -52,6 +52,18 @@ FIELD_STATUS Room::getFieldStatus(Position pos)
 	}
 }
 
+Position Room::getFreePosition()
+{
+	Position pos;
+	Field* f = NULL;
+	do
+	{
+		pos = Position(1 + (rand() % (width_ - 2)), 1 + (rand() % (height_ - 2)));
+		f = getField(pos);
+	} while(f->status_ == SOLID || f->status_ == OCCUPIED);
+	return pos;
+}
+
 
 bool Room::stepOn(Position to, Character* who, Position& new_pos)
 {

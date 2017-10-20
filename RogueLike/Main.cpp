@@ -69,7 +69,7 @@ int main()
 	player_stats.int_  = 10;
 	player_stats.dex_  = 10;
 
-	Player* player = new Player("Oliver", { 2, 2 }, player_stats);
+	Player* player = new Player("Oliver", current_room->getFreePosition(), player_stats);
 	current_player = player;
 
 	//place Pickup item
@@ -79,9 +79,9 @@ int main()
 
 	//spawn Enemy
 	//Enemy* blob = new Enemy("Blobby", {12,4}, player_stats, "../images/enemy.png");
-	new Ghost({ 5,5 });
-	new Spider({ 6, 6 });
-	new Golem({ 9, 6 });
+	new Ghost(current_room->getFreePosition());
+	new Spider(current_room->getFreePosition());
+	new Golem(current_room->getFreePosition());
 	//Enemy* blob2 = new Enemy("Blobby2", {9,4}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
