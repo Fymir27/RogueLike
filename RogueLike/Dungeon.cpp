@@ -102,6 +102,10 @@ Room* Dungeon::generateRoom(size_t x, size_t y, size_t height)
 	room->width_ = room->getColCount();
 	room->height_ = room->getRowCount();
 	layout_test_.at(y).at(x) = room;
+
+	current_room = room; //Character() needs current_room set
+	while(roll(1,2)) { room->spawnEnemy(); }
+
 	return room;
 }
 

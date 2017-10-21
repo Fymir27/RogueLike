@@ -3,7 +3,7 @@
 #include "Field.h"
 #include "Types.h"
 #include "TileMap.h"
-
+#include "Enemy.h"
 
 class Enemy;
 class TileMap;
@@ -39,11 +39,11 @@ class Room
 		Position getPathToPlayer(Position from);
 		vector<Position> getShortestPath(Position from, Position to);
 		void updateDistanceToPlayer();
+
 		bool stepOn(Position to, Character* who, Position& new_pos); //returns new Position of Character
 		void freeField(Position pos);
 		void occupyField(Position pos, Character* who);
 		void placeItem(Position pos, Item* item);
-
 
 		Room(Position pos);
 
@@ -63,6 +63,7 @@ class Room
 		void addEnemy(Enemy* enemy);
 		void removeEnemy(Enemy* enemy);
 		void stepEnemies();
+		Enemy* spawnEnemy(Position pos = Position(0,0), EnemyType type = RANDOM_ENEMY);
 };
 
 extern Room* current_room;

@@ -529,3 +529,35 @@ void Room::stepEnemies() //called appr. 63 times a second
 		delete enemy;
 	}
 }
+
+Enemy* Room::spawnEnemy(Position pos, EnemyType type)
+{
+	Enemy* e = NULL;
+
+	if(pos == Position(0,0))
+		pos = getFreePosition();
+
+	if(type == RANDOM_ENEMY)
+		type = (EnemyType)(1 + (rand() % (ENEMY_TYPE_COUNT)));
+
+	switch(type)
+	{
+		case SPIDER:
+		e = new Spider(pos);
+		break;
+
+		case GHOST:
+		e = new Ghost(pos);
+		break;
+
+		case GOLEM:
+		e = new Golem(pos);
+		break;
+
+		default:
+		cout << "Unknown enemy type!" << endl;
+		break;
+	}
+
+	return e;
+}

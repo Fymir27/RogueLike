@@ -10,6 +10,15 @@ enum MoveType
 	RANDOM
 };
 
+#define ENEMY_TYPE_COUNT 3
+enum EnemyType
+{
+	RANDOM_ENEMY,
+	SPIDER,
+	GHOST,
+	GOLEM
+};
+
 class Enemy : public Character
 {
 	private:

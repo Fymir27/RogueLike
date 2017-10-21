@@ -79,9 +79,6 @@ int main()
 
 	//spawn Enemy
 	//Enemy* blob = new Enemy("Blobby", {12,4}, player_stats, "../images/enemy.png");
-	new Ghost(current_room->getFreePosition());
-	new Spider(current_room->getFreePosition());
-	new Golem(current_room->getFreePosition());
 	//Enemy* blob2 = new Enemy("Blobby2", {9,4}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
