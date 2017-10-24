@@ -94,6 +94,30 @@ Room* Dungeon::generateRoom(size_t x, size_t y, size_t height)
 				case '.':
 					room->map_.at(y).push_back(new Floor(Position(x, y)));
 					break;
+
+				case '^':
+					room->door_pos_[UP] = Position(x,y);
+					room->map_.at(y).push_back(new Wall(Position(x, y)));
+					break;
+				
+				case '>':
+					room->door_pos_[RIGHT] = Position(x,y);
+					room->map_.at(y).push_back(new Wall(Position(x, y)));
+					break;
+
+				case 'v':
+					room->door_pos_[DOWN] = Position(x,y);
+					room->map_.at(y).push_back(new Wall(Position(x, y)));
+					break;
+
+				case '<':
+					room->door_pos_[LEFT] = Position(x,y);
+					room->map_.at(y).push_back(new Wall(Position(x, y)));
+					break;
+
+				default: //WUT?
+					room->map_.at(y).push_back(new Lava(Position(x, y)));
+					break;
 				}
 			}
 			//cout << endl;

@@ -295,6 +295,10 @@ Room::Room(Position pos) : pos_(pos)
 void Room::addNeighbour(Direction dir, Room* other)
 {
 	neighbours_[dir] = other;
+	Position pos = door_pos_;
+	addField(new Door(pos, dir));
+
+	/*
 	Position pos;
 	Position entry;
 	switch (dir)
@@ -330,6 +334,7 @@ void Room::addNeighbour(Direction dir, Room* other)
 	map_.at(pos.y_).at(pos.x_) = new Door(pos, dir);
 	entries_[dir] = entry;
 	//tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int)getColCount(), (int)getRowCount());
+	*/
 }
 
 Room::Room(const char * filename, Position pos) : pos_(pos)

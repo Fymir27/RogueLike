@@ -21,7 +21,7 @@ class Room
 		list<Enemy*> enemies_;
 		string       name;
 		Position     pos_; //Position in Dungeon
-		Position     entries_[4];
+		Position	 door_pos_[4];
 		Room*        neighbours_[4] = { NULL, NULL, NULL, NULL };
 		DijkstraMap2D* dm_player_ = NULL;
 
