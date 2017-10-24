@@ -8,6 +8,7 @@
 
 Dungeon* current_dungeon = NULL;
 
+/*
 void Dungeon::loadFromFile(string filename)
 {
 	cout << "Reading Dungeon " << filename << " from file..." << endl;
@@ -56,6 +57,7 @@ void Dungeon::loadFromFile(string filename)
 	}
 	current_room = loaded_rooms_[starting_room];
 }
+*/
 
 Room*& Dungeon::getRoom(size_t x, size_t y)
 {
@@ -85,42 +87,48 @@ Room* Dungeon::generateRoom(size_t x, size_t y, size_t height)
 			{
 				char c = line.at(x);
 				//cout << c;
+				size_t room_x = room->map_.at(y).size();
 				switch (c)
 				{
 				case '#':
-					room->map_.at(y).push_back(new Wall(Position(x, y)));
+					room->map_.at(y).push_back(new Wall(Position(room_x, y)));
 					break;
 
 				case '.':
-					room->map_.at(y).push_back(new Floor(Position(x, y)));
+					room->map_.at(y).push_back(new Floor(Position(room_x, y)));
 					break;
 
 				case '^':
-					room->door_pos_[UP] = Position(x,y);
-					room->map_.at(y).push_back(new Wall(Position(x, y)));
+					room->door_pos_[UP] = Position(room_x,y);
+					room->map_.at(y).push_back(new Wall(Position(room_x, y)));
 					break;
 				
 				case '>':
-					room->door_pos_[RIGHT] = Position(x,y);
-					room->map_.at(y).push_back(new Wall(Position(x, y)));
+					room->door_pos_[RIGHT] = Position(room_x,y);
+					room->map_.at(y).push_back(new Wall(Position(room_x, y)));
 					break;
 
 				case 'v':
-					room->door_pos_[DOWN] = Position(x,y);
-					room->map_.at(y).push_back(new Wall(Position(x, y)));
+					room->door_pos_[DOWN] = Position(room_x,y);
+					room->map_.at(y).push_back(new Wall(Position(room_x, y)));
 					break;
 
 				case '<':
-					room->door_pos_[LEFT] = Position(x,y);
-					room->map_.at(y).push_back(new Wall(Position(x, y)));
+					room->door_pos_[LEFT] = Position(room_x,y);
+					room->map_.at(y).push_back(new Wall(Position(room_x, y)));
 					break;
 
 				default: //WUT?
-					room->map_.at(y).push_back(new Lava(Position(x, y)));
+					room->map_.at(y).push_back(new Lava(Position(room_x, y)));
 					break;
 				}
 			}
 			//cout << endl;
+		}
+		cout << "Door Positions: "<< endl;
+		for (int i = 0; i < 4; i++)
+		{
+			cout << room->door_pos_[i] << endl;
 		}
 	}
 	room->width_ = room->getColCount();
@@ -371,6 +379,5 @@ void Dungeon::changeRoom(Direction dir)
 	cout << "New Room is at Pos. " << pos << " in Dungeon!" << endl; 
 	Room* new_room = layout_test_.at(pos.y_).at(pos.x_);
 	current_room = new_room;
-	current_room->movePlayerToDoor(entry);
 	Minimap::setActiveRoom(current_room->pos_);
 }

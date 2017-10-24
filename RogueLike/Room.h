@@ -29,36 +29,28 @@ class Room
 		Field* getField(Position pos);
 
 	public:
+		Room(Position pos);
+
 		std::string getName() { return name; };
 		size_t getColCount() { return map_.front().size(); };
 		size_t getRowCount() { return map_.size(); };
 
+		void addField(Field * field);
 		FIELD_STATUS getFieldStatus(Position pos);
 		Position getFreePosition();
+		Position getDoorPosition(Direction dir);
 
 		Position getPathToPlayer(Position from);
 		vector<Position> getShortestPath(Position from, Position to);
-		void updateDistanceToPlayer();
 
 		bool stepOn(Position to, Character* who, Position& new_pos); //returns new Position of Character
 		void freeField(Position pos);
 		void occupyField(Position pos, Character* who);
 		void placeItem(Position pos, Item* item);
 
-		Room(Position pos);
-
 		void addNeighbour(Direction dir, Room * other);
 
-		Room(const char* filename, Position pos = {0,0});
-
-		bool readRoomFromFile(const char* filename);
 		void draw(sf::RenderWindow& window);
-		void addField(Field * field);
-
-		Position getEntryPosition(Direction entry);
-		void     addEntryPosition(Direction dir, Position pos);
-
-		void movePlayerToDoor(Direction entry);
 
 		void addEnemy(Enemy* enemy);
 		void removeEnemy(Enemy* enemy);

@@ -64,6 +64,11 @@ Position Room::getFreePosition()
 	return pos;
 }
 
+Position Room::getDoorPosition(Direction dir)
+{
+	return door_pos_[dir];
+}
+
 
 bool Room::stepOn(Position to, Character* who, Position& new_pos)
 {
@@ -257,21 +262,6 @@ vector<Position> Room::getShortestPath(Position from, Position to)
 	}
 }
 
-void Room::updateDistanceToPlayer()
-{
-	cout << "Updating distance to player:" << endl;
-	Position player_pos = current_player->getPosition();
-	for (auto line : map_)
-	{
-		for (auto field : line)
-		{
-			field->distance_to_player_ = abs(field->pos_.x_ - player_pos.x_) + abs(field->pos_.y_ - player_pos.y_);
-			//printf_s("%3zd", field->distance_to_player_);
-		}
-		cout << endl;
-	}
-}
-
 void Room::freeField(Position pos)
 {
 	getField(pos.x_, pos.y_)->free();
@@ -295,7 +285,7 @@ Room::Room(Position pos) : pos_(pos)
 void Room::addNeighbour(Direction dir, Room* other)
 {
 	neighbours_[dir] = other;
-	Position pos = door_pos_;
+	Position pos = door_pos_[dir];
 	addField(new Door(pos, dir));
 
 	/*
@@ -337,120 +327,6 @@ void Room::addNeighbour(Direction dir, Room* other)
 	*/
 }
 
-Room::Room(const char * filename, Position pos) : pos_(pos)
-{
-	if(!readRoomFromFile(filename))
-	{
-		cout << "[Error] Room could not be loaded!" << endl;
-		return;
-	}
-
-	cout << "Tile Nrs:" << endl;
-	for(auto row : map_)
-	{
-		for(auto field : row)
-			cout << field->getTileNr();
-		cout << endl;
-	}
-	tile_map_ = new TileMap();
-	tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int)getColCount(), (int)getRowCount());
-}
-
-bool Room::readRoomFromFile(const char * filename)
-{
-	cout << "Reading Room " << filename << " from file..." << endl;
-	name = filename;
-	std::fstream file(filename);
-	if (!file.is_open())
-	{
-		return false;
-		cout << "Failed!" << endl;
-	}
-
-	Row row;
-	char c;
-
-	cout << "File opened successfully!" << endl;
-	bool reading = true;
-	Position pos = { 0,0 };
-	while (reading)
-	{
-		c = file.get();
-		Field* field = NULL;
-
-		switch (c)
-		{
-		case '/':
-			map_.push_back(row);
-			reading = false;
-			continue;
-			break;
-
-		case '#':
-			field = new Wall(pos);
-			break;
-
-		case ' ':
-			field = new Floor(pos);
-			break;
-
-		case '*':
-			field = new Tree(pos);
-			break;
-
-		case '%':
-			field = new Water(pos);
-			break;
-
-		case 'X':
-			field = new Lava(pos);
-			break;
-
-		case '^':
-			field = new Door(pos, UP);
-			entries_[UP] = (pos + Position(0,1));
-			break;
-
-		case '>':
-			field = new Door(pos, RIGHT);
-			entries_[RIGHT] = (pos + Position(-1,0));
-			break;
-
-		case 'v':
-			field = new Door(pos, DOWN);
-			entries_[DOWN] = (pos + Position(0,-1));
-			break;
-
-		case '<':
-			field = new Door(pos, LEFT);
-			entries_[LEFT] = (pos + Position(1,0));
-			break;
-
-		case '\n':
-			map_.push_back(row);
-			row.clear();
-			field = NULL;
-			pos.x_ = 0;
-			pos.y_++;
-			break;
-
-		default:
-			cout << "[Error] Unknown Symbol!" << endl;
-			break;
-		}
-
-		if (field)
-		{
-			pos.x_++;
-			row.push_back(field);
-		}
-		//cout << c;
-		//cout << pos << endl;
-	}
-	//cout << endl;
-	return true;
-}
-
 void Room::draw(sf::RenderWindow& window)
 {
 	if (!tile_map_)
@@ -486,21 +362,6 @@ void Room::addField(Field* field)
 	delete map_.at(y).at(x);
 	map_.at(y).at(x) = field;
 
-}
-
-Position Room::getEntryPosition(Direction entry)
-{
-	return entries_[entry];
-}
-
-void Room::addEntryPosition(Direction dir, Position pos)
-{
-	entries_[dir] = pos;
-}
-
-void Room::movePlayerToDoor(Direction entry)
-{
-	//current_player->pos_ = doors_[entry];
 }
 
 void Room::addEnemy(Enemy* enemy)
