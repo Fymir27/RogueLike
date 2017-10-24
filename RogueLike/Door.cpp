@@ -3,6 +3,7 @@
 #include "Dungeon.h"
 #include "Room.h"
 #include "Character.h"
+#include "Player.h"
 
 Door::Door(Position pos, Direction dir) : Field(pos, 5, TRIGGER), dir_(dir)
 {
@@ -11,6 +12,9 @@ Door::Door(Position pos, Direction dir) : Field(pos, 5, TRIGGER), dir_(dir)
 
 Position Door::trigger(Character* character)
 {
+	if(character == current_player)
+		return current_player->getPosition();
+		
 	cout << "Stepped on a Door!" << endl;
 	current_room->freeField(character->getPosition());
 	current_dungeon->changeRoom(dir_);
