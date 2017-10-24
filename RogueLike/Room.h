@@ -24,12 +24,15 @@ class Room
 		Position	 door_pos_[4];
 		Room*        neighbours_[4] = { NULL, NULL, NULL, NULL };
 		DijkstraMap2D* dm_player_ = NULL;
+		vector < vector<bool> > spawn_locations_;
 
 		Field* getField(int x, int y);
 		Field* getField(Position pos);
 
+		void initSpawnLocations();
+
 	public:
-		Room(Position pos);
+		Room(Position pos, size_t height);
 
 		std::string getName() { return name; };
 		size_t getColCount() { return map_.front().size(); };
@@ -39,6 +42,9 @@ class Room
 		FIELD_STATUS getFieldStatus(Position pos);
 		Position getFreePosition();
 		Position getDoorPosition(Direction dir);
+		vector<vector<bool>> const& getSpawnLocations();
+
+		void generate();
 
 		Position getPathToPlayer(Position from);
 		vector<Position> getShortestPath(Position from, Position to);

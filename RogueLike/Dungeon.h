@@ -15,8 +15,7 @@ private:
 	unsigned int height_;
 	unsigned int width_;
 	map<string, Room*> loaded_rooms_;
-	vector<vector<Room*>> layout_;
-	vector<vector<Room*>> layout_test_; //currently used
+	vector<vector<Room*>> layout_; //currently used
 	map<size_t, RoomHeightClass> room_parts_;  // room_parts[height][section][random index][row]
 
 public:
@@ -29,6 +28,8 @@ public:
 	//string * getRandomRoomParts();
 	void generate(size_t width, size_t height);
 	void readRoomPartsFromFile();
+	RoomHeightClass const& getRoomParts(size_t height);
+
 };
 
 extern Dungeon* current_dungeon;

@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "DijkstraMap.h"
+#include "Dungeon.h"
 
 #include <fstream>
 #include <sstream>
@@ -39,6 +40,59 @@ Field* Room::getField(Position pos)
 	return NULL;
 }
 
+void Room::initSpawnLocations()
+{
+	spawn_locations_.resize(map_.size());
+	for (size_t y = 0; y < map_.size(); y++)
+	{
+		for (size_t x = 0; x < map_[y].size(); x++)
+		{
+			Field* f = getField(x, y);
+			if (f->status_ == FREE)
+			{
+				spawn_locations_[y].push_back(true);
+			}
+			else
+			{
+				spawn_locations_[y].push_back(false);
+			}
+		}
+	}
+
+	for (size_t i = 0; i < 4; i++)
+	{
+
+		if (neighbours_[i] == NULL)
+			continue;
+
+		Position origin = door_pos_[i];
+		for (int y = origin.y_ - 2; y <=  origin.y_ + 2; y++)
+		{
+			for (int x = origin.x_ - 2; x <= origin.x_ + 2; x++)
+			{
+				try
+				{
+					spawn_locations_.at(y).at(x) = false;
+				}
+				catch (std::out_of_range&)
+				{
+					continue;
+				}
+			}
+		}
+	}
+	/*
+	for (auto row : spawn_locations_)
+	{
+		for (bool spawnable : row)
+		{
+			cout << spawnable;
+		}
+		cout << endl;
+	}
+	*/
+}
+
 FIELD_STATUS Room::getFieldStatus(Position pos)
 {
 	try
@@ -55,18 +109,86 @@ FIELD_STATUS Room::getFieldStatus(Position pos)
 Position Room::getFreePosition()
 {
 	Position pos;
-	Field* f = NULL;
 	do
 	{
 		pos = Position(1 + (rand() % (width_ - 2)), 1 + (rand() % (height_ - 2)));
-		f = getField(pos);
-	} while(f->status_ == SOLID || f->status_ == OCCUPIED);
+	} while(!spawn_locations_.at(pos.y_).at(pos.x_) && getField(pos)->status_ != OCCUPIED);
 	return pos;
 }
 
 Position Room::getDoorPosition(Direction dir)
 {
 	return door_pos_[dir];
+}
+
+vector<vector<bool>> const & Room::getSpawnLocations()
+{
+	return spawn_locations_;
+}
+
+
+void Room::generate()
+{
+	//cout << "Randomly generating Room" << Position(x, y) << endl;
+	RoomHeightClass room_parts = current_dungeon->getRoomParts(height_);
+	map_.resize(height_);
+	for (size_t i = 0; i < 3; i++) //for every section
+	{
+		size_t r = rand() % room_parts[i].size();  //pick random part
+		vector<string> const& part = room_parts[i][r];
+		for (size_t y = 0; y < height_; y++)
+		{
+			string const& line = part.at(y);
+			for (size_t x = 0; x < part[y].size(); x++)
+			{
+				char c = line.at(x);
+				//cout << c;
+				size_t room_x = map_.at(y).size();
+				switch (c)
+				{
+				case '#':
+					map_.at(y).push_back(new Wall(Position(room_x, y)));
+					break;
+
+				case '.':
+					map_.at(y).push_back(new Floor(Position(room_x, y)));
+					break;
+
+				case '^':
+					door_pos_[UP] = Position(room_x, y);
+					map_.at(y).push_back(new Wall(Position(room_x, y)));
+					break;
+
+				case '>':
+					door_pos_[RIGHT] = Position(room_x, y);
+					map_.at(y).push_back(new Wall(Position(room_x, y)));
+					break;
+
+				case 'v':
+					door_pos_[DOWN] = Position(room_x, y);
+					map_.at(y).push_back(new Wall(Position(room_x, y)));
+					break;
+
+				case '<':
+					door_pos_[LEFT] = Position(room_x, y);
+					map_.at(y).push_back(new Wall(Position(room_x, y)));
+					break;
+
+				default: //WUT?
+					map_.at(y).push_back(new Lava(Position(room_x, y)));
+					break;
+				}
+			}
+		}
+	}
+	width_ = getColCount();
+
+	initSpawnLocations();
+	//spawning enemies
+	current_room = this;
+	size_t prob = 3;
+	while (roll(2, prob++)) { spawnEnemy(); }
+
 }
 
 
@@ -277,9 +399,9 @@ void Room::placeItem(Position pos, Item* item)
 	getField(pos.x_, pos.y_)->placeItem(item);
 }
 
-Room::Room(Position pos) : pos_(pos)
+Room::Room(Position pos, size_t height) : pos_(pos), height_(height)
 {
-	
+	generate();
 }
 
 void Room::addNeighbour(Direction dir, Room* other)

@@ -61,7 +61,7 @@ void Dungeon::loadFromFile(string filename)
 
 Room*& Dungeon::getRoom(size_t x, size_t y)
 {
-	return layout_test_.at(y).at(x);
+	return layout_.at(y).at(x);
 }
 
 void Dungeon::connect(Room* from, Direction dir, Room* to)
@@ -70,6 +70,7 @@ void Dungeon::connect(Room* from, Direction dir, Room* to)
 	to->addNeighbour(Direction((dir + 2) % 4), from);
 }
 
+/*
 Room* Dungeon::generateRoom(size_t x, size_t y, size_t height)
 {
 	//cout << "Randomly generating Room" << Position(x, y) << endl;
@@ -133,7 +134,7 @@ Room* Dungeon::generateRoom(size_t x, size_t y, size_t height)
 	}
 	room->width_ = room->getColCount();
 	room->height_ = room->getRowCount();
-	layout_test_.at(y).at(x) = room;
+	layout_.at(y).at(x) = room;
 
 	size_t prob = 2;
 	current_room = room; //Character() needs current_room set
@@ -141,6 +142,7 @@ Room* Dungeon::generateRoom(size_t x, size_t y, size_t height)
 
 	return room;
 }
+*/
 
 size_t Dungeon::getRandomRoomHeight()
 {
@@ -157,8 +159,8 @@ void Dungeon::generate(size_t width, size_t height)
 	cout << "Generating Dungeon... (" << width << "x" << height << ")" << endl;
 
 	//-- Setting the size --//
-	layout_test_.resize(height);
-	for (auto& row : layout_test_)
+	layout_.resize(height);
+	for (auto& row : layout_)
 	{
 		row.resize(width);
 		for (auto& room : row)
@@ -182,11 +184,12 @@ void Dungeon::generate(size_t width, size_t height)
 
 	cout << "Margins (hor/ver): " << margin_hor << "/" << margin_ver << endl;
 
-	Room* tmp = getRoom(0,0);
+	Room* tmp = NULL;
 
 	for (size_t y = 0; y < height; y++)     //vertical line
 	{
-		tmp = generateRoom(margin_hor, y); //TODO: random height
+		tmp = new Room(Position(margin_hor, y), getRandomRoomHeight());
+		layout_[y][margin_hor] = tmp;
 		if (y > 0)
 		{
 			connect(tmp, UP, getRoom(margin_hor, y - 1));
@@ -203,7 +206,8 @@ void Dungeon::generate(size_t width, size_t height)
 			tmp = getRoom(x, y);
 			if (tmp == NULL)
 			{
-				tmp = generateRoom(x, y);
+				tmp = new Room(Position(x, y), getRandomRoomHeight());
+				layout_[y][x] = tmp;
 			}
 			connect(tmp, (dir_grow == 1 ? LEFT : RIGHT), getRoom(x + (dir_grow * -1), y));
 			stack_count++;
@@ -215,7 +219,8 @@ void Dungeon::generate(size_t width, size_t height)
 		tmp = getRoom(x, margin_ver);            //horizontal line
 		if (tmp == NULL)
 		{
-			tmp = generateRoom(x, margin_ver);
+			tmp = new Room(Position(x, margin_ver), getRandomRoomHeight());
+			layout_[margin_ver][x] = tmp;
 		}
 		if (x > 0)
 		{
@@ -233,7 +238,8 @@ void Dungeon::generate(size_t width, size_t height)
 			tmp = getRoom(x, y);
 			if (tmp == NULL)
 			{
-				tmp = generateRoom(x, y);
+				tmp = new Room(Position(x, y), getRandomRoomHeight());
+				layout_[y][x] = tmp;
 			}
 			connect(tmp, (dir_grow == 1 ? UP : DOWN), getRoom(x, y + (dir_grow * -1)));
 
@@ -261,7 +267,7 @@ void Dungeon::generate(size_t width, size_t height)
 	*/
 
 	//-- DEBUG --//
-	for (auto& row : layout_test_)
+	for (auto& row : layout_)
 	{
 		for (Room* room : row)
 		{
@@ -343,7 +349,12 @@ void Dungeon::readRoomPartsFromFile()
 	//tmp->generateFromParts(test);
 }
 
+RoomHeightClass const & Dungeon::getRoomParts(size_t height)
+{
+	return room_parts_.at(height);
+}
 
+//TODO: make simpler (use DELTA)
 void Dungeon::changeRoom(Direction dir)
 {
 	Position pos = current_room->pos_;
@@ -377,7 +388,8 @@ void Dungeon::changeRoom(Direction dir)
 	}
 
 	cout << "New Room is at Pos. " << pos << " in Dungeon!" << endl; 
-	Room* new_room = layout_test_.at(pos.y_).at(pos.x_);
+	Room* new_room = layout_.at(pos.y_).at(pos.x_);
 	current_room = new_room;
 	Minimap::setActiveRoom(current_room->pos_);
+	current_room->initSpawnLocations();
 }
