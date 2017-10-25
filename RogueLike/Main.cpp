@@ -8,6 +8,7 @@
 #include "Common.h"
 #include "UI.h"
 #include "Enemy.h"
+#include "Ressource.h"
 
 #include <ctime>
 
@@ -60,14 +61,7 @@ int main()
 	current_dungeon->generate(20, 13);
 
 	//-- create player --//
-	Stats player_stats;
-	player_stats.hp_[CUR] = 100;
-	player_stats.hp_[MAX] = 100;
-	player_stats.mana_[CUR] = 100;
-	player_stats.mana_[MAX] = 100;
-	player_stats.str_  = 10;
-	player_stats.int_  = 10;
-	player_stats.dex_  = 10;
+	Stats player_stats(10, 10, 10, 10, 10);
 
 	Player* player = new Player("Oliver", current_room->getFreePosition(), player_stats);
 	current_player = player;
@@ -108,7 +102,7 @@ int main()
 		}
 
 		//-- Game Logic --//
-		if (current_player->getStats().hp_[CUR] <= 0)
+		if (current_player->dead())
 		{
 			UI::displayText("");
 			UI::displayText("Game Over");
@@ -122,12 +116,13 @@ int main()
 		ui->draw(window);
 		window.display();
 
-		if (current_player->getStats().hp_[CUR] <= 0)
+		if (current_player->dead())
 		{
 			delete current_player;
 			current_player = NULL;
 			break;
 		}
+		
 	}
 
 	while (window.isOpen())

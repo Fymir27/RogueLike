@@ -6,7 +6,7 @@ bool Enemy::step()
 {
 	//cout << "Enemy::step()" << endl;
 
-	if(stats_.hp_[CUR] <= 0) //am I dead?
+	if (dead())
 		return false;
 
 	switch (move_type_)

@@ -63,8 +63,8 @@ void UI::draw(sf::RenderWindow& window)
 	window.draw(stat_names_);
 
 	Stats stats = current_player->getStats();
-	string buffer = std::to_string(stats.hp_[CUR])   + "/" + std::to_string(stats.hp_[MAX]) + '\n' +
-					std::to_string(stats.mana_[CUR]) + "/" + std::to_string(stats.mana_[MAX]) + '\n' +
+	string buffer = /*std::to_string(stats.hp_[CUR])   + "/" + std::to_string(stats.hp_[MAX]) + '\n' +
+					std::to_string(stats.mana_[CUR]) + "/" + std::to_string(stats.mana_[MAX]) + '\n' +*/
 					std::to_string(stats.str_)  + '\n' +
 					std::to_string(stats.int_)  + '\n' +
 					std::to_string(stats.dex_);

@@ -160,6 +160,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="Minimap.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Ressource.h" />
     <ClInclude Include="Textbox.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Types.h" />

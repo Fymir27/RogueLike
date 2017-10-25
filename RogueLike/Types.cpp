@@ -30,37 +30,3 @@ bool operator==(const Position& first, const Position& second)
 	return (first.x_ == second.x_ && first.y_ == second.y_);
 }
 
-
-std::ostream& operator<<(std::ostream& out, Stats stats)
-{
-	out << "Hitpoints:   " << stats.hp_[CUR] << "|" << stats.hp_[MAX] << endl;
-	out << "Mana:   " << stats.mana_[CUR] << "|" << stats.mana_[MAX] << endl;
-	out << "Strength:    " << stats.str_ << endl;
-	out << "Intelligence:" << stats.int_ << endl;
-	out << "Dexterity:   " << stats.dex_ << endl;
-	return out;
-}
-
-/*
-char* getStatString(Stats stats)
-{
-	static char buffer[1024];
-	sprintf_s(buffer, 1024, 
-		"Hitpoints %d\n"
-		"Mana     %d\n"
-		"Str      %d\n"
-		"Int      %d\n"
-		"Dex      %d\n",
-		stats.hp_, stats.mana_, stats.str_, stats.int_, stats.dex_);
-	return buffer;
-}
-*/
-
-Stats::Stats(int hp, int mana, int str, int intelligence, int dex) :
-	str_(str), int_(intelligence), dex_(dex)
-{
-	hp_[MAX] = hp;
-	hp_[CUR] = hp;
-	mana_[MAX] = mana;
-	mana_[CUR] = mana;
-}

@@ -6,8 +6,6 @@ class Field;
 typedef std::vector<Field*> Row;
 typedef std::vector<Row> Map;
 
-
-
 template<class T>
 void print(const std::vector<std::vector<T>>& v)
 {
@@ -37,24 +35,6 @@ extern bool operator==(const Position& first, const Position& second);
 std::ostream& operator<<(std::ostream& out, const Position& pos);
 
 const Position DELTA[4] = { Position(0, -1), Position(1, 0), Position(0, 1), Position(-1, 0) };
-
-#define CUR 0
-#define MAX 1
-
-struct Stats
-{
-	int hp_[2];  //Hitpoints
-	int mana_[2];//Mana
-	int str_; //Strength
-	int int_; //Intelligence
-	int dex_; //Dexterity
-	Stats(int hp, int mana, int str, int intelligence, int dex);
-	Stats() {};
-};
-
-std::ostream& operator<<(std::ostream& out, Stats stats);
-
-//extern char* getStatString(Stats stats);
 
 enum Direction
 {

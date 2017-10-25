@@ -29,11 +29,6 @@ bool Player::move(Position new_pos)
 {
 	if (Character::move(new_pos)) //check if move is valid
 	{
-		if (stats_.hp_[CUR] <= 0)
-		{
-
-			//current_room->updateDistanceToPlayer();
-		}
 		return true;
 	}
 	return false;
