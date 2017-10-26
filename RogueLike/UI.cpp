@@ -27,14 +27,14 @@ UI::UI()
 	pos_bottom_text_ = { 10                 , TILE_SIZE * 9 + 10 };
 
 	stat_names_.setPosition(pos_stats_.x_, pos_stats_.y_);
-	stat_values_.setPosition(pos_stats_.x_ + 130, pos_stats_.y_);
+	stat_values_.setPosition(pos_stats_.x_ + 150, pos_stats_.y_);
 
 	//-- set fixed Text --//
-	stat_names_.setString("Hitpoints\n"
-						  "Mana\n"
-						  "Str\n"
-						  "Int\n"
-						  "Dex\n");
+	stat_names_.setString("Strength\n"
+						  "Endurance\n"
+						  "Dexterity\n"
+						  "Intelligence\n"
+						  "Willpower\n");
 
 	textbox_ = new Textbox(3, 20, font_, 
 		    pos_bottom_text_, 420, 80,
@@ -63,11 +63,11 @@ void UI::draw(sf::RenderWindow& window)
 	window.draw(stat_names_);
 
 	Stats stats = current_player->getStats();
-	string buffer = /*std::to_string(stats.hp_[CUR])   + "/" + std::to_string(stats.hp_[MAX]) + '\n' +
-					std::to_string(stats.mana_[CUR]) + "/" + std::to_string(stats.mana_[MAX]) + '\n' +*/
-					std::to_string(stats.str_)  + '\n' +
+	string buffer = std::to_string(stats.str_)  + '\n' +
+					std::to_string(stats.end_)  + '\n' +
+					std::to_string(stats.dex_)  + '\n' +
 					std::to_string(stats.int_)  + '\n' +
-					std::to_string(stats.dex_);
+					std::to_string(stats.will_);
 	stat_values_.setString(buffer.c_str());
 	window.draw(stat_values_);
 	textbox_->draw(window);

@@ -28,13 +28,16 @@ void Player::step()
 bool Player::move(Position new_pos)
 {
 	if (Character::move(new_pos)) //check if move is valid
-	{
+	{ 
 		return true;
 	}
 	return false;
 }
 
-
+void Player::rest()
+{
+	hp_ += (stats_.will_ / 10);
+}
 
 /*
 void Player::damage(const int amount)

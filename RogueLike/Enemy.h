@@ -5,7 +5,9 @@
 
 enum MoveType
 {
+	SLEEP,
 	STAY,
+	WAIT,
 	FOLLOW,
 	RANDOM
 };
@@ -24,7 +26,7 @@ class Enemy : public Character
 	private:
 	MoveType move_type_;
 
-	void stay();
+	bool checkSurroundings();
 	void moveRandomly();
 
 	public:
@@ -41,19 +43,19 @@ class Ghost : public Enemy
 {
 	private:
 	public:
-	Ghost(Position pos) : Enemy("Ghost", pos, Stats(30, 100, 0, 20, 0), FOLLOW, "../images/ghost.png") {};
+	Ghost(Position pos) : Enemy("Ghost", pos, Stats(0, 5, 0, 15, 5), FOLLOW, "../images/ghost.png") {};
 };
 
 class Spider : public Enemy
 {
 	private:
 	public:
-	Spider(Position pos) : Enemy("Spider", pos, Stats(10, 10, 5, 10, 15), RANDOM, "../images/spider.png") {};
+	Spider(Position pos) : Enemy("Spider", pos, Stats(5, 2, 10, 0, 5), RANDOM, "../images/spider.png") {};
 };
 
 class Golem : public Enemy
 {
 	private:
 	public:
-	Golem(Position pos) : Enemy("Golem", pos, Stats(100, 0, 30, 5, 5), STAY, "../images/golem.png") {};
+	Golem(Position pos) : Enemy("Golem", pos, Stats(15, 10, 5, 5, 10), WAIT, "../images/golem.png") {};
 };

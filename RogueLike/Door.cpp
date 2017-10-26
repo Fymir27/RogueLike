@@ -13,7 +13,7 @@ Door::Door(Position pos, Direction dir) : Field(pos, 5, TRIGGER), dir_(dir)
 Position Door::trigger(Character* character)
 {
 	if(character != current_player)
-		return current_player->getPosition();
+		return character->getPosition();
 
 	cout << "Stepped on a Door!" << endl;
 	current_room->freeField(character->getPosition());

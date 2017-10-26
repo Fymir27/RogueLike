@@ -10,6 +10,7 @@ std::ostream& operator<<(std::ostream& out, Stats stats)
 	out << "Strength:    " << stats.str_ << endl;
 	out << "Intelligence:" << stats.int_ << endl;
 	out << "Dexterity:   " << stats.dex_ << endl;
+
 	return out;
 }
 
@@ -52,6 +53,26 @@ void Character::draw(sf::RenderWindow & window)
 {
 	sprite_.setPosition(sf::Vector2f(pos_.x_ * TILE_SIZE, pos_.y_ * TILE_SIZE));
 	window.draw(sprite_);
+
+	//-- hp bar --//
+	int x = pos_.x_ * TILE_SIZE;
+	int y = pos_.y_ * TILE_SIZE - 11;
+	//border
+	sf::RectangleShape border(sf::Vector2f(TILE_SIZE,10));
+	border.setFillColor(sf::Color::Black);
+	border.setPosition(sf::Vector2f(x, y));
+	//background
+	sf::RectangleShape background(sf::Vector2f(TILE_SIZE - 2,8));
+	background.setFillColor(sf::Color(150,150,150));
+	background.setPosition(sf::Vector2f(x+1, y+1));
+	//bar
+	sf::RectangleShape bar(sf::Vector2f((float)hp_.percent() * (float)(TILE_SIZE - 2) / 100.f,8));
+	bar.setFillColor(sf::Color::Red);
+	bar.setPosition(sf::Vector2f(x+1, y+1));
+
+	window.draw(border);
+	window.draw(background);
+	window.draw(bar);
 }
 
 void Character::heal(const int amount)

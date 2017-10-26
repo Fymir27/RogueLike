@@ -11,8 +11,16 @@ bool Enemy::step()
 
 	switch (move_type_)
 	{
+	case SLEEP:
+		break;
+
 	case STAY:
-		stay();
+		checkSurroundings();
+		break;
+
+	case WAIT:
+		if(checkSurroundings())
+			move_type_ = FOLLOW;
 		break;
 
 	case FOLLOW:
@@ -32,19 +40,30 @@ Enemy::Enemy(string name, Position pos, Stats stats, MoveType move_type, string 
 	current_room->addEnemy(this);
 }
 
-void Enemy::stay()
+bool Enemy::checkSurroundings()
 {
-	Position new_pos = current_room->getPathToPlayer(pos_);
-	if (new_pos == current_player->getPosition())
-		move(new_pos);
+	for(size_t i = 0; i < 4; i++)
+	{
+		if(current_room->getFieldStatus(pos_ + DELTA_POS[i]) == OCCUPIED)
+		{
+			move(pos_ + DELTA_POS[i]);
+			return true;
+		}
+	}		
 }
 
 void Enemy::moveRandomly()
 {
-	int r;
+	int counter = 0;
+	int r = rand() % 4;
 	do 
 	{ 
-		r = rand() % 4; 
+		r = (r+1) % 4; 
+		if(counter++ > 3)
+		{
+			move_type_ = SLEEP;
+			break;
+		}
 	} while (!move(Position(pos_.x_ + DELTA_X[r], pos_.y_ + DELTA_Y[r])));
 }
 

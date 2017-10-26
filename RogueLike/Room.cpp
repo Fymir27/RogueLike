@@ -112,7 +112,7 @@ Position Room::getFreePosition()
 	do
 	{
 		pos = Position(1 + (rand() % (width_ - 2)), 1 + (rand() % (height_ - 2)));
-	} while(!spawn_locations_.at(pos.y_).at(pos.x_) && getField(pos)->status_ != OCCUPIED);
+	} while(!spawn_locations_.at(pos.y_).at(pos.x_) || getField(pos)->status_== OCCUPIED);
 	return pos;
 }
 
