@@ -87,12 +87,14 @@ void Character::damage(const int amount)
 	cout << name_ << " damaged for " << amount << endl;
 }
 
+/*
 void Character::attack(Character* target)
 {
 	size_t damage = stats_.str_ + stats_.dex_/2 + stats_.int_/3;
 	UI::displayText(name_ + " attacks " + target->getName() + " for " + std::to_string(damage) + " damage.");
 	target->damage(damage);
 }
+*/
 
 bool Character::move(Position new_pos)
 {

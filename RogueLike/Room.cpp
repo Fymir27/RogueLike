@@ -3,7 +3,7 @@
 #include "Common.h"
 #include "Types.h"
 #include "Player.h"
-#include "Enemy.h"
+#include "EnemyClasses.h"
 #include "DijkstraMap.h"
 #include "Dungeon.h"
 

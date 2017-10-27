@@ -9,6 +9,7 @@
 #include "UI.h"
 #include "Enemy.h"
 #include "Ressource.h"
+#include "PlayerClasses.h"
 
 #include <ctime>
 
@@ -67,7 +68,7 @@ int main()
 	//-- create player --//
 	Stats player_stats(10, 10, 10, 10, 10);
 
-	Player* player = new Player("Oliver", current_room->getFreePosition(), player_stats);
+	Player* player = new Mage("Oliver", current_room->getFreePosition());
 	current_player = player;
 
 	//place Pickup item
@@ -91,6 +92,10 @@ int main()
 	cout << "//                  Good Luck!                        //" << endl;
 	cout << "////////////////////////////////////////////////////////" << endl;
 	cout << endl;
+
+	//------- Test Area ----------//
+
+	//----------------------------//
 
 	//-- main loop --//
 	sf::Event event;

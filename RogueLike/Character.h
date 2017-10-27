@@ -51,7 +51,7 @@ public:
 	bool addItem(Item* item);
 
 	virtual bool move(Position new_pos); //returns if the move was valid
-	void attack(Character* target);
+	virtual void attack(Character* target) = 0;
 
 	void draw(sf::RenderWindow& window);
 	friend std::ostream& operator<<(std::ostream& out, Character* character);

@@ -71,3 +71,8 @@ Enemy::~Enemy()
 {
 	current_room->removeEnemy(this);
 }
+
+void Enemy::attack(Character* target)
+{
+	cout << "Enemy::attack" << endl;
+}
