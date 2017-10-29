@@ -17,6 +17,7 @@ struct Stats
 	int will_; //Willpower
 	Stats(int str, int end, int dex, int intel, int will);
 	Stats() {};
+	Stats& operator+= (const Stats& other);
 };
 
 class Item;
@@ -27,6 +28,9 @@ protected:
 	Position   pos_;
 	Inventory* inventory_;
 
+	size_t level_ = 1;
+	size_t exp_ = 0;
+	static map<size_t, size_t> exp_needed_;
 	Ressource<int> hp_;
 	Ressource<int> mana_;
 	Stats     stats_;
@@ -35,9 +39,16 @@ protected:
 	sf::Sprite  sprite_;
 
 	Character(const string name, const Position pos, const Stats stats, string filename);
+	
 
 public:
 	virtual ~Character();
+	static void init_exp_needed();
+	void grantExp(size_t amount);
+	void levelUp();
+	size_t getLevel() { return level_; }
+	size_t getExp() { return exp_; }
+	size_t getExpNeeded() { return exp_needed_[level_]; }
 
 	//--- Getters ---//
 	string   getName() const     { return name_; };

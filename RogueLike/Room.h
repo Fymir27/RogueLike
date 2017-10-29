@@ -61,6 +61,7 @@ class Room
 		void addEnemy(Enemy* enemy);
 		void removeEnemy(Enemy* enemy);
 		void stepEnemies();
+		void spawnEnemies(size_t count);
 		Enemy* spawnEnemy(Position pos = Position(0,0), EnemyType type = RANDOM_ENEMY);
 };
 

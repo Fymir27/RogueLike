@@ -81,7 +81,7 @@ void Room::initSpawnLocations()
 			}
 		}
 	}
-	/*
+	
 	for (auto row : spawn_locations_)
 	{
 		for (bool spawnable : row)
@@ -90,7 +90,7 @@ void Room::initSpawnLocations()
 		}
 		cout << endl;
 	}
-	*/
+	
 }
 
 FIELD_STATUS Room::getFieldStatus(Position pos)
@@ -102,7 +102,7 @@ FIELD_STATUS Room::getFieldStatus(Position pos)
 	catch (std::exception e)
 	{
 		cout << "Invalid Field!" << endl;
-		std::cout << e.what();
+		std::cout << e.what() << endl;
 	}
 }
 
@@ -182,13 +182,6 @@ void Room::generate()
 		}
 	}
 	width_ = getColCount();
-
-	initSpawnLocations();
-	//spawning enemies
-	current_room = this;
-	size_t prob = 3;
-	while (roll(2, prob++)) { spawnEnemy(); }
-
 }
 
 
@@ -409,44 +402,6 @@ void Room::addNeighbour(Direction dir, Room* other)
 	neighbours_[dir] = other;
 	Position pos = door_pos_[dir];
 	addField(new Door(pos, dir));
-
-	/*
-	Position pos;
-	Position entry;
-	switch (dir)
-	{
-	case UP:
-		pos.x_ = getColCount() / 2;
-		pos.y_ = 0;
-		entry = pos;
-		entry.y_ += 1;
-		break;
-
-	case RIGHT:
-		pos.x_ = getColCount() - 1;
-		pos.y_ = getRowCount() / 2;
-		entry = pos;
-		entry.x_ -= 1;
-		break;
-
-	case DOWN:
-		pos.x_ = getColCount() / 2;
-		pos.y_ = getRowCount() - 1;
-		entry = pos;
-		entry.y_ -= 1;
-		break;
-
-	case LEFT:
-		pos.x_ = 0;
-		pos.y_ = getRowCount() / 2;
-		entry = pos;
-		entry.x_ += 1;
-		break;
-	}
-	map_.at(pos.y_).at(pos.x_) = new Door(pos, dir);
-	entries_[dir] = entry;
-	//tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int)getColCount(), (int)getRowCount());
-	*/
 }
 
 void Room::draw(sf::RenderWindow& window)
@@ -518,6 +473,12 @@ void Room::stepEnemies() //called appr. 63 times a second
 	}
 }
 
+void Room::spawnEnemies(size_t count)
+{
+	for(size_t i = 0; i < count; i++)
+		spawnEnemy(Position(0,0), RANDOM_ENEMY);
+}
+
 Enemy* Room::spawnEnemy(Position pos, EnemyType type)
 {
 	Enemy* e = NULL;
@@ -546,6 +507,5 @@ Enemy* Room::spawnEnemy(Position pos, EnemyType type)
 		cout << "Unknown enemy type!" << endl;
 		break;
 	}
-
 	return e;
 }

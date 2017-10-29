@@ -14,6 +14,16 @@ std::ostream& operator<<(std::ostream& out, Stats stats)
 	return out;
 }
 
+Stats& Stats::operator+=(const Stats& other)
+{
+	this->str_ += other.str_;
+	this->end_ += other.end_;
+	this->dex_ += other.dex_;
+	this->int_ += other.int_;
+	this->will_ += other.will_;
+	return *this;
+}
+
 
 Stats::Stats(int str, int end, int dex, int intel, int will) :
 	 str_(str), end_(end), dex_(dex), int_(intel), will_(will)
@@ -24,6 +34,37 @@ Stats::Stats(int str, int end, int dex, int intel, int will) :
 bool Character::addItem(Item* item)
 { 
 	return inventory_->addItem(item); 
+}
+
+map<size_t, size_t> Character::exp_needed_;
+void Character::init_exp_needed()
+{
+	exp_needed_[1] = 10;
+	exp_needed_[2] = 15;
+	exp_needed_[3] = 20;
+	exp_needed_[4] = 30;
+	exp_needed_[5] = 40;
+	exp_needed_[6] = 55;
+	exp_needed_[7] = 70;
+	exp_needed_[8] = 95;
+	exp_needed_[9] = 120;
+}
+
+void Character::grantExp(size_t amount)
+{
+	cout << amount << " Exp granted" << endl;
+	exp_ += amount;
+	while(exp_ >= exp_needed_[level_])
+	{
+		exp_ -= exp_needed_[level_];
+		levelUp();
+	}
+}
+
+void Character::levelUp()
+{
+	cout << "Levelled up to " << ++level_ << endl;
+	stats_ += Stats(1,1,1,1,1);
 }
 
 Character::Character(string name, Position pos, Stats stats, string filename) : name_(name), pos_(pos),

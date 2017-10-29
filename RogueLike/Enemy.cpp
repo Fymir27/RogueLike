@@ -19,8 +19,7 @@ bool Enemy::step()
 		break;
 
 	case WAIT:
-		if(checkSurroundings())
-			move_type_ = FOLLOW;
+		checkSurroundings();
 		break;
 
 	case FOLLOW:
@@ -47,6 +46,8 @@ bool Enemy::checkSurroundings()
 		if(current_room->getFieldStatus(pos_ + DELTA_POS[i]) == OCCUPIED)
 		{
 			move(pos_ + DELTA_POS[i]);
+			if(pos_ + DELTA_POS[i] == current_player->getPosition())
+				move_type_ = FOLLOW;
 			return true;
 		}
 	}		
@@ -69,10 +70,7 @@ void Enemy::moveRandomly()
 
 Enemy::~Enemy()
 {
+	current_player->grantExp(exp_reward_);
 	current_room->removeEnemy(this);
 }
 
-void Enemy::attack(Character* target)
-{
-	cout << "Enemy::attack" << endl;
-}

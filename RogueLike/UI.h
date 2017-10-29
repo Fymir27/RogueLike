@@ -2,31 +2,67 @@
 
 #include "Common.h"
 #include "Types.h"
+#include "Bar.h"
 
 class Textbox;
 class UI
 {
+    class Bar
+    {
+    private:
+        size_t cur_; //current width of bar
+        sf::Vector2f pos_;
+        sf::Vector2f size_;
+        size_t border_size_;
+        sf::Color bar_color_;
+
+        sf::RectangleShape border_;
+        sf::RectangleShape background_;
+        sf::RectangleShape bar_;
+
+    public:
+        Bar(sf::Vector2f pos_, sf::Vector2f size_, size_t border_size = 0, sf::Color bar_color = sf::Color::Red);
+        void draw(sf::RenderWindow& window);
+        void setPosition(sf::Vector2f pos) { pos_ = pos; }
+        void setBarColor(sf::Color col) { bar_color_ = col; }
+        void update(float value_, float max_);
+    };
+
+    struct CharacterInfo
+    {
+        sf::Vector2f pos_;
+        sf::Text description_;
+        Bar* ressource1_; //hp
+        Bar* ressource2_; //mana
+        Bar* ressource3_; //exp
+        ~CharacterInfo();
+    };
+
 	public:
 	UI();
 	~UI();
 
 	void draw(sf::RenderWindow & window);
-	//void click(const sf::Event& event);
-	//
 	static void displayText(string text);
 
-	private:
-	Position pos_inv_;
+
+    private:
+
+    sf::Font font_;
+    unsigned int font_size_ = 20;
+
+    //--- Inventory ---//
+    Position pos_inv_;
+    sf::Texture tex_inv_;
+
+    //--- Stats ---//
 	Position pos_stats_;
-	Position pos_bottom_text_;
-
-	sf::Font font_;
-	unsigned int font_size_ = 20;
-
 	sf::Text stat_names_;
 	sf::Text stat_values_;
 
-	static Textbox* textbox_;
+    Position pos_bottom_text_;
+    static Textbox* textbox_;
+    
+	CharacterInfo player_info_;
 
-	sf::Texture tex_inv_;
 };

@@ -31,6 +31,11 @@ void Minimap::setActiveRoom(Position pos)
 	setActiveRoom(pos.x_, pos.y_);
 }
 
+bool Minimap::isExplored(Position pos)
+{
+	return map_.at(pos.y_).at(pos.x_) == EXPLORED;
+}
+
 void Minimap::print()
 {
 	for (auto& row : map_)

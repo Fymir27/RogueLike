@@ -20,8 +20,9 @@ class Minimap //static class
 	public:
 	static void init(size_t width, size_t height, Position pos_active);
 	static void setActiveRoom(size_t x, size_t y);
-
 	static void setActiveRoom(Position pos);
+
+	static bool isExplored(Position pos);
 
 	static void print();
 

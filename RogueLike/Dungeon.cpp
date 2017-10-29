@@ -251,9 +251,12 @@ void Dungeon::generate(size_t width, size_t height)
 	while (current_room == NULL)
 		current_room = getRoom(rand() % width, rand() % height);
 
+	current_room->initSpawnLocations();
+
 	//DM.getNextPosition(Position(1,1);
 
 	Minimap::init(width_, height_, current_room->pos_);
+
 	/*
 	for (auto row : layout_test_)
 	{
@@ -357,9 +360,9 @@ RoomHeightClass const & Dungeon::getRoomParts(size_t height)
 //TODO: make simpler (use DELTA)
 void Dungeon::changeRoom(Direction dir)
 {
-	Position pos = current_room->pos_;
-	Direction entry; //Entry point of char
+	Position pos = current_room->pos_ + DELTA_POS[dir];
 
+	/*
 	switch(dir)
 	{
 		case UP:
@@ -386,10 +389,14 @@ void Dungeon::changeRoom(Direction dir)
 		cout << "Dungeon::changeRoom: Unknown direction!" << endl;
 		break;
 	}
+	*/
 
 	cout << "New Room is at Pos. " << pos << " in Dungeon!" << endl; 
-	Room* new_room = layout_.at(pos.y_).at(pos.x_);
-	current_room = new_room;
-	Minimap::setActiveRoom(current_room->pos_);
-	current_room->initSpawnLocations();
+	current_room = layout_.at(pos.y_).at(pos.x_);
+	if(!Minimap::isExplored(pos))
+	{
+		current_room->initSpawnLocations();
+		current_room->spawnEnemies(rand() % 3);
+	}
+	Minimap::setActiveRoom(pos);	
 }

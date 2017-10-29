@@ -65,6 +65,8 @@ int main()
 	cout << "Dungeon Layout:" << endl;
 	current_dungeon->generate(20, 13);
 
+	Character::init_exp_needed();
+
 	//-- create player --//
 	Stats player_stats(10, 10, 10, 10, 10);
 
@@ -72,7 +74,7 @@ int main()
 	current_player = player;
 
 	//place Pickup item
-	//current_room->placeItem({5,2}, new SmallHealingPotion(33));
+	current_room->placeItem({5,2}, new SmallHealingPotion(33));
 	//Field* pickup = new Pickup({ 5, 3 }, new SmallHealingPotion(), 17);
 	//current_room->addField(pickup);
 

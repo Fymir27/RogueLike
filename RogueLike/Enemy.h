@@ -29,6 +29,9 @@ class Enemy : public Character
 	bool checkSurroundings();
 	void moveRandomly();
 
+	protected:
+		size_t exp_reward_;
+
 	public:
 		
 		//-ctors-//

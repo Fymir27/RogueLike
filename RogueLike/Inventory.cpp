@@ -51,17 +51,19 @@ bool Inventory::addItem(Item* new_item)
 		}
 		else
 		{
-			if(new_count <= max_count)
+			int overflow = new_count - max_count;
+			if(overflow <= 0)
 			{
 				items_[i] = new_item;
 				return true;
 			}
 			else
 			{
-				items_[i] = new_item->clone();
+				items_[i] = new_item;
 				items_[i]->count_ = max_count;
-				new_item->count_ -= max_count;
-				return addItem(new_item);
+				Item* tmp = new_item->clone();
+				tmp->count_ = overflow;
+				return addItem(tmp);
 			}
 		}
 	}
@@ -87,7 +89,7 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 	for(size_t i = 0; i < items_.size(); i++)
 	{
 		if(!items_[i])
-			break;
+			continue;
 		Item* item = items_[i];
 		sf::Sprite& sprite = item->getSprite();
 		sprite.setScale(sf::Vector2f(1.5f,1.5f));
