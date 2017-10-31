@@ -75,6 +75,12 @@
     <ClCompile Include="DijkstraMap.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyClasses.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerClasses.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Room.h">
@@ -129,6 +135,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Ressource.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyClasses.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerClasses.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

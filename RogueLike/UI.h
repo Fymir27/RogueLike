@@ -2,7 +2,6 @@
 
 #include "Common.h"
 #include "Types.h"
-#include "Bar.h"
 
 class Textbox;
 class UI
@@ -32,9 +31,9 @@ class UI
     {
         sf::Vector2f pos_;
         sf::Text description_;
-        Bar* ressource1_; //hp
-        Bar* ressource2_; //mana
-        Bar* ressource3_; //exp
+        Bar* ressource1_ = NULL; //hp
+        Bar* ressource2_ = NULL; //mana
+        Bar* ressource3_ = NULL; //exp
         ~CharacterInfo();
     };
 

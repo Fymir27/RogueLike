@@ -132,6 +132,7 @@
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyClasses.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="HealingPotion.cpp" />
     <ClCompile Include="Inventory.cpp" />
@@ -140,6 +141,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minimap.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerClasses.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="Textbox.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -154,12 +156,14 @@
     <ClInclude Include="Door.h" />
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyClasses.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="HealingPotion.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Minimap.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerClasses.h" />
     <ClInclude Include="Ressource.h" />
     <ClInclude Include="Textbox.h" />
     <ClInclude Include="TileMap.h" />

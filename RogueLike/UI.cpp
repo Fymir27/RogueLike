@@ -4,7 +4,6 @@
 #include "Player.h"
 #include "Textbox.h"
 #include "Minimap.h"
-#include "Bar.h"
 #include "Ressource.h"
 
 Textbox* UI::textbox_ = NULL;
@@ -120,10 +119,10 @@ void UI::Bar::draw(sf::RenderWindow& window)
 
 UI::CharacterInfo::~CharacterInfo()
 {
-	if(ressource1_)
+	if(ressource1_ != NULL)
 		delete ressource1_;
-	if(ressource2_)
+	if(ressource2_ != NULL)
 		delete ressource2_;
-	if(ressource3_)
+	if(ressource3_ != NULL)
 		delete ressource3_;
 }
