@@ -70,17 +70,8 @@ int main()
 	//-- create player --//
 	Stats player_stats(10, 10, 10, 10, 10);
 
-	Player* player = new Mage("Oliver", current_room->getFreePosition());
+	Player* player = new Warrior("Oliver", current_room->getFreePosition());
 	current_player = player;
-
-	//place Pickup item
-	current_room->placeItem({5,2}, new SmallHealingPotion(33));
-	//Field* pickup = new Pickup({ 5, 3 }, new SmallHealingPotion(), 17);
-	//current_room->addField(pickup);
-
-	//spawn Enemy
-	//Enemy* blob = new Enemy("Blobby", {12,4}, player_stats, "../images/enemy.png");
-	//Enemy* blob2 = new Enemy("Blobby2", {9,4}, player_stats, "../images/enemy.png");
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
@@ -96,7 +87,8 @@ int main()
 	cout << endl;
 
 	//------- Test Area ----------//
-
+	//current_player->grantExp(33);
+	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
 	//----------------------------//
 
 	//-- main loop --//

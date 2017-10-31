@@ -53,11 +53,11 @@ void Character::init_exp_needed()
 void Character::grantExp(size_t amount)
 {
 	cout << amount << " Exp granted" << endl;
-	exp_ += amount;
-	while(exp_ >= exp_needed_[level_])
+	long overflow = exp_.add(amount);
+	while(exp_.full())
 	{
-		exp_ -= exp_needed_[level_];
 		levelUp();
+		overflow = exp_.add(overflow);
 	}
 }
 
@@ -65,6 +65,9 @@ void Character::levelUp()
 {
 	cout << "Levelled up to " << ++level_ << endl;
 	stats_ += Stats(1,1,1,1,1);
+	hp_ = Ressource(stats_.end_ * 10);
+	mana_ = Ressource(stats_.int_ * 10);
+	exp_ = Ressource(exp_needed_[level_], 0); //reinstantiate exp with new max
 }
 
 Character::Character(string name, Position pos, Stats stats, string filename) : name_(name), pos_(pos),
@@ -75,8 +78,9 @@ Character::Character(string name, Position pos, Stats stats, string filename) : 
 	if (!texture_.loadFromFile(filename))
 		cout << "Failed to load character texture!" << endl;
 
-	hp_ = Ressource<int>(stats_.end_ * 10);
-	mana_ = Ressource<int>(stats_.int_ * 10);
+	hp_ = Ressource(stats_.end_ * 10);
+	mana_ = Ressource(stats_.int_ * 10);
+	exp_ = Ressource(exp_needed_[1], 0);
 
 	sprite_.setTexture(texture_);
 
@@ -94,26 +98,6 @@ void Character::draw(sf::RenderWindow & window)
 {
 	sprite_.setPosition(sf::Vector2f(pos_.x_ * TILE_SIZE, pos_.y_ * TILE_SIZE));
 	window.draw(sprite_);
-
-	//-- hp bar --//
-	int x = pos_.x_ * TILE_SIZE;
-	int y = pos_.y_ * TILE_SIZE - 11;
-	//border
-	sf::RectangleShape border(sf::Vector2f(TILE_SIZE,10));
-	border.setFillColor(sf::Color::Black);
-	border.setPosition(sf::Vector2f(x, y));
-	//background
-	sf::RectangleShape background(sf::Vector2f(TILE_SIZE - 2,8));
-	background.setFillColor(sf::Color(150,150,150));
-	background.setPosition(sf::Vector2f(x+1, y+1));
-	//bar
-	sf::RectangleShape bar(sf::Vector2f((float)hp_.percent() * (float)(TILE_SIZE - 2) / 100.f,8));
-	bar.setFillColor(sf::Color::Red);
-	bar.setPosition(sf::Vector2f(x+1, y+1));
-
-	window.draw(border);
-	window.draw(background);
-	window.draw(bar);
 }
 
 void Character::heal(const int amount)

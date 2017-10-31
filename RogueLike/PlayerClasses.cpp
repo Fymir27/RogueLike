@@ -6,7 +6,7 @@ Stats Warrior::base_stats_(15,15,10,5,5);
 
 Warrior::Warrior(string name, Position pos) : Player(name, pos, base_stats_) 
 {
-
+	class_ = "Warrior";
 } 
 
 void Warrior::attack(Character* target)
@@ -21,7 +21,7 @@ Stats Mage::base_stats_(5,10,5,15,15);
 
 Mage::Mage(string name, Position pos) : Player(name, pos, base_stats_) 
 {
-
+	class_ = "Mage";
 } 
 
 void Mage::attack(Character* target)
@@ -36,7 +36,7 @@ Stats Thief::base_stats_(10,10,15,10,5);
 
 Thief::Thief(string name, Position pos) : Player(name, pos, base_stats_) 
 {
-
+	class_ = "Thief";
 } 
 
 void Thief::attack(Character* target)

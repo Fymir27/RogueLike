@@ -142,6 +142,7 @@
     <ClCompile Include="Minimap.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerClasses.cpp" />
+    <ClCompile Include="Ressource.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="Textbox.cpp" />
     <ClCompile Include="TileMap.cpp" />

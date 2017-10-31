@@ -25,14 +25,15 @@ class Character
 {
 protected:
 	string     name_;
+	string     class_ = "None";
 	Position   pos_;
 	Inventory* inventory_;
 
 	size_t level_ = 1;
-	size_t exp_ = 0;
 	static map<size_t, size_t> exp_needed_;
-	Ressource<int> hp_;
-	Ressource<int> mana_;
+	Ressource hp_;
+	Ressource mana_;
+	Ressource exp_;
 	Stats     stats_;
 
 	sf::Texture texture_;
@@ -47,13 +48,16 @@ public:
 	void grantExp(size_t amount);
 	void levelUp();
 	size_t getLevel() { return level_; }
-	size_t getExp() { return exp_; }
 	size_t getExpNeeded() { return exp_needed_[level_]; }
+	Ressource const& getHp() { return hp_; }
+	Ressource const& getMana() { return mana_; }
+	Ressource const& getExp() { return exp_; }
 
 	//--- Getters ---//
-	string   getName() const     { return name_; };
-	Position getPosition() const { return pos_; };
-	Stats    getStats() const    { return stats_; };
+	string   getName() const     { return name_; }
+	string   getClassName() const { return class_; }
+	Position getPosition() const { return pos_; }
+	Stats    getStats() const    { return stats_; }
 
 	virtual void heal(const int amount);
 	virtual void damage(const int amount);
@@ -65,5 +69,4 @@ public:
 	virtual void attack(Character* target) = 0;
 
 	void draw(sf::RenderWindow& window);
-	friend std::ostream& operator<<(std::ostream& out, Character* character);
 };

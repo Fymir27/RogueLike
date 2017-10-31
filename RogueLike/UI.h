@@ -3,41 +3,41 @@
 #include "Common.h"
 #include "Types.h"
 
+class Ressource;
 class Textbox;
+class Character;
 class UI
 {
     class Bar
     {
-    private:
-        size_t cur_; //current width of bar
-        sf::Vector2f pos_;
-        sf::Vector2f size_;
-        size_t border_size_;
-        sf::Color bar_color_;
+			private:
+			sf::Vector2f size_;
+			Ressource const& ressource_;
+			sf::RectangleShape background_;
+			sf::RectangleShape bar_;
 
-        sf::RectangleShape border_;
-        sf::RectangleShape background_;
-        sf::RectangleShape bar_;
-
-    public:
-        Bar(sf::Vector2f pos_, sf::Vector2f size_, size_t border_size = 0, sf::Color bar_color = sf::Color::Red);
-        void draw(sf::RenderWindow& window);
-        void setPosition(sf::Vector2f pos) { pos_ = pos; }
-        void setBarColor(sf::Color col) { bar_color_ = col; }
-        void update(float value_, float max_);
+			public:
+			Bar(sf::Vector2f pos_, sf::Vector2f size_, Ressource const& ress, sf::Color bar_color = sf::Color::Red);
+			void draw(sf::RenderWindow& window);
     };
 
     struct CharacterInfo
     {
-        sf::Vector2f pos_;
-        sf::Text description_;
-        Bar* ressource1_ = NULL; //hp
-        Bar* ressource2_ = NULL; //mana
-        Bar* ressource3_ = NULL; //exp
-        ~CharacterInfo();
+			Character* source_;
+      sf::Vector2f pos_;
+      sf::Text title_;   //Font needs manual setting
+      Bar* bar1_ = NULL; //hp
+      Bar* bar2_ = NULL; //mana
+      Bar* bar3_ = NULL; //exp
+
+			CharacterInfo(sf::Vector2f pos, Character* source);
+      ~CharacterInfo();
+
+			void draw(sf::RenderWindow& window);
     };
 
 	public:
+
 	UI();
 	~UI();
 
@@ -55,13 +55,13 @@ class UI
     sf::Texture tex_inv_;
 
     //--- Stats ---//
-	Position pos_stats_;
-	sf::Text stat_names_;
-	sf::Text stat_values_;
+		Position pos_stats_;
+		sf::Text stat_names_;
+		sf::Text stat_values_;
 
     Position pos_bottom_text_;
     static Textbox* textbox_;
     
-	CharacterInfo player_info_;
+		CharacterInfo player_info_;
 
 };

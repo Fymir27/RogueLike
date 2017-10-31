@@ -37,9 +37,9 @@ void Textbox::draw(sf::RenderWindow& window)
 
 void Textbox::displayText(string text)
 {
-	for(size_t i = lines_.size()-1; i > 0; i--)
+	for(size_t i = 0; i < lines_.size() - 1; i++)
 	{
-		lines_[i].setString(lines_[i-1].getString());
+		lines_[i].setString(lines_[i+1].getString());
 	}
-	lines_[0].setString(text);
+	lines_[lines_.size() - 1].setString(text);
 }
