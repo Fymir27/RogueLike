@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "Room.h"
 #include "Player.h"
+#include "UI.h"
 
 bool Enemy::step()
 {
@@ -70,6 +71,7 @@ void Enemy::moveRandomly()
 
 Enemy::~Enemy()
 {
+	UI::displayText(name_ + " defeated. Gained " + std::to_string(exp_reward_) + " Exp.");
 	current_player->grantExp(exp_reward_);
 	current_room->removeEnemy(this);
 }

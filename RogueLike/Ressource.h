@@ -21,7 +21,9 @@ class Ressource
 	long add(const long value); //gives back overflow
 	bool depleted() const { return cur_value_ == min_value_; }
 	bool full() const { return cur_value_ == max_value_; }
-	long val() const { return cur_value_; }
+	long cur() const { return cur_value_; }
+	long max() const { return max_value_; }
+	long min() const { return min_value_; }
 	float relative() const { return ((float)cur_value_) / ((float)max_value_); }
 
 	bool operator==(const Ressource& other)	{	return (this->cur_value_ == other.cur_value_); }

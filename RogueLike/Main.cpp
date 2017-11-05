@@ -10,7 +10,6 @@
 #include "Enemy.h"
 #include "Ressource.h"
 #include "PlayerClasses.h"
-
 #include <ctime>
 
 void processInput(const sf::Event& event)
@@ -68,10 +67,7 @@ int main()
 	Character::init_exp_needed();
 
 	//-- create player --//
-	Stats player_stats(10, 10, 10, 10, 10);
-
-	Player* player = new Warrior("Oliver", current_room->getFreePosition());
-	current_player = player;
+	current_player = new Mage("Patrick", current_room->getFreePosition());
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
@@ -115,7 +111,7 @@ int main()
 		window.clear(sf::Color::Black);
 		
 		current_room->draw(window);
-		player->draw(window);
+		current_player->draw(window);
 		ui->draw(window);
 		window.display();
 

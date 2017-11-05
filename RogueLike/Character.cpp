@@ -63,7 +63,8 @@ void Character::grantExp(size_t amount)
 
 void Character::levelUp()
 {
-	cout << "Levelled up to " << ++level_ << endl;
+	level_++;
+	UI::displayText("Reached level " + std::to_string(level_) + "!");
 	stats_ += Stats(1,1,1,1,1);
 	hp_ = Ressource(stats_.end_ * 10);
 	mana_ = Ressource(stats_.int_ * 10);
@@ -89,7 +90,6 @@ Character::Character(string name, Position pos, Stats stats, string filename) : 
 
 Character::~Character()
 {
-	UI::displayText(name_ + " defeated.");
 	current_room->freeField(pos_);
 	delete inventory_;
 }

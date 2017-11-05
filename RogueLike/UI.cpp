@@ -18,6 +18,12 @@ UI::UI() : player_info_({500,300}, current_player)
 	stat_names_.setFont(font_);
 	stat_values_.setFont(font_);
 	player_info_.title_.setFont(font_);
+	player_info_.bar1_->text_cur_.setFont(font_);
+	player_info_.bar2_->text_cur_.setFont(font_);
+	player_info_.bar3_->text_cur_.setFont(font_);
+	player_info_.bar1_->text_max_.setFont(font_);
+	player_info_.bar2_->text_max_.setFont(font_);
+	player_info_.bar3_->text_max_.setFont(font_);
 
 	//-- set size --//
 	stat_names_.setCharacterSize(font_size_);
@@ -48,7 +54,7 @@ UI::UI() : player_info_({500,300}, current_player)
 
 UI::~UI()
 {
-
+	delete textbox_;
 }
 
 void UI::draw(sf::RenderWindow& window)
@@ -84,6 +90,12 @@ UI::Bar::Bar(sf::Vector2f pos, sf::Vector2f size, Ressource const& ress, sf::Col
 	background_.setFillColor(sf::Color(150, 150, 150));
 	bar_.setPosition(pos);
 	bar_.setFillColor(bar_color);
+
+	//--- Text ---//
+	text_cur_.setPosition(pos);
+	text_cur_.setCharacterSize(15);
+	text_max_.setPosition(pos + sf::Vector2f(size.x - 30, 0));
+	text_max_.setCharacterSize(15);
 }
 
 void UI::Bar::draw(sf::RenderWindow& window)
@@ -91,6 +103,10 @@ void UI::Bar::draw(sf::RenderWindow& window)
 	bar_.setSize(sf::Vector2f(ressource_.relative() * size_.x, size_.y));
 	window.draw(background_);
 	window.draw(bar_);
+	text_cur_.setString(std::to_string(ressource_.cur()));
+	text_max_.setString(std::to_string(ressource_.max()));
+	window.draw(text_cur_);
+	window.draw(text_max_);
 }
 
 UI::CharacterInfo::CharacterInfo(sf::Vector2f pos, Character * source) : source_(source), pos_(pos)
@@ -100,6 +116,7 @@ UI::CharacterInfo::CharacterInfo(sf::Vector2f pos, Character * source) : source_
 	bar1_ = new Bar(pos_ + sf::Vector2f(0, 20), { 200, 20 }, source_->getHp());
 	bar2_ = new Bar(pos_ + sf::Vector2f(0, 40), { 200, 20 }, source_->getMana(), sf::Color::Blue);
 	bar3_ = new Bar(pos_ + sf::Vector2f(0, 60), { 200, 20 }, source_->getExp(), sf::Color(200,0,200));
+
 }
 
 UI::CharacterInfo::~CharacterInfo()
@@ -118,10 +135,10 @@ void UI::CharacterInfo::draw(sf::RenderWindow & window)
 	window.draw(title_);
 
 	if(bar1_)
-		bar1_->draw(window);
+		{bar1_->draw(window);}
 	if (bar2_)
-		bar2_->draw(window);
+		{bar2_->draw(window);}
 	if (bar3_)
-		bar3_->draw(window);
+		{bar3_->draw(window);}
 }
 

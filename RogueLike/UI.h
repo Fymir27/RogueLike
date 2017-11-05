@@ -8,15 +8,15 @@ class Textbox;
 class Character;
 class UI
 {
-    class Bar
+    struct Bar
     {
-			private:
 			sf::Vector2f size_;
 			Ressource const& ressource_;
 			sf::RectangleShape background_;
-			sf::RectangleShape bar_;
+      sf::RectangleShape bar_;
+      sf::Text text_cur_; //Font needs manual setting
+      sf::Text text_max_;
 
-			public:
 			Bar(sf::Vector2f pos_, sf::Vector2f size_, Ressource const& ress, sf::Color bar_color = sf::Color::Red);
 			void draw(sf::RenderWindow& window);
     };
