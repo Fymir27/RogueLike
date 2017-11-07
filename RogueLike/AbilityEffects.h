@@ -12,7 +12,7 @@ class AbilityEffect : public GameObject
 public:
     AbilityEffect(string name, string descr, size_t dur) : GameObject(name, descr), dur_(dur) {}
     virtual void apply(Character* target) = 0;
-    virtual void tick() {};
+    virtual size_t tick() { return --dur_; }; //returns remaining duration
 protected:
     Character* target_;
     size_t dur_;
@@ -24,7 +24,7 @@ class OverTimeEffect : public AbilityEffect
 public:
     OverTimeEffect(string name, string descr, bool harmful, int amount, size_t dur);
     void apply(Character* target);
-    void tick();
+    size_t tick();
     void remove();
 private:
     bool harmful_;
@@ -52,7 +52,7 @@ class ConditionEffect : public AbilityEffect
 public:
     ConditionEffect(string name, string descr, ConditionType type, size_t dur);
     void apply(Character* target);
-    void tick();
+    size_t tick();
     ~ConditionEffect();
 private:
     ConditionType type_;  

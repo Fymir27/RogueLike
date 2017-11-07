@@ -11,9 +11,10 @@ void OverTimeEffect::apply(Character* target)
     //target->applyEffect(this);
 }
 
-void OverTimeEffect::tick()
+size_t OverTimeEffect::tick()
 {
     target_->damage(amount_);
+    return --dur_;
 }
 
 //-----------------------------------------------------------------------------//
@@ -49,9 +50,9 @@ void ConditionEffect::apply(Character* target)
     //target->setStatus()
 }
 
-void ConditionEffect::tick()
+size_t ConditionEffect::tick()
 {
-    //probably nothing
+    return --dur_;
 }
 
 ConditionEffect::~ConditionEffect()

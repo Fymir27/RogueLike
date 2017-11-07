@@ -1,13 +1,13 @@
 #pragma once
 
+#include "OS.h"
+
 //--- Constants ---//
 const unsigned int TILE_SIZE = 32;
 const unsigned int WINDOW_WIDTH = 1024;
 const unsigned int WINDOW_HEIGHT = 720;
 const int DELTA_X[4] = { 0, 1, 0, -1 };
 const int DELTA_Y[4] = { -1, 0, 1, 0 };
-//#define OS_WIN
-#define OS_LIN
 
 //--- SFML ---//
 #ifdef OS_WIN

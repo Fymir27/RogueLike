@@ -3,6 +3,7 @@
 #include "Room.h"
 #include "Item.h"
 #include "UI.h"
+#include "AbilityEffects.h"
 
 
 std::ostream& operator<<(std::ostream& out, Stats stats)
@@ -127,5 +128,24 @@ bool Character::move(Position new_pos)
 	bool valid = current_room->stepOn(new_pos, this, pos_);
 	//cout << "Result: " << pos_ << endl;
 	return valid;
+}
+
+void Character::applyEffect(AbilityEffect *effect)
+{
+	effects_.push_back(effect);
+	effect->apply(this);
+}
+
+void Character::step()
+{
+    auto effects_tmp = effects_; //copy so deleting is possible
+    for(auto effect : effects_tmp)
+    {
+        if(effect->tick() == 0) //check if effect has run out
+        {
+            effects_.remove(effect);
+            delete effect;
+        }
+    }
 }
 

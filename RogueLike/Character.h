@@ -3,6 +3,8 @@
 #include "Inventory.h"
 #include "Types.h"
 #include "Ressource.h"
+//#include <SFML/Graphics.hpp>
+//#include <SFML/Window.hpp>
 
 //typedef array<int, 2> Ressource;
 const int CUR = 0;
@@ -21,6 +23,7 @@ struct Stats
 };
 
 class Item;
+class AbilityEffect;
 class Character
 {
 protected:
@@ -35,6 +38,7 @@ protected:
 	Ressource mana_;
 	Ressource exp_;
 	Stats     stats_;
+	list<AbilityEffect*> effects_;
 
 	sf::Texture texture_;
 	sf::Sprite  sprite_;
@@ -61,12 +65,17 @@ public:
 
 	virtual void heal(const int amount);
 	virtual void damage(const int amount);
+	void applyEffect(AbilityEffect* effect);
+	void removeEffect(AbilityEffect *effect);
 	bool dead() { return hp_.depleted(); }
 	
 	bool addItem(Item* item);
 
 	virtual bool move(Position new_pos); //returns if the move was valid
 	virtual void attack(Character* target) = 0;
+    virtual void step();
 
 	void draw(sf::RenderWindow& window);
+
+
 };
