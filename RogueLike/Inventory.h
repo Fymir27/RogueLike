@@ -21,7 +21,7 @@ public:
 	void sort() {}; //not implemented
 	bool addItem(Item* item); //returns false when full
 	void removeItem(Item* item);
-	void useItem(int slot);
+	bool useItem(int slot);
 	sf::Sprite & getSprite();
 	void draw(sf::RenderWindow& window, Position pos = { 0,0 });
 };

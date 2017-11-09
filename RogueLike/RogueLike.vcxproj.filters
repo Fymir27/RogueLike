@@ -84,6 +84,12 @@
     <ClCompile Include="Ressource.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Abilities.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilityEffects.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Room.h">
@@ -144,6 +150,15 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="PlayerClasses.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="OS.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilityEffects.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Abilities.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

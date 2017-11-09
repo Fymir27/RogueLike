@@ -18,7 +18,7 @@ Fireball::Fireball() : Ability("Fireball", "Deals additional damage over time.",
 void Fireball::cast(Character* target)
 {
     target->damage(damage_);
-    new OverTimeEffect("Burn", "Deals fire damage over time", true, 10, 5);
+    target->applyEffect(new OverTimeEffect("Burn", "Deals fire damage over time", true, 10, 5));
 }
 
 //-----------------------------------------------------------------------------------------------------//

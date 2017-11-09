@@ -8,13 +8,14 @@ AbilityEffect(name, descr, dur), harmful_(harmful), amount_(amount)
 
 void OverTimeEffect::apply(Character* target)
 {
-    //target->applyEffect(this);
+	target_ = target;
 }
 
 size_t OverTimeEffect::tick()
 {
-    target_->damage(amount_);
-    return --dur_;
+	cout << name_ << " tick." << endl;
+  target_->damage(amount_);
+  return --dur_;
 }
 
 //-----------------------------------------------------------------------------//

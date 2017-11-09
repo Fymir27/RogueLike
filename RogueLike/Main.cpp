@@ -12,41 +12,96 @@
 #include "PlayerClasses.h"
 #include <ctime>
 
+enum InputType
+{
+	INVALID,
+	REST,
+	MOVE,
+	ITEM,
+	SPELL
+};
+
+struct Command
+{
+	InputType type_;
+	Direction dir_;
+	int nr_;
+};
+
+Command getCommand(const sf::Keyboard::Key& key)
+{
+	Command c;
+
+	switch (key)
+	{
+		case sf::Keyboard::Space:	  c.type_ = REST; break;
+
+		case sf::Keyboard::Right:   c.type_ = MOVE; c.dir_ = RIGHT; break;
+		case sf::Keyboard::Left:    c.type_ = MOVE; c.dir_ = LEFT; break;
+		case sf::Keyboard::Up:      c.type_ = MOVE; c.dir_ = UP; break;
+		case sf::Keyboard::Down:    c.type_ = MOVE; c.dir_ = DOWN; break;
+
+		case sf::Keyboard::Numpad1: c.type_ = ITEM; c.nr_ = 1; break;
+		case sf::Keyboard::Numpad2: c.type_ = ITEM; c.nr_ = 2; break;
+		case sf::Keyboard::Numpad3: c.type_ = ITEM; c.nr_ = 3; break;
+		case sf::Keyboard::Numpad4: c.type_ = ITEM; c.nr_ = 4; break;
+		case sf::Keyboard::Numpad5: c.type_ = ITEM; c.nr_ = 5; break;
+		case sf::Keyboard::Numpad6: c.type_ = ITEM; c.nr_ = 6; break;
+		case sf::Keyboard::Numpad7: c.type_ = ITEM; c.nr_ = 7; break;
+		case sf::Keyboard::Numpad8: c.type_ = ITEM; c.nr_ = 8; break;
+		case sf::Keyboard::Numpad9: c.type_ = ITEM; c.nr_ = 9; break;
+
+		case sf::Keyboard::Num1:    c.type_ = SPELL; c.nr_ = 1; break;
+		case sf::Keyboard::Num2:    c.type_ = SPELL; c.nr_ = 2; break;
+		case sf::Keyboard::Num3:    c.type_ = SPELL; c.nr_ = 3; break;
+		case sf::Keyboard::Num4:    c.type_ = SPELL; c.nr_ = 4; break;
+		case sf::Keyboard::Num5:    c.type_ = SPELL; c.nr_ = 5; break;
+		case sf::Keyboard::Num6:    c.type_ = SPELL; c.nr_ = 6; break;
+		case sf::Keyboard::Num7:    c.type_ = SPELL; c.nr_ = 7; break;
+		case sf::Keyboard::Num8:    c.type_ = SPELL; c.nr_ = 8; break;
+		case sf::Keyboard::Num9:    c.type_ = SPELL; c.nr_ = 9; break;
+
+		default:
+			c.type_ = INVALID;
+			cout << "UNKNOWN COMMAND" << endl;
+			break;
+	}
+
+	return c;
+}
+
 void processInput(const sf::Event& event)
 {
 	//cout << "Input detected!" << endl;
 	auto key = event.key.code;
-	Position new_pos = current_player->getPosition();
-	int item_slot = 0;
+	Command com = getCommand(key);
+	bool valid = false; //valid action?
 
-	if     (key == sf::Keyboard::Right) new_pos.x_++;
-	else if(key == sf::Keyboard::Left)  new_pos.x_--;
-	else if(key == sf::Keyboard::Up)    new_pos.y_--;
-	else if(key == sf::Keyboard::Down)  new_pos.y_++;
-	else if(key == sf::Keyboard::Num1)  item_slot = 1;
-	else if(key == sf::Keyboard::Num2)  item_slot = 2;
-	else if(key == sf::Keyboard::Num3)  item_slot = 3;
-	else if(key == sf::Keyboard::Num4)  item_slot = 4;
-	else if(key == sf::Keyboard::Num5)  item_slot = 5;
-	else if(key == sf::Keyboard::Num6)  item_slot = 6;
-	else if(key == sf::Keyboard::Num7)  item_slot = 7;
-	else if(key == sf::Keyboard::Num8)  item_slot = 8;
-	else if(key == sf::Keyboard::Num9)  item_slot = 9;
-	else if(key == sf::Keyboard::Space) 
+	switch (com.type_)
 	{
-		current_player->rest();
-		current_room->stepEnemies(); //wait a turn
-		
+		case REST:
+			valid = true;
+			current_player->castSpell(key, current_player);
+			current_player->rest();
+			break;
+
+		case MOVE:
+			valid = current_player->move(current_player->getPosition() + DELTA_POS[com.dir_]);
+			break;
+
+		case ITEM:
+			valid = current_player->getInventory()->useItem(com.nr_);
+			break;
+
+		case SPELL:
+			valid = current_player->castSpell(com.nr_, current_player);
+			break;
 	}
-	if(item_slot > 0)
-		current_player->getInventory()->useItem(item_slot);
 
-	if(!(new_pos == current_player->getPosition())) 
+	if (valid)
 	{
-		if(current_player->move(new_pos)) //valid move?
-		{
-			current_room->stepEnemies();
-		}
+		current_room->stepEnemies();
+		current_player->advanceEffects();
 	}
 }
 
@@ -67,7 +122,7 @@ int main()
 	Character::init_exp_needed();
 
 	//-- create player --//
-	current_player = new Mage("Patrick", current_room->getFreePosition());
+	current_player = new Mage("Oliver", current_room->getFreePosition());
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);

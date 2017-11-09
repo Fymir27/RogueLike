@@ -82,6 +82,7 @@ void Room::initSpawnLocations()
 		}
 	}
 	
+	/*
 	for (auto row : spawn_locations_)
 	{
 		for (bool spawnable : row)
@@ -90,6 +91,7 @@ void Room::initSpawnLocations()
 		}
 		cout << endl;
 	}
+	*/
 	
 }
 

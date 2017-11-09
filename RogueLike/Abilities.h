@@ -21,6 +21,7 @@ protected:
 
 class Fireball : public Ability
 {
+	public:
     Fireball();
     void cast(Character* target);
 

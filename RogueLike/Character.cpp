@@ -4,6 +4,8 @@
 #include "Item.h"
 #include "UI.h"
 #include "AbilityEffects.h"
+#include "Abilities.h"
+#include "Player.h"
 
 
 std::ostream& operator<<(std::ostream& out, Stats stats)
@@ -136,16 +138,26 @@ void Character::applyEffect(AbilityEffect *effect)
 	effect->apply(this);
 }
 
-void Character::step()
+void Character::advanceEffects()
 {
-    auto effects_tmp = effects_; //copy so deleting is possible
-    for(auto effect : effects_tmp)
-    {
-        if(effect->tick() == 0) //check if effect has run out
-        {
-            effects_.remove(effect);
-            delete effect;
-        }
-    }
+  auto effects_tmp = effects_; //copy so deleting is possible
+  for(auto effect : effects_tmp)
+  {
+      if(effect->tick() == 0) //check if effect has run out
+      {
+          effects_.remove(effect);
+          delete effect;
+      }
+  }
+}
+
+bool Character::castSpell(int nr, Character* target)
+{
+	if (nr != 1)
+		return false;
+
+	Fireball ab = Fireball();
+	ab.cast(target);
+	return true;
 }
 

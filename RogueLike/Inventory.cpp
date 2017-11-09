@@ -113,14 +113,14 @@ Inventory::~Inventory()
 
 
 
-void Inventory::useItem(int slot)
+bool Inventory::useItem(int slot)
 {
 	try
 	{
 		if(items_.at(--slot) == NULL)
 		{
 			cout << "There is no Item!" << endl;
-			return;
+			return false;
 		}
 
 		items_.at(slot)->use(current_player);
@@ -130,10 +130,12 @@ void Inventory::useItem(int slot)
 			delete items_.at(slot);
 			items_.at(slot) = NULL;
 		}
+		return true;
 	}
-		catch (std::exception e)
+	catch (std::exception e)
 	{
 		cout << "Invalid Item!" << endl;
+		return false;
 	}
 }
 
