@@ -1,4 +1,5 @@
 #include "AbilityEffects.h"
+#include "UI.h"
 
 OverTimeEffect::OverTimeEffect(string name, string descr, bool harmful, int amount, size_t dur) :
 AbilityEffect(name, descr, dur), harmful_(harmful), amount_(amount)
@@ -9,13 +10,20 @@ AbilityEffect(name, descr, dur), harmful_(harmful), amount_(amount)
 void OverTimeEffect::apply(Character* target)
 {
 	target_ = target;
+    //UI::displayText(name_ + " (" + std::to_string(amount_) + ") applied for " + std::to_string(dur_) + " turns");
 }
 
 size_t OverTimeEffect::tick()
 {
+    dur_--;
+    UI::displayText(target_->getName() + " gets " + (harmful_?"hurt":"healed") +
+                    " by " + name_ + " (" + std::to_string(dur_) + ")");
 	cout << name_ << " tick." << endl;
-  target_->damage(amount_);
-  return --dur_;
+    if(harmful_)
+        target_->damage(amount_);
+    else
+        target_->heal(amount_);
+    return dur_;
 }
 
 //-----------------------------------------------------------------------------//
