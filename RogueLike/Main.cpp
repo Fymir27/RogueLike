@@ -81,7 +81,6 @@ void processInput(const sf::Event& event)
 	{
 		case REST:
 			valid = true;
-			current_player->castSpell(key, current_player);
 			current_player->rest();
 			break;
 

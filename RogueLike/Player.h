@@ -2,14 +2,14 @@
 #include "Common.h"
 #include "Character.h"
 
+class Ability;
 class Player : public Character
 {
 
 friend class Room;
 
 private:
-	bool invincible = false;
-	unsigned int invincibility_frames = 0;
+	vector<Ability*> ability_bar_;
 
 public:
 
@@ -18,11 +18,11 @@ public:
 	Inventory * getInventory();
 
 	void setPosition(Position pos) { pos_ = pos; };
-	void step();
 	virtual bool move(Position new_pos);
 	void rest();
 	//void damage(const int amount);
 
+    bool castSpell(int nr, Character *target);
 };
 
 extern Player* current_player;

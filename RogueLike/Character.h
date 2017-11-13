@@ -73,9 +73,8 @@ public:
 
 	virtual bool move(Position new_pos); //returns if the move was valid
 	virtual void attack(Character* target) = 0;
-  virtual void advanceEffects();
+    virtual void advanceEffects();
 
-	bool castSpell(int nr, Character * target);
 
 	void draw(sf::RenderWindow& window);
 

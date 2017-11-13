@@ -150,35 +150,3 @@ void Character::advanceEffects()
       }
   }
 }
-
-bool Character::castSpell(int nr, Character* target)
-{
-    Ability* ab = NULL;
-	if (nr == 1)
-    {
-        ab = new Fireball();
-    }
-    else if(nr == 2)
-    {
-        ab = new Regeneration();
-    }
-    else
-    {
-        UI::displayText("No such spell!");
-        return false;
-    }
-    size_t cost = ab->getCost();
-    if(mana_ >= cost)
-    {
-        UI::displayText(name_ + " casts " + ab->getName() + " on " + target->getName() + ".");
-        ab->cast(target);
-        mana_ -= cost;
-    }
-    else
-    {
-        UI::displayText("Not enough Ressource!");
-        return false;
-    }
-    return true;
-}
-

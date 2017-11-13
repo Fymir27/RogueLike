@@ -17,8 +17,8 @@ size_t OverTimeEffect::tick()
 {
     dur_--;
     UI::displayText(target_->getName() + " gets " + (harmful_?"hurt":"healed") +
-                    " by " + name_ + " (" + std::to_string(dur_) + ")");
-	cout << name_ << " tick." << endl;
+                    " by " + name_ + " (" + std::to_string(amount_) + ")");
+
     if(harmful_)
         target_->damage(amount_);
     else
