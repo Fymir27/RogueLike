@@ -65,10 +65,13 @@ Character* Player::findTarget(Direction dir)
 
 bool Player::castSpell(int nr, Direction dir)
 {
+    return castSpell(nr, findTarget(dir));
+}
+
+bool Player::castSpell(int nr, Character* target)
+{
     try
     {
-        Character* target = findTarget(dir);
-
         Ability *ab = ability_bar_.at(nr - 1);
 
         size_t cost = ab->getCost();

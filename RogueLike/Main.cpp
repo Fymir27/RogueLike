@@ -18,7 +18,8 @@ enum InputType
 	REST,
 	MOVE,
 	ITEM,
-	SPELL
+	SPELL,
+    ESC
 };
 
 struct Command
@@ -34,6 +35,8 @@ Command getCommand(const sf::Keyboard::Key& key)
 
 	switch (key)
 	{
+        case sf::Keyboard::Escape:    c.type_ = ESC; break;
+
 		case sf::Keyboard::Space:	  c.type_ = REST; break;
 
 		case sf::Keyboard::Right:   c.type_ = MOVE; c.dir_ = RIGHT; break;
@@ -81,8 +84,13 @@ void processInput(const sf::Event& event, sf::RenderWindow& window)
 	switch (com.type_)
 	{
 		case REST:
-			valid = true;
-			current_player->rest();
+            if (prev.type_ == SPELL)
+                valid = current_player->castSpell(prev.nr_, current_player);
+            else
+            {
+                valid = true;
+                current_player->rest();
+            }
 			break;
 
 		case MOVE:
