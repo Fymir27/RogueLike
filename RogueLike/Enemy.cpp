@@ -6,6 +6,7 @@
 bool Enemy::step()
 {
 	//cout << "Enemy::step()" << endl;
+    advanceEffects();
 
 	if (dead())
 		return false;

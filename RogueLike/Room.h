@@ -44,6 +44,8 @@ class Room
 		Position getDoorPosition(Direction dir);
 		vector<vector<bool>> const& getSpawnLocations();
 
+        Character * getCharacter(Position pos);
+
 		void generate();
 
 		Position getPathToPlayer(Position from);

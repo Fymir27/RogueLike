@@ -23,7 +23,7 @@ enum InputType
 
 struct Command
 {
-	InputType type_;
+	InputType type_ = INVALID;
 	Direction dir_;
 	int nr_;
 };
@@ -70,8 +70,9 @@ Command getCommand(const sf::Keyboard::Key& key)
 	return c;
 }
 
-void processInput(const sf::Event& event)
+void processInput(const sf::Event& event, sf::RenderWindow& window)
 {
+    static Command prev;
 	//cout << "Input detected!" << endl;
 	auto key = event.key.code;
 	Command com = getCommand(key);
@@ -85,7 +86,10 @@ void processInput(const sf::Event& event)
 			break;
 
 		case MOVE:
-			valid = current_player->move(current_player->getPosition() + DELTA_POS[com.dir_]);
+            if (prev.type_ == SPELL)
+                valid = current_player->castSpell(prev.nr_, com.dir_);
+            else
+			    valid = current_player->move(current_player->getPosition() + DELTA_POS[com.dir_]);
 			break;
 
 		case ITEM:
@@ -93,10 +97,11 @@ void processInput(const sf::Event& event)
 			break;
 
 		case SPELL:
-			valid = current_player->castSpell(com.nr_, current_player);
-			break;
+           UI::displayText("Which direction?");
+           valid = false; //wait for next input to be move
+           break;
 	}
-
+    prev = com;
 	if (valid)
 	{
 		current_room->stepEnemies();
@@ -151,7 +156,7 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 			else if (event.type == sf::Event::KeyPressed)
-				processInput(event);
+				processInput(event, window);
 		}
 
 		//-- Game Logic --//

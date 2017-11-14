@@ -49,20 +49,41 @@ void Player::damage(const int amount)
 }
 */
 
+Character* Player::findTarget(Direction dir)
+{
+    Character* target = NULL;
+    Position pos = pos_;
+    FIELD_STATUS status;
+    do
+    {
+        pos = pos + DELTA_POS[dir];
+        status = current_room->getFieldStatus(pos);
 
-bool Player::castSpell(int nr, Character* target)
+    } while (status != SOLID && status != OCCUPIED);
+    return current_room->getCharacter(pos);
+}
+
+bool Player::castSpell(int nr, Direction dir)
 {
     try
     {
+        Character* target = findTarget(dir);
+
         Ability *ab = ability_bar_.at(nr - 1);
 
         size_t cost = ab->getCost();
         if (mana_ >= cost)
         {
-            UI::displayText(name_ + " casts " + ab->getName() + " on " + target->getName() + ".");
-            ab->cast(target);
             mana_ -= cost;
-        } else
+            if (target == NULL)
+            {
+                UI::displayText(ab->getName() + " misses!");
+                return true;
+            }
+            UI::displayText(name_ + " casts " + ab->getName() + " on " + target->getName() + ".");
+            ab->cast(target);           
+        } 
+        else
         {
             UI::displayText("Not enough Ressource!");
             return false;

@@ -23,6 +23,7 @@ public:
 	void loadFromFile(string filename);
 	Room*& getRoom(size_t x, size_t y);
 	void connect(Room * from, Direction dir, Room * to);
+    bool hasNeighbour(Position pos, Direction dir);
 	Room * generateRoom(size_t x, size_t y, size_t height = 0); // 0 = random
 	size_t getRandomRoomHeight();
 	//string * getRandomRoomParts();

@@ -70,6 +70,11 @@ void Dungeon::connect(Room* from, Direction dir, Room* to)
 	to->addNeighbour(Direction((dir + 2) % 4), from);
 }
 
+bool Dungeon::hasNeighbour(Position pos, Direction dir)
+{
+    return (getRoom(pos.x_, pos.y_)->neighbours_[dir] != NULL);
+}
+
 /*
 Room* Dungeon::generateRoom(size_t x, size_t y, size_t height)
 {

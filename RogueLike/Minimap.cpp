@@ -1,4 +1,5 @@
 #include "Minimap.h"
+#include "Dungeon.h"
 
 vector<vector<RoomStatus>> Minimap::map_;
 Position Minimap::active_room_;
@@ -11,10 +12,11 @@ void Minimap::init(size_t width, size_t height, Position pos_active)
 		row.resize(width);
 		for (auto& status : row)
 		{
-			status = UNEXPLORED;
+			status = NONE;
 		}
 	}
 	active_room_ = pos_active;
+    setActiveRoom(active_room_.x_, active_room_.y_); //weird but needed for correct initialization
 	map_.at(active_room_.y_).at(active_room_.x_) = ACTIVE;
 }
 
@@ -23,7 +25,18 @@ void Minimap::setActiveRoom(size_t x, size_t y)
 	map_.at(active_room_.y_).at(active_room_.x_) = EXPLORED;
 	active_room_ = Position(x, y);
 	map_.at(active_room_.y_).at(active_room_.x_) = ACTIVE;
-	//print();
+    for (size_t i = 0; i < 4; i++)
+    {
+        int cur_x = x + DELTA_X[i];
+        int cur_y = y + DELTA_Y[i];
+        if (current_dungeon->hasNeighbour(Position(x,y),(Direction)i))
+        {
+            if (map_.at(cur_y).at(cur_x) == NONE)
+            {
+                map_.at(cur_y).at(cur_x) = UNEXPLORED;
+            }
+        }
+    }
 }
 
 void Minimap::setActiveRoom(Position pos)
@@ -57,7 +70,7 @@ void Minimap::draw(sf::RenderWindow& window)
 	border.setPosition(pos.x_, pos.y_);
 	window.draw(border);
 
-	sf::Color colors[4] = { sf::Color::Blue, sf::Color(100, 100, 100), sf::Color::Black, sf::Color::Black };
+	sf::Color colors[4] = { sf::Color::Blue, sf::Color(100, 100, 100), sf::Color(30,30,50), sf::Color::Black };
 
 	for (size_t y = 0; y < map_.size(); y++)
 	{

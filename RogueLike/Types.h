@@ -26,7 +26,7 @@ struct Position
 	Position(int x = 0, int y = 0);
 };
 
-const Position DELTA_POS[4] = { {0,-1}, {1,0}, {0,1}, {-1,0} };
+const Position DELTA_POS[4] = { Position(0,-1), Position(1,0), Position(0,1), Position(-1,0) };
 
 extern Position operator+(Position first, const Position& second);
 extern Position operator-(Position first, const Position& second);

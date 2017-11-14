@@ -20,9 +20,9 @@ public:
 	void setPosition(Position pos) { pos_ = pos; };
 	virtual bool move(Position new_pos);
 	void rest();
+    Character * findTarget(Direction dir);
+    bool castSpell(int nr, Direction dir);
 	//void damage(const int amount);
-
-    bool castSpell(int nr, Character *target);
 };
 
 extern Player* current_player;

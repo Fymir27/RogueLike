@@ -128,6 +128,11 @@ vector<vector<bool>> const & Room::getSpawnLocations()
 	return spawn_locations_;
 }
 
+Character* Room::getCharacter(Position pos)
+{
+    return getField(pos)->character_;
+}
+
 
 void Room::generate()
 {
