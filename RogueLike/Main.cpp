@@ -10,6 +10,7 @@
 #include "Enemy.h"
 #include "Ressource.h"
 #include "PlayerClasses.h"
+#include "Effects.h"
 #include <ctime>
 
 enum InputType
@@ -179,6 +180,7 @@ int main()
 		
 		current_room->draw(window);
 		current_player->draw(window);
+		Effect::drawEffects(window);
 		ui->draw(window);
 		window.display();
 

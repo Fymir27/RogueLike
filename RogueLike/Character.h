@@ -76,7 +76,7 @@ public:
     virtual void advanceEffects();
 
 
-	void draw(sf::RenderWindow& window);
+    virtual void draw(sf::RenderWindow& window);
 
 
 };

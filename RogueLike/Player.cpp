@@ -99,3 +99,8 @@ bool Player::castSpell(int nr, Character* target)
     }
 }
 
+void Player::draw(sf::RenderWindow &window)
+{
+    Character::draw(window);
+}
+

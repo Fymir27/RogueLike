@@ -24,6 +24,8 @@ public:
     bool castSpell(int nr, Direction dir);
     bool castSpell(int nr, Character * target);
 	//void damage(const int amount);
+
+    void draw(sf::RenderWindow& window);
 };
 
 extern Player* current_player;
