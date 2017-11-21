@@ -8,6 +8,7 @@ class Effect
 public:
     static void drawEffects(sf::RenderWindow& window);
     static void addEffect(Effect* e);
+    static size_t getEffectCount() { return effects_.size(); }
 protected:
     static list<Effect*> effects_;
 

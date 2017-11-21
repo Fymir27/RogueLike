@@ -426,11 +426,12 @@ void Room::draw(sf::RenderWindow& window)
 			field->draw(window);
 		}
 	}
-	for(auto enemy : enemies_)
-	{
-		enemy->draw(window);
-	}
+    for(auto enemy : enemies_)
+    {
+        enemy->draw(window);
+    }
 }
+
 
 void Room::addField(Field* field)
 {
@@ -459,25 +460,31 @@ void Room::removeEnemy(Enemy* enemy)
 	//dead_enemies_.push_back(enemy);
 }
 
+void Room::deleteDeadEnemies()
+{
+    //cout << "Cleaning up Enemies" << endl;
+    for (auto enemy : dead_enemies_)
+    {
+        enemies_.remove(enemy);
+        delete enemy;
+    }
+    dead_enemies_.clear();
+}
+
 void Room::stepEnemies() //called appr. 63 times a second
 {
 	if (!dm_player_)
 		dm_player_ = new DijkstraMap2D(getColCount(), getRowCount(), current_player->getPosition());
 	dm_player_->updateSource(current_player->getPosition());
-	vector<Enemy*> dead_enemies;
-	//cout << "Room::stepEnemies()" << endl;
-	for(Enemy* enemy : enemies_)
-	{
-		if(!enemy->step())
-		{
-			dead_enemies.push_back(enemy);
-		}
-	}
-	for(auto enemy : dead_enemies)
-	{
-		enemies_.remove(enemy);
-		delete enemy;
-	}
+
+    for (Enemy* enemy : enemies_)
+    {
+        if (enemy->dead())
+            dead_enemies_.push_back(enemy);
+        else
+            enemy->step();
+    }
+
 }
 
 void Room::spawnEnemies(size_t count)

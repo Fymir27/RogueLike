@@ -19,6 +19,7 @@ class Room
 		size_t width_;
 		size_t height_;
 		list<Enemy*> enemies_;
+        list<Enemy*> dead_enemies_;
 		string       name;
 		Position     pos_; //Position in Dungeon
 		Position	 door_pos_[4];
@@ -62,6 +63,7 @@ class Room
 
 		void addEnemy(Enemy* enemy);
 		void removeEnemy(Enemy* enemy);
+        void deleteDeadEnemies();
 		void stepEnemies();
 		void spawnEnemies(size_t count);
 		Enemy* spawnEnemy(Position pos = Position(0,0), EnemyType type = RANDOM_ENEMY);

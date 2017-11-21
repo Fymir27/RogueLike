@@ -8,9 +8,6 @@ bool Enemy::step()
 	//cout << "Enemy::step()" << endl;
     advanceEffects();
 
-	if (dead())
-		return false;
-
 	switch (move_type_)
 	{
 	case SLEEP:
@@ -74,6 +71,5 @@ Enemy::~Enemy()
 {
 	UI::displayText(name_ + " defeated. Gained " + std::to_string(exp_reward_) + " Exp.");
 	current_player->grantExp(exp_reward_);
-	current_room->removeEnemy(this);
 }
 

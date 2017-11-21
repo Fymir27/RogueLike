@@ -118,6 +118,11 @@ void processInput(const sf::Event& event, sf::RenderWindow& window)
 	}
 }
 
+bool turnReady()
+{
+    return (Effect::getEffectCount() == 0);
+}
+
 int main()
 {
 	cout << endl;
@@ -164,9 +169,10 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			else if (event.type == sf::Event::KeyPressed)
+			else if (event.type == sf::Event::KeyPressed && turnReady())
 				processInput(event, window);
 		}
+
 
 		//-- Game Logic --//
 		if (current_player->dead())
@@ -176,9 +182,16 @@ int main()
 			UI::displayText("");
 		}
 
+        if (turnReady())
+        {
+            current_room->deleteDeadEnemies();
+        }
+
+
+        //-- Draw Stuff --//
 		window.clear(sf::Color::Black);
 		
-		current_room->draw(window);
+		current_room->draw(window);   //draws Fields and enemies
 		current_player->draw(window);
 		Effect::drawEffects(window);
 		ui->draw(window);

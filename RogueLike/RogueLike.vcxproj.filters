@@ -90,6 +90,9 @@
     <ClCompile Include="AbilityEffects.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Effects.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Room.h">
@@ -159,6 +162,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Abilities.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Effects.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

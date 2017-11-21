@@ -33,6 +33,7 @@ using std::endl;
 #include <map>
 #include <string>
 #include <array>
+#include <algorithm>
 using std::array;
 using std::vector;
 using std::list;

@@ -133,6 +133,7 @@
     <ClCompile Include="DijkstraMap.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Dungeon.cpp" />
+    <ClCompile Include="Effects.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyClasses.cpp" />
     <ClCompile Include="Field.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="DijkstraMap.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Dungeon.h" />
+    <ClInclude Include="Effects.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyClasses.h" />
     <ClInclude Include="Field.h" />

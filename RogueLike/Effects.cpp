@@ -35,14 +35,18 @@ void Effect::drawEffects(sf::RenderWindow &window)
 MovingEffect::MovingEffect(string filename, sf::Vector2f from, sf::Vector2f to, float speed) : Effect(filename)
 {
     sprite_.setPosition(from);
-    dur_ = (30 / speed);
-    step_ = (to - from) / (float)dur_;
+
+    sf::Vector2f path = (to - from);
+    float path_length = getVectorLength(path);
+    sf::Vector2f dir = path / path_length;
+    step_ = dir * speed;
+    dur_ = path_length / speed;
 }
 
 void MovingEffect::draw(sf::RenderWindow &window)
 {
     window.draw(sprite_);
     sprite_.move(step_);
-    if(dur_-- == 0)
+    if (--dur_ == 0)
         active_ = false;
 }
