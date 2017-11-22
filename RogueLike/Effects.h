@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "Types.h"
+#include "Animation.h"
 
 class Effect
 {
@@ -17,6 +18,7 @@ protected:
     sf::Texture tex_;
     sf::Sprite sprite_;
     bool active_ = true;
+    Animation anim_;
 };
 
 class MovingEffect : public Effect

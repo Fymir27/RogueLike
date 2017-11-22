@@ -8,6 +8,7 @@ Effect::Effect(string filename)
     {
         cout << "Failed to load " << filename << endl;
     }
+    anim_.init(&tex_, 4, 30);
     sprite_.setTexture(tex_);
 }
 
@@ -45,6 +46,8 @@ MovingEffect::MovingEffect(string filename, sf::Vector2f from, sf::Vector2f to, 
 
 void MovingEffect::draw(sf::RenderWindow &window)
 {
+    sf::IntRect rect = anim_.update();
+    sprite_.setTextureRect(rect);
     window.draw(sprite_);
     sprite_.move(step_);
     if (--dur_ == 0)
