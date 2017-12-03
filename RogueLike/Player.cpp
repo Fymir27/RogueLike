@@ -5,7 +5,7 @@
 
 Player* current_player = NULL;
 
-Player::Player(string name, Position pos, Stats stats) : Character(name, pos, stats, "../images/player.png")
+Player::Player(string name, Position pos, Stats stats, string filename) : Character(name, pos, stats, filename)
 {
     ability_bar_.resize(9);
     ability_bar_[0] = new Fireball();
@@ -58,6 +58,19 @@ Character* Player::findTarget(Direction dir)
     {
         pos = pos + DELTA_POS[dir];
         status = current_room->getFieldStatus(pos);
+
+        //special case for doors
+        if(status == TRIGGER)
+        {
+            for(size_t i = 0; i < 4; i ++)
+            {
+                if(current_room->getDoorPosition((Direction)i) == pos)
+                {
+                    status = SOLID;
+                    break;
+                }
+            }
+        }
 
     } while (status != SOLID && status != OCCUPIED);
     return current_room->getCharacter(pos);

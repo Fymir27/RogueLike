@@ -49,5 +49,6 @@ inline Direction opposite(Direction dir)
 
 inline float getVectorLength(sf::Vector2f v)
 {
-    return std::sqrtf(v.x*v.x + v.y*v.y);
+    //return std::sqrtf(v.x*v.x + v.y*v.y);
+	return std::sqrt(v.x*v.x + v.y*v.y);
 }

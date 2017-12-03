@@ -19,7 +19,7 @@ void Warrior::attack(Character* target)
 //--- Mage ---//
 Stats Mage::base_stats_(5,10,5,15,15);
 
-Mage::Mage(string name, Position pos) : Player(name, pos, base_stats_) 
+Mage::Mage(string name, Position pos) : Player(name, pos, base_stats_, "../images/player_mage.png")
 {
 	class_ = "Mage";
 } 
@@ -34,7 +34,7 @@ void Mage::attack(Character* target)
 //--- Thief ---//
 Stats Thief::base_stats_(10,10,15,10,5);
 
-Thief::Thief(string name, Position pos) : Player(name, pos, base_stats_) 
+Thief::Thief(string name, Position pos) : Player(name, pos, base_stats_, "../images/player_thief.png")
 {
 	class_ = "Thief";
 } 
