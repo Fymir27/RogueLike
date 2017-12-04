@@ -13,7 +13,7 @@ private:
 
 public:
 
-	Player(const string name, const Position pos, const Stats stats);
+	Player(string name, Position pos, Stats stats, string filename = "../images/player.png");
 	
 	Inventory * getInventory();
 
