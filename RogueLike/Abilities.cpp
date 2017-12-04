@@ -31,7 +31,7 @@ void Fireball::cast(Character* target)
 
     Effect::addEffect(new MovingEffect("../images/ab_fireball_animated.png",
                                        sf::Vector2f(from.x_ * TILE_SIZE, from.y_ * TILE_SIZE),
-                                       sf::Vector2f(to.x_ * TILE_SIZE, to.y_ * TILE_SIZE), 2));
+                                       sf::Vector2f(to.x_ * TILE_SIZE, to.y_ * TILE_SIZE), 3));
 }
 
 //-----------------------------------------------------------------------------------------------------//

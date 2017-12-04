@@ -8,8 +8,9 @@ Effect::Effect(string filename)
     {
         cout << "Failed to load " << filename << endl;
     }
-    anim_.init(&tex_, 4, 30);
+    anim_.init(&tex_, 4, 40);
     sprite_.setTexture(tex_);
+    //sprite_.setRotation(90);
 }
 
 void Effect::addEffect(Effect *e)
