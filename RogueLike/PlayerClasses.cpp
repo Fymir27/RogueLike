@@ -4,7 +4,7 @@
 //--- Warrior ---//
 Stats Warrior::base_stats_(15,15,10,5,5);
 
-Warrior::Warrior(string name, Position pos) : Player(name, pos, base_stats_) 
+Warrior::Warrior(string name, Position pos) : Player(name, pos, base_stats_, "../images/player_warrior.png")
 {
 	class_ = "Warrior";
 } 
