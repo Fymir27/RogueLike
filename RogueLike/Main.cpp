@@ -13,6 +13,15 @@
 #include "Effects.h"
 #include <ctime>
 
+enum Turn
+{
+    PLAYER,
+    PLAYER_EFFECTS,
+    ENEMY,
+};
+
+Turn turn = PLAYER;
+
 enum InputType
 {
 	INVALID,
@@ -109,11 +118,19 @@ void processInput(const sf::Event& event, sf::RenderWindow& window)
            UI::displayText("Which direction?");
            valid = false; //wait for next input to be move
            break;
+
+        case ESC:
+            //interrupts spell casting automatically bec. prev is now ESC
+            break;
+
+        case INVALID:
+            //just do nothing
+            break;
 	}
     prev = com;
 	if (valid)
 	{
-		current_room->stepEnemies();
+        turn = PLAYER_EFFECTS;
 		current_player->advanceEffects();
 	}
 }
@@ -131,16 +148,18 @@ int main()
 	cout << "#################################" << endl;
 	cout << endl;
 
-	srand(std::time(NULL));
+	srand((unsigned int)std::time(NULL));
 	current_dungeon = new Dungeon();	
 	current_dungeon->readRoomPartsFromFile();
 	cout << "Dungeon Layout:" << endl;
-	current_dungeon->generate(20, 13);
+	current_dungeon->generate(15, 10);
 
 	Character::init_exp_needed();
 
 	//-- create player --//
 	current_player = new Mage("Oliver", current_room->getFreePosition());
+    //current_player = new Warrior("Oliver", current_room->getFreePosition());
+    //current_player = new Thief("Oliver", current_room->getFreePosition());
 
 	//-- create window --//
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
@@ -168,24 +187,42 @@ int main()
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
-				window.close();
-			else if (event.type == sf::Event::KeyPressed && turnReady())
-				processInput(event, window);
+            {
+                window.close();
+            }
+			else if (event.type == sf::Event::KeyPressed && turn == PLAYER)
+            {
+                processInput(event, window);
+            }
 		}
 
-
 		//-- Game Logic --//
+
+        if(Effect::getEffectCount() == 0) //advances the phase when animations have finished playing
+        {
+            switch(turn)
+            {
+                case PLAYER_EFFECTS:
+                    turn = ENEMY;
+                    current_room->stepEnemies();
+                    current_room->deleteDeadEnemies();
+                    break;
+
+                case ENEMY:
+                    turn = PLAYER;
+                    break;
+
+                case PLAYER:
+                    break;
+            }
+        }
+
 		if (current_player->dead())
 		{
 			UI::displayText("");
 			UI::displayText("Game Over");
 			UI::displayText("");
 		}
-
-        if (turnReady())
-        {
-            current_room->deleteDeadEnemies();
-        }
 
 
         //-- Draw Stuff --//

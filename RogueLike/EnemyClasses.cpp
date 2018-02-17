@@ -3,7 +3,7 @@
 
 //--- Ghost ----//
 
-Ghost::Ghost(Position pos) : Enemy("Ghost", pos, Stats(0, 30, 0, 15, 5), FOLLOW, "../images/ghost.png") 
+Ghost::Ghost(Position pos) : Enemy("Ghost", pos, Stats(0, 10, 0, 15, 5), FOLLOW, "../images/ghost.png")
 {
 	exp_reward_ = 5;
 }
