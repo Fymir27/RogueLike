@@ -13,6 +13,7 @@ public:
     AbilityEffect(string name, string descr, size_t dur) : GameObject(name, descr), dur_(dur) {}
     virtual void apply(Character* target) = 0;
     virtual size_t tick() { return --dur_; }; //returns remaining duration
+    virtual ~AbilityEffect() {};
 protected:
     Character* target_;
     size_t dur_;
@@ -25,7 +26,7 @@ public:
     OverTimeEffect(string name, string descr, bool harmful, int amount, size_t dur);
     void apply(Character* target);
     size_t tick();
-    void remove();
+    ~OverTimeEffect();
 private:
     bool harmful_;
     int amount_;

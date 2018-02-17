@@ -46,3 +46,19 @@ void Regeneration::cast(Character *target)
     UI::displayText(target->getName() + " feels refreshed!");
     target->applyEffect(new OverTimeEffect("Regneration", "Heals you for 10 turns", false, 5, 10));
 }
+
+//-----------------------------------------------------------------------------------------------------//
+
+SyphonSoul::SyphonSoul() : Ability("Syphon Soul", "Drains power from the enemy", 0, 0, 5, 70)
+{
+
+}
+
+void SyphonSoul::cast(Character* target)
+{
+    UI::displayText(target->getName() + " had its power drained!");
+    Stats minus(-5,-5,-5,-5,-5);
+    Stats plus (5,5,5,5,5);
+    target->applyEffect(new StatEffect("Power drain", "Stats are lowered", minus, 5));
+    current_player->applyEffect(new StatEffect("Power surge", "Stats are increased", plus, 5));
+}

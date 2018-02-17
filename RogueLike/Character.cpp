@@ -27,6 +27,38 @@ Stats& Stats::operator+=(const Stats& other)
 	return *this;
 }
 
+Stats& Stats::operator-=(const Stats& other)
+{
+	this->str_ -= other.str_;
+	this->end_ -= other.end_;
+	this->dex_ -= other.dex_;
+	this->int_ -= other.int_;
+	this->will_ -= other.will_;
+	return *this;
+}
+
+Stats Stats::operator+(const Stats& right)
+{
+    Stats res;
+    res.str_ = this->str_ + right.str_;
+    res.end_ = this->end_ + right.end_;
+    res.dex_ = this->dex_ + right.dex_;
+    res.int_ = this->int_ + right.int_;
+    res.will_ = this->will_ + right.will_;
+    return res;
+}
+
+Stats Stats::operator-(const Stats& right)
+{
+    Stats res;
+    res.str_ = this->str_ - right.str_;
+    res.end_ = this->end_ - right.end_;
+    res.dex_ = this->dex_ - right.dex_;
+    res.int_ = this->int_ - right.int_;
+    res.will_ = this->will_ - right.will_;
+    return res;
+}
+
 
 Stats::Stats(int str, int end, int dex, int intel, int will) :
 	 str_(str), end_(end), dex_(dex), int_(intel), will_(will)

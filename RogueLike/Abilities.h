@@ -22,7 +22,7 @@ protected:
 
 class Fireball : public Ability
 {
-	public:
+public:
     Fireball();
     void cast(Character* target);
 };
@@ -32,4 +32,11 @@ class Regeneration : public Ability
 public:
 	Regeneration();
 	void cast(Character* target);
+};
+
+class SyphonSoul : public Ability
+{
+public:
+    SyphonSoul();
+    void cast(Character* target);
 };

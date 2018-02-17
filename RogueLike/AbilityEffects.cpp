@@ -26,6 +26,11 @@ size_t OverTimeEffect::tick()
     return dur_;
 }
 
+OverTimeEffect::~OverTimeEffect()
+{
+
+}
+
 //-----------------------------------------------------------------------------//
 
 StatEffect::StatEffect(string name, string descr, Stats delta, size_t dur) :
@@ -36,12 +41,14 @@ AbilityEffect(name, descr, dur), delta_(delta)
 
 void StatEffect::apply(Character* target)
 {
-    //modify target stats;
+    target_ = target;
+    target->setStats(target->getStats() + delta_);
 }
 
 StatEffect::~StatEffect()
 {
-    //remove modification
+    target_->setStats(target_->getStats() - delta_);
+    //UI::displayText(name_ + " fades from " + target_->getName());
 }
 
 //-----------------------------------------------------------------------------//

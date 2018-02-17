@@ -10,6 +10,7 @@ Player::Player(string name, Position pos, Stats stats, string filename) : Charac
     ability_bar_.resize(9);
     ability_bar_[0] = new Fireball();
     ability_bar_[1] = new Regeneration();
+    ability_bar_[2] = new SyphonSoul();
 }
 
 Inventory* Player::getInventory()

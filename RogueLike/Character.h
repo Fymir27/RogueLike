@@ -20,6 +20,9 @@ struct Stats
 	Stats(int str, int end, int dex, int intel, int will);
 	Stats() {};
 	Stats& operator+= (const Stats& other);
+	Stats& operator-= (const Stats& other);
+    Stats operator+ (const Stats& right);
+    Stats operator- (const Stats& right);
 };
 
 class Item;
@@ -62,6 +65,9 @@ public:
 	string   getClassName() const { return class_; }
 	Position getPosition() const { return pos_; }
 	Stats    getStats() const    { return stats_; }
+
+    //--- Setters ---//
+    void setStats(const Stats& stats) { stats_ = stats; };
 
 	virtual void heal(const int amount);
 	virtual void damage(const int amount);
