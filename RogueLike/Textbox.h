@@ -7,7 +7,7 @@ class Textbox
 {
 public:
 	Textbox(size_t lines, size_t font_size, const sf::Font& font, 
-		    Position pos, size_t width, size_t height,
+		    sf::Vector2f pos, size_t width, size_t height,
 		    size_t margin, size_t border, 
 		    sf::Color fill_color, sf::Color border_color);
 
@@ -16,7 +16,7 @@ public:
 
 private:
 	vector<sf::Text> lines_;
-	Position pos_;
+	sf::Vector2f pos_;
 	size_t font_size_;
 
 	size_t margin_;

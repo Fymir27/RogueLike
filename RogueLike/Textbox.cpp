@@ -1,7 +1,7 @@
 #include "Textbox.h"
 
-Textbox::Textbox(size_t lines, size_t font_size,  const sf::Font& font, 
-		    	Position pos, size_t width, size_t height,
+Textbox::Textbox(size_t lines, size_t font_size,  const sf::Font& font,
+				 sf::Vector2f pos, size_t width, size_t height,
 		    	size_t margin, size_t border, 
 		    	sf::Color fill_color, sf::Color border_color) :
 				pos_(pos), font_size_(font_size), margin_(margin), border_(border),
@@ -22,15 +22,15 @@ Textbox::Textbox(size_t lines, size_t font_size,  const sf::Font& font,
 
 void Textbox::draw(sf::RenderWindow& window)
 {
-	outer_box_.setPosition(pos_.x_, pos_.y_);
+	outer_box_.setPosition(pos_);
 	outer_box_.setFillColor(border_color_);
 	window.draw(outer_box_);
-	inner_box_.setPosition(pos_.x_ + border_, pos_.y_ + border_);
+	inner_box_.setPosition(pos_ + sf::Vector2f(border_, border_));
 	inner_box_.setFillColor(fill_color_);
 	window.draw(inner_box_);
 	for(size_t i = 0; i < lines_.size(); i++)
 	{
-		lines_[i].setPosition(pos_.x_ + border_ + margin_, pos_.y_ + border_ + margin_ + i * font_size_ );
+		lines_[i].setPosition(pos_ + sf::Vector2f(border_ + margin_, border_ + margin_ + i * font_size_));
 		window.draw(lines_[i]);
 	}
 }

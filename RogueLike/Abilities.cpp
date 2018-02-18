@@ -25,6 +25,7 @@ void Fireball::cast(Character* target)
     UI::displayText(name_ + " deals " + std::to_string(damage_) + " damage.");
     target->damage(damage_);
     target->applyEffect(new OverTimeEffect("Burn", "Deals fire damage over 5 turns", true, 10, 5));
+    UI::displayText(target->getName() + " gets burned!");
     //--draw test--//
     Position from = current_player->getPosition();
     Position to = target->getPosition();

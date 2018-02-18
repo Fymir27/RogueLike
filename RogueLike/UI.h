@@ -15,7 +15,7 @@ class UI
     class Text
     {
     public:
-        Text(float x, float y, string content, unsigned int size = 15, sf::Color color = sf::Color::White);
+        Text(sf::Vector2f pos, string content = "TEXT", unsigned int size = default_font_size_, sf::Color color = sf::Color::White);
         void draw(sf::RenderWindow& target);
         void setFont(sf::Font& font);
         static void setDefaultFont(sf::Font& font) { default_font_ = font; };
@@ -25,7 +25,8 @@ class UI
     private:
         sf::Text text_;
         bool font_loaded_ = false;
-        static sf::Font default_font_; //plz load me
+        static sf::Font default_font_;
+        static unsigned int default_font_size_;
     };
 
     struct Bar
@@ -34,8 +35,8 @@ class UI
         Ressource const &ressource_;
         sf::RectangleShape background_;
         sf::RectangleShape bar_;
-        sf::Text text_cur_; //Font needs manual setting
-        sf::Text text_max_;
+        Text text_cur_;
+        Text text_max_;
 
         Bar(sf::Vector2f pos_, sf::Vector2f size_, Ressource const &ress, sf::Color bar_color = sf::Color::Red);
 
@@ -46,7 +47,7 @@ class UI
     {
         Character *source_;
         sf::Vector2f pos_;
-        sf::Text title_;   //Font needs manual setting
+        Text title_;
         Bar *bar1_ = NULL; //hp
         Bar *bar2_ = NULL; //mana
         Bar *bar3_ = NULL; //exp
@@ -71,21 +72,19 @@ public:
 
 private:
 
-    sf::Font font_;
-    unsigned int font_size_ = 20;
-
     //--- Inventory ---//
-    Position pos_inv_;
+    sf::Vector2f pos_inv_;
     sf::Texture tex_inv_;
 
     //--- Stats ---//
-    Position pos_stats_;
-    sf::Text stat_names_;
-    sf::Text stat_values_;
+    sf::Vector2f pos_stats_;
+    Text stat_names_;
+    Text stat_values_;
 
-    Position pos_bottom_text_;
+    sf::Vector2f pos_bottom_text_;
     static Textbox *textbox_;
 
+    sf::Vector2f pos_ability_bar_;
     Text abilities_;
 
     CharacterInfo player_info_;
