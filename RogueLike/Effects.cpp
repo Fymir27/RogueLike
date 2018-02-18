@@ -40,6 +40,14 @@ MovingEffect::MovingEffect(string filename, sf::Vector2f from, sf::Vector2f to, 
 
     sf::Vector2f path = (to - from);
     float path_length = getVectorLength(path);
+
+    if(path_length == 0)
+    {
+        dur_ = 1;
+        step_ = sf::Vector2f(0,0);
+        return;
+    }
+
     sf::Vector2f dir = path / path_length;
     step_ = dir * speed;
     dur_ = path_length / speed;
@@ -51,6 +59,6 @@ void MovingEffect::draw(sf::RenderWindow &window)
     sprite_.setTextureRect(rect);
     window.draw(sprite_);
     sprite_.move(step_);
-    if (--dur_ == 0)
+    if (--dur_ <= 0)
         active_ = false;
 }
