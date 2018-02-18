@@ -49,3 +49,4 @@ inline bool roll(size_t count, size_t out_of) {return ((rand() % out_of) < count
 #include <cstdlib>
 
 //---  ---//
+#include "GameObject.h"

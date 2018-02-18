@@ -24,6 +24,7 @@ public:
     bool castSpell(int nr, Direction dir);
     bool castSpell(int nr, Character * target);
 	//void damage(const int amount);
+	vector<Ability*> getAbilities() { return ability_bar_; };
 
     void draw(sf::RenderWindow& window);
 };
