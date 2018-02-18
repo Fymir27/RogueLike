@@ -59,7 +59,7 @@ void Enemy::moveRandomly()
 	do 
 	{ 
 		r = (r+1) % 4; 
-		if(counter++ > 3)
+		if(counter++ > 3) //trapped
 		{
 			move_type_ = SLEEP;
 			break;
@@ -67,9 +67,18 @@ void Enemy::moveRandomly()
 	} while (!move(Position(pos_.x_ + DELTA_X[r], pos_.y_ + DELTA_Y[r])));
 }
 
+void Enemy::damage(const int amount)
+{
+    Character::damage(amount);
+    if(move_type_ == WAIT)
+        move_type_ = FOLLOW;
+}
+
 Enemy::~Enemy()
 {
 	UI::displayText(name_ + " defeated. Gained " + std::to_string(exp_reward_) + " Exp.");
 	current_player->grantExp(exp_reward_);
 }
+
+
 

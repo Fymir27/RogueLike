@@ -1,45 +1,48 @@
 #pragma once
+
 #include "Common.h"
 #include "Types.h"
 #include "Character.h"
 
 enum MoveType
 {
-	SLEEP,
-	STAY,
-	WAIT,
-	FOLLOW,
-	RANDOM
+    SLEEP,
+    STAY,
+    WAIT,
+    FOLLOW,
+    RANDOM
 };
 
 #define ENEMY_TYPE_COUNT 3
 enum EnemyType
 {
-	RANDOM_ENEMY,
-	SPIDER,
-	GHOST,
-	GOLEM
+    RANDOM_ENEMY,
+    SPIDER,
+    GHOST,
+    GOLEM
 };
 
 class Enemy : public Character
 {
-	private:
-	MoveType move_type_;
+private:
+    MoveType move_type_;
 
-	bool checkSurroundings();
-	void moveRandomly();
+    bool checkSurroundings();
 
-	protected:
-		size_t exp_reward_;
+    void moveRandomly();
 
-	public:
-		
-		//-ctors-//
-		Enemy(string name, Position pos, Stats stats, MoveType move_type, string texture = "../images/enemy.png");
+protected:
+    size_t exp_reward_;
 
-		~Enemy();
+public:
 
-		virtual bool step(); //returns false when the enemy is dead
+    //-ctors-//
+    Enemy(string name, Position pos, Stats stats, MoveType move_type, string texture = "../images/enemy.png");
 
-		//void attack(Character* target);
+    ~Enemy();
+
+    virtual bool step(); //returns false when the enemy is dead
+
+    //void attack(Character* target);
+    void damage(const int amount);
 };

@@ -162,7 +162,9 @@ void UI::draw(sf::RenderWindow& window)
         if(ability == nullptr)
             continue;
 
-        s << ab_nr++ << " - " << ability->getName() << '\n';
+        s << '[' << ab_nr++ << ']' << " " << ability->getName() << " (" <<  ability->getCost()<< ')';
+        //s << " - " << ability->getDescription();
+        s << '\n';
     }
     abilities_.setString(s.str());
     abilities_.draw(window);
