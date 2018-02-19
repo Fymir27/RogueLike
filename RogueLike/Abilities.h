@@ -6,6 +6,8 @@
 
 
 class Character;
+
+//TODO: Rework to add Effects properly
 class Ability : public GameObject 
 {
 public:

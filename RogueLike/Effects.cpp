@@ -1,6 +1,9 @@
 #include "Effects.h"
+#include "Room.h"
+#include "Player.h"
 
 list<Effect*> Effect::effects_;
+list<Effect*> Effect::effects_persistent_;
 
 Effect::Effect(string filename)
 {
@@ -13,14 +16,18 @@ Effect::Effect(string filename)
     //sprite_.setRotation(90);
 }
 
-void Effect::addEffect(Effect *e)
+void Effect::addEffect(Effect *e, bool persistent)
 {
-    effects_.push_back(e);
+    if(persistent)
+        effects_persistent_.push_back(e);
+    else
+        effects_.push_back(e);
 }
 
 void Effect::drawEffects(sf::RenderWindow &window)
 {
-    list<Effect*> tmp = effects_;
+    //persistent effects:
+    list<Effect*> tmp = effects_persistent_;
     for(Effect* e : tmp)
     {
         e->draw(window);
@@ -30,6 +37,28 @@ void Effect::drawEffects(sf::RenderWindow &window)
             effects_.remove(e);
         }
     }
+
+    //other effects:
+    tmp = effects_;
+    for(Effect* e : tmp)
+    {
+        e->draw(window);
+        if(!e->active_)
+        {
+            delete e;
+            effects_.remove(e);
+        }
+    }
+}
+
+Effect::Effect()
+{
+
+}
+
+void Effect::removeEffect(Effect *e)
+{
+    effects_persistent_.remove(e); //shouln't need to remove non persistent effects
 }
 
 //----------------------------------------------
@@ -50,7 +79,7 @@ MovingEffect::MovingEffect(string filename, sf::Vector2f from, sf::Vector2f to, 
 
     sf::Vector2f dir = path / path_length;
     step_ = dir * speed;
-    dur_ = path_length / speed;
+    dur_ = (size_t)(path_length / speed);
 }
 
 void MovingEffect::draw(sf::RenderWindow &window)
@@ -61,4 +90,57 @@ void MovingEffect::draw(sf::RenderWindow &window)
     sprite_.move(step_);
     if (--dur_ <= 0)
         active_ = false;
+}
+
+//----------------------------------------------
+
+void ParticleEffect::draw(sf::RenderWindow &window)
+{
+    const int randomize_every = 8;
+    static size_t randomize_in = 0;
+    static sf::Vector2f prev_pos;
+
+    if(current_room != room_ && target_ != current_player) //only draw in generated room!
+        return;
+
+    if(target_ != nullptr)
+    {
+        prev_pos = pos_;
+        pos_ = worldToScreen(target_->getPosition());
+    }
+
+    if((randomize_in-- == 0) || (pos_ != prev_pos)) //every few frames or when character has moved
+    {
+        randomizeParticles();
+        randomize_in = randomize_every;
+    }
+
+    window.draw(particles_);
+}
+
+ParticleEffect::ParticleEffect(Position tile, sf::Color color, size_t count)
+{
+    pos_ = worldToScreen(tile);
+    generateParticles(color, count);
+}
+
+ParticleEffect::ParticleEffect(Character *target, sf::Color color, size_t count)
+{
+    target_ = target;
+    pos_ = worldToScreen(target_->getPosition());
+    generateParticles(color, count);
+}
+
+void ParticleEffect::generateParticles(sf::Color color, size_t count)
+{
+    room_ = current_room;
+    for(size_t i = 0; i < count; i++) particles_.append(sf::Vertex(pos_, color));
+}
+
+void ParticleEffect::randomizeParticles()
+{
+    for(size_t i = 0; i < particles_.getVertexCount(); i++)
+    {
+        particles_[i].position = pos_ + sf::Vector2f(rand() % TILE_SIZE, rand() % TILE_SIZE);
+    }
 }

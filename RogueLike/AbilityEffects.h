@@ -7,6 +7,7 @@
 
 struct Stats;
 
+//TODO: Rework to add Effects properly
 class AbilityEffect : public GameObject
 {
 public:

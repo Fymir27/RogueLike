@@ -33,6 +33,8 @@ void Fireball::cast(Character* target)
     Effect::addEffect(new MovingEffect("../images/ab_fireball_animated.png",
                                        sf::Vector2f(from.x_ * TILE_SIZE, from.y_ * TILE_SIZE),
                                        sf::Vector2f(to.x_ * TILE_SIZE, to.y_ * TILE_SIZE), 3));
+
+    Effect::addEffect(new ParticleEffect(target, sf::Color::Red, 80), true);
 }
 
 //-----------------------------------------------------------------------------------------------------//
@@ -46,6 +48,7 @@ void Regeneration::cast(Character *target)
 {
     UI::displayText(target->getName() + " feels refreshed!");
     target->applyEffect(new OverTimeEffect("Regneration", "Heals you for 10 turns", false, 5, 10));
+    Effect::addEffect(new ParticleEffect(target, sf::Color::Green, 80), true);
 }
 
 //-----------------------------------------------------------------------------------------------------//
@@ -62,4 +65,5 @@ void SyphonSoul::cast(Character* target)
     Stats plus (5,5,5,5,5);
     target->applyEffect(new StatEffect("Power drain", "Stats are lowered", minus, 5));
     current_player->applyEffect(new StatEffect("Power surge", "Stats are increased", plus, 5));
+    Effect::addEffect(new ParticleEffect(target, sf::Color::Blue, 80), true);
 }

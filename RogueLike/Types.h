@@ -52,3 +52,8 @@ inline float getVectorLength(sf::Vector2f v)
     //return std::sqrtf(v.x*v.x + v.y*v.y);
 	return std::sqrt(v.x*v.x + v.y*v.y);
 }
+
+inline sf::Vector2f worldToScreen(Position pos)
+{
+	return sf::Vector2f(pos.x_ * TILE_SIZE, pos.y_ * TILE_SIZE);
+}
