@@ -2,7 +2,7 @@
 
 #include "Common.h"
 #include "Types.h"
-#include "Animation.h"
+#include "AnimatedSprite.h"
 #include "Character.h"
 
 class Room;
@@ -14,25 +14,33 @@ public:
     static void addEffect(Effect* e, bool persistent = false);
     static size_t getEffectCount() { return effects_.size(); } //doesn't count persistent effects
     static void removeEffect(Effect* e);
+
 protected:
     static list<Effect*> effects_;
     static list<Effect*> effects_persistent_;
 
-    Effect(string filename); //effect with animation
-    Effect();
+    Effect() = default;
+    explicit Effect(string filename); //normal sprite
+    explicit Effect(AnimatedSprite* anim); //animated sprite
+
+    bool active_ = true;
+
     virtual void draw(sf::RenderWindow& window) = 0;
     sf::Texture tex_;
     sf::Sprite sprite_;
-    bool active_ = true;
-    Animation anim_;
+
+    AnimatedSprite* anim_;
 };
 
 class MovingEffect : public Effect
 {
 public:
-    MovingEffect(string filename, sf::Vector2f from, sf::Vector2f to, float speed = 1);
+    explicit MovingEffect(string filename, float speed = 1);
+    explicit MovingEffect(AnimatedSprite* anim, float speed = 1);
+    void aim(sf::Vector2f from, sf::Vector2f to);
 private:
     void draw(sf::RenderWindow& window);
+    float speed_;
     sf::Vector2f step_;
     size_t dur_;
 };

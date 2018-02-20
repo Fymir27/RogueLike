@@ -3,6 +3,8 @@
 #include "Common.h"
 #include "Types.h"
 #include "GameObject.h"
+#include "AbilityEffectTypes.h"
+#include "Effects.h"
 
 
 class Character;
@@ -12,33 +14,40 @@ class Ability : public GameObject
 {
 public:
     Ability(string name, string descr, unsigned damage, unsigned healing, size_t cd, size_t cost);
-    virtual void cast(Character* target) = 0;
+    Ability(string name, string descr);
+    virtual bool cast(Character* target); //returns if cast was successful
+    void coolDown();
+
     size_t getCost() { return cost_; }
+    size_t getCooldownLeft() { return cooldown_left_; }
 
 protected:
     unsigned damage_ = 0;
     unsigned healing_ = 0;
     size_t cooldown_ = 0;
-    size_t cost_ = 0;  
+    size_t cooldown_left_ = 0;
+    size_t cost_ = 0;
+
+    vector<AbilityEffect*> ab_effects_;
+    Effect* effect_ = nullptr; //visual effect
 };
 
 class Fireball : public Ability
 {
 public:
     Fireball();
-    void cast(Character* target);
+    virtual bool cast(Character* target);
 };
 
 class Regeneration : public Ability
 {
 public:
 	Regeneration();
-	void cast(Character* target);
 };
 
 class SyphonSoul : public Ability
 {
 public:
     SyphonSoul();
-    void cast(Character* target);
+    virtual bool cast(Character* target);
 };

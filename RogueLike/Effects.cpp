@@ -11,9 +11,13 @@ Effect::Effect(string filename)
     {
         cout << "Failed to load " << filename << endl;
     }
-    anim_.init(&tex_, 4, 40);
     sprite_.setTexture(tex_);
-    //sprite_.setRotation(90);
+}
+
+
+Effect::Effect(AnimatedSprite *anim) : anim_(anim)
+{
+
 }
 
 void Effect::addEffect(Effect *e, bool persistent)
@@ -33,7 +37,6 @@ void Effect::drawEffects(sf::RenderWindow &window)
         e->draw(window);
         if(!e->active_)
         {
-            delete e;
             effects_.remove(e);
         }
     }
@@ -45,15 +48,9 @@ void Effect::drawEffects(sf::RenderWindow &window)
         e->draw(window);
         if(!e->active_)
         {
-            delete e;
             effects_.remove(e);
         }
     }
-}
-
-Effect::Effect()
-{
-
 }
 
 void Effect::removeEffect(Effect *e)
@@ -61,14 +58,52 @@ void Effect::removeEffect(Effect *e)
     effects_persistent_.remove(e); //shouln't need to remove non persistent effects
 }
 
+
 //----------------------------------------------
 
-MovingEffect::MovingEffect(string filename, sf::Vector2f from, sf::Vector2f to, float speed) : Effect(filename)
+MovingEffect::MovingEffect(string filename, float speed) : Effect(filename), speed_(speed)
 {
-    sprite_.setPosition(from);
+
+}
+
+MovingEffect::MovingEffect(AnimatedSprite* anim, float speed) : Effect(anim), speed_(speed)
+{
+
+}
+
+void MovingEffect::draw(sf::RenderWindow &window)
+{
+    static size_t dur_left = dur_;
+
+    if(anim_ == nullptr)
+    {
+        window.draw(sprite_);
+        sprite_.move(step_);
+    }
+    else
+    {
+        anim_->draw(window);
+        anim_->move(step_);
+    }
+    if (--dur_ <= 0)
+    {
+        active_ = false;
+    }
+}
+
+
+
+void MovingEffect::aim(sf::Vector2f from, sf::Vector2f to)
+{
+    cout << "Moving Effect aim from" << from.x << "|" << from.y << " to " << to.x << "|" << to.y << endl;
+    if(anim_ != nullptr)
+        anim_->setPosition(from);
+    else
+        sprite_.setPosition(from);
 
     sf::Vector2f path = (to - from);
     float path_length = getVectorLength(path);
+    cout << "Path length: " << path_length << endl;
 
     if(path_length == 0)
     {
@@ -78,18 +113,11 @@ MovingEffect::MovingEffect(string filename, sf::Vector2f from, sf::Vector2f to, 
     }
 
     sf::Vector2f dir = path / path_length;
-    step_ = dir * speed;
-    dur_ = (size_t)(path_length / speed);
-}
-
-void MovingEffect::draw(sf::RenderWindow &window)
-{
-    sf::IntRect rect = anim_.update();
-    sprite_.setTextureRect(rect);
-    window.draw(sprite_);
-    sprite_.move(step_);
-    if (--dur_ <= 0)
-        active_ = false;
+    step_ = dir * speed_;
+    cout << "Step: " << step_.x << "|" << step_.y << endl;
+    dur_ = (size_t)(path_length / speed_);
+    cout << "Dur: " << dur_ << endl;
+    active_ = true;
 }
 
 //----------------------------------------------

@@ -1,5 +1,13 @@
-#include "AbilityEffects.h"
+#include "AbilityEffectTypes.h"
 #include "UI.h"
+
+void AbilityEffect::remove()
+{
+    if(effect != nullptr)
+        Effect::removeEffect(effect);
+}
+
+//-----------------------------------------------------------------------------//
 
 OverTimeEffect::OverTimeEffect(string name, string descr, bool harmful, int amount, size_t dur) :
 AbilityEffect(name, descr, dur), harmful_(harmful), amount_(amount)
@@ -10,7 +18,7 @@ AbilityEffect(name, descr, dur), harmful_(harmful), amount_(amount)
 void OverTimeEffect::apply(Character* target)
 {
 	target_ = target;
-    //UI::displayText(name_ + " (" + std::to_string(amount_) + ") applied for " + std::to_string(dur_) + " turns");
+    target_->applyEffect(this);
 }
 
 size_t OverTimeEffect::tick()
@@ -28,11 +36,6 @@ size_t OverTimeEffect::tick()
     return dur_;
 }
 
-OverTimeEffect::~OverTimeEffect()
-{
-
-}
-
 //-----------------------------------------------------------------------------//
 
 StatEffect::StatEffect(string name, string descr, Stats delta, size_t dur) :
@@ -44,11 +47,13 @@ AbilityEffect(name, descr, dur), delta_(delta)
 void StatEffect::apply(Character* target)
 {
     target_ = target;
-    target->setStats(target->getStats() + delta_);
+    target_->setStats(target_->getStats() + delta_);
+    target_->applyEffect(this);
 }
 
-StatEffect::~StatEffect()
+void StatEffect::remove()
 {
+    AbilityEffect::remove();
     target_->setStats(target_->getStats() - delta_);
     //UI::displayText(name_ + " fades from " + target_->getName());
 }
@@ -70,11 +75,6 @@ void ConditionEffect::apply(Character* target)
 
 size_t ConditionEffect::tick()
 {
-    return --dur_;
-}
 
-ConditionEffect::~ConditionEffect()
-{
-    //target->removeEffect() oder so
 }
 

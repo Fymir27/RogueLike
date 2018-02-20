@@ -344,8 +344,8 @@ void Dungeon::readRoomPartsFromFile()
 
 			//room_parts_.insert();
 
-			for(auto line : part)
-				cout << line << endl;	
+			//for(auto line : part)
+				//cout << line << endl;
 			
 			room_parts_[part.size()][i].push_back(part);
 	

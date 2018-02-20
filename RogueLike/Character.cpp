@@ -3,7 +3,7 @@
 #include "Room.h"
 #include "Item.h"
 #include "UI.h"
-#include "AbilityEffects.h"
+#include "AbilityEffectTypes.h"
 #include "Abilities.h"
 #include "Player.h"
 
@@ -167,7 +167,6 @@ bool Character::move(Position new_pos)
 void Character::applyEffect(AbilityEffect *effect)
 {
 	effects_.push_back(effect);
-	effect->apply(this);
 }
 
 void Character::advanceEffects()
@@ -178,7 +177,9 @@ void Character::advanceEffects()
       if(effect->tick() == 0) //check if effect has run out
       {
           effects_.remove(effect);
-          delete effect;
+          effect->remove(); //trigger fading effect
       }
   }
 }
+
+
