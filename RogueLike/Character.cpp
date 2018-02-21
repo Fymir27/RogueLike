@@ -126,6 +126,11 @@ Character::Character(string name, Position pos, Stats stats, string filename) : 
 
 Character::~Character()
 {
+    for (auto const& effect : effects_)
+    {
+           delete effect;
+    }
+    effects_.clear();
     current_room->freeField(pos_);
     delete inventory_;
 }
