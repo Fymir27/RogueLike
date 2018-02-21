@@ -13,8 +13,7 @@ class Character;
 class Ability : public GameObject 
 {
 public:
-    Ability(string name, string descr, unsigned damage, unsigned healing, size_t cd, size_t cost);
-    Ability(string name, string descr);
+    Ability(const string& name, const string& descr, unsigned damage, unsigned healing, size_t cd, size_t cost);
     virtual bool cast(Character* target); //returns if cast was successful
     void coolDown();
 
@@ -29,7 +28,7 @@ protected:
     size_t cost_ = 0;
 
     vector<AbilityEffect*> ab_effects_;
-    Effect* effect_ = nullptr; //visual effect
+    shared_ptr<Effect> effect_; //visual effect
 };
 
 class Fireball : public Ability
@@ -50,4 +49,6 @@ class SyphonSoul : public Ability
 public:
     SyphonSoul();
     virtual bool cast(Character* target);
+private:
+	AbilityEffect* buff_;
 };

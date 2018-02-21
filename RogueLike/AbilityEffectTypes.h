@@ -8,27 +8,30 @@
 
 struct Stats;
 
-//TODO: Rework to add Effects properly
 class AbilityEffect : public GameObject
 {
 public:
-    AbilityEffect(string name, string descr, size_t dur) : GameObject(name, descr), dur_(dur) {}
-    virtual void apply(Character* target) = 0;
-    virtual void remove();
     virtual size_t tick() { return --dur_; }; //returns remaining duration
+    virtual AbilityEffect* createInstance(Character* target) = 0;
+    virtual ~AbilityEffect();
 protected:
-    Character* target_;
+    AbilityEffect(const string& name, const string& descr, size_t dur);
+    AbilityEffect(AbilityEffect* orig, Character* target);
+
+    Character* target_ = nullptr;
+    shared_ptr<Effect> effect_; //visual effect
     size_t dur_;
-    Effect* effect = nullptr;
 };
 
 
 class OverTimeEffect : public AbilityEffect
 {
 public:
-    OverTimeEffect(string name, string descr, bool harmful, int amount, size_t dur);
-    void apply(Character* target);
-    size_t tick();
+    virtual size_t tick();
+    virtual AbilityEffect* createInstance(Character* target) final;
+protected:
+    OverTimeEffect(const string& name, const string& descr, bool harmful, int amount, size_t dur);
+    OverTimeEffect(OverTimeEffect* orig, Character* target);
 private:
     bool harmful_;
     int amount_;
@@ -37,27 +40,11 @@ private:
 class StatEffect : public AbilityEffect
 {
 public:
-    StatEffect(string name, string descr, Stats delta, size_t dur);
-    void apply(Character* target);
-    void remove();
+    virtual AbilityEffect* createInstance(Character* target) final;
+    ~StatEffect();
+protected:
+    StatEffect(const string& name, const string& descr, Stats delta, size_t dur);
+    StatEffect(StatEffect* orig, Character* target);
 private:
     Stats delta_;
 };
-
-enum ConditionType
-{
-    STUN,
-    FREEZE
-};
-
-class ConditionEffect : public AbilityEffect
-{
-public:
-    ConditionEffect(string name, string descr, ConditionType type, size_t dur);
-    void apply(Character* target);
-    size_t tick();
-    ~ConditionEffect();
-private:
-    ConditionType type_;  
-};
-

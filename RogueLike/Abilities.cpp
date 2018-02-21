@@ -4,20 +4,17 @@
 #include "UI.h"
 #include "Player.h"
 #include "Effects.h"
+#include "AbilityEffects.h"
 
-Ability::Ability(string name, string descr, unsigned damage, unsigned healing, size_t cd, size_t cost) :
+Ability::Ability(const string& name, const string& descr, unsigned damage, unsigned healing, size_t cd, size_t cost) :
 GameObject(name, descr), damage_(damage), healing_(healing), cooldown_(cd), cost_(cost) 
-{
-
-}
-
-Ability::Ability(string name, string descr) : GameObject(name, descr)
 {
 
 }
 
 bool Ability::cast(Character *target)
 {
+    cout << "Ability cast" << endl;
     if(cooldown_left_ > 0)
     {
         UI::displayText("That Ability is still on cooldown!");
@@ -31,12 +28,15 @@ bool Ability::cast(Character *target)
 
     for(auto e : ab_effects_)
     {
-        e->apply(target);
+        e->createInstance(target);
+        cout << e->getName() << " created successfully!" << endl;
     }
 
     if(effect_ != nullptr)
+    {
+        cout << "Adding Visual Effect" << endl;
         Effect::addEffect(effect_);
-
+    }
     return true;
 }
 
@@ -52,9 +52,9 @@ void Ability::coolDown()
 
 Fireball::Fireball() : Ability("Fireball", "Deals additional damage over time.", 50, 0, 0, 50) 
 {
-    ab_effects_.push_back(new OverTimeEffect("Burn", "Deals fire damage over 5 turns", true, 10, 5));
+    ab_effects_.push_back(new BurnEffect(10, 5));
     AnimatedSprite* anim = new AnimatedSprite("../images/ab_fireball_animated.png", 40);
-    effect_ = new MovingEffect(anim, 3);
+    effect_ = shared_ptr<Effect>(new MovingSprite(anim, 3));
 }
 
 bool Fireball::cast(Character* target)
@@ -62,7 +62,7 @@ bool Fireball::cast(Character* target)
     Position from = current_player->getPosition();
     Position to = target->getPosition();
 
-    dynamic_cast<MovingEffect*>(effect_)->aim(worldToScreen(from), worldToScreen(to));
+    dynamic_cast<MovingSprite*>(effect_.get())->aim(worldToScreen(from), worldToScreen(to));
 
     return Ability::cast(target);
 }
@@ -71,15 +71,15 @@ bool Fireball::cast(Character* target)
 
 Regeneration::Regeneration() : Ability("Regeneration", "Heals over time", 0, 0, 3, 30)
 {
-    ab_effects_.push_back(new OverTimeEffect("Regneration", "Heals you for 10 turns", false, 5, 10));
+    ab_effects_.push_back(new RegenerationEffect(10, 5));
 }
 
 //-----------------------------------------------------------------------------------------------------//
 
 SyphonSoul::SyphonSoul() : Ability("Syphon Soul", "Drains power from the enemy", 0, 0, 5, 70)
 {
-    Stats minus(-5,-5,-5,-5,-5);
-    ab_effects_.push_back(new StatEffect("Power drain", "Stats are lowered", minus, 5));
+    ab_effects_.push_back(new AllStatsDown(5,5));
+    buff_ = new AllStatsUp(5,5);
 }
 
 bool SyphonSoul::cast(Character* target)
@@ -88,8 +88,6 @@ bool SyphonSoul::cast(Character* target)
         return false;
 
     UI::displayText(target->getName() + " had its power drained!");
-    Stats plus (5,5,5,5,5);
-    StatEffect* buff = new StatEffect("Power surge", "Stats are increased", plus, 5);
-    buff->apply(current_player);
+    buff_->createInstance(current_player);
     return true;
 }

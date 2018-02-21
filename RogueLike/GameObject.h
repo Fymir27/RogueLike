@@ -11,6 +11,6 @@ public:
 protected:
     string name_;
     string description_;
-    GameObject(string name, string descr) : name_(name), description_(descr) {}
-    
+    GameObject(const string& name, const string& descr);
+    GameObject(GameObject* src);
 };

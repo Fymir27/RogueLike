@@ -2,25 +2,10 @@
 #include "Room.h"
 #include "Player.h"
 
-list<Effect*> Effect::effects_;
-list<Effect*> Effect::effects_persistent_;
+list<shared_ptr<Effect>> Effect::effects_;
+list<shared_ptr<Effect>> Effect::effects_persistent_;
 
-Effect::Effect(string filename)
-{
-    if(!tex_.loadFromFile(filename))
-    {
-        cout << "Failed to load " << filename << endl;
-    }
-    sprite_.setTexture(tex_);
-}
-
-
-Effect::Effect(AnimatedSprite *anim) : anim_(anim)
-{
-
-}
-
-void Effect::addEffect(Effect *e, bool persistent)
+void Effect::addEffect(shared_ptr<Effect>e, bool persistent)
 {
     if(persistent)
         effects_persistent_.push_back(e);
@@ -31,19 +16,19 @@ void Effect::addEffect(Effect *e, bool persistent)
 void Effect::drawEffects(sf::RenderWindow &window)
 {
     //persistent effects:
-    list<Effect*> tmp = effects_persistent_;
-    for(Effect* e : tmp)
+    list<shared_ptr<Effect>> tmp = effects_persistent_;
+    for(const shared_ptr<Effect>& e : tmp)
     {
-        e->draw(window);
-        if(!e->active_)
-        {
-            effects_.remove(e);
-        }
+        cout << "Effect::drawEffects: use count: " << e.use_count() << endl;
+        if(e.use_count() == 2) //ability effect ran out
+            effects_persistent_.remove(e);
+
+        e->draw(window); //should kill themselves once ability effect dies
     }
 
     //other effects:
     tmp = effects_;
-    for(Effect* e : tmp)
+    for(const shared_ptr<Effect>& e : tmp)
     {
         e->draw(window);
         if(!e->active_)
@@ -53,37 +38,40 @@ void Effect::drawEffects(sf::RenderWindow &window)
     }
 }
 
-void Effect::removeEffect(Effect *e)
+void Effect::removeEffect(shared_ptr<Effect>e)
 {
-    effects_persistent_.remove(e); //shouln't need to remove non persistent effects
+    effects_persistent_.remove(e);
 }
 
 
 //----------------------------------------------
 
-MovingEffect::MovingEffect(string filename, float speed) : Effect(filename), speed_(speed)
+MovingSprite::MovingSprite(string filename, float speed) : speed_(speed)
 {
-
+    if(!tex_.loadFromFile(filename))
+        cout << "Couln't load " << filename << endl;
+    sprite_.setTexture(tex_);
 }
 
-MovingEffect::MovingEffect(AnimatedSprite* anim, float speed) : Effect(anim), speed_(speed)
+MovingSprite::MovingSprite(AnimatedSprite* anim, float speed) : speed_(speed)
 {
-
+    anim_sprite_ = anim;
+    animated_ = true;
 }
 
-void MovingEffect::draw(sf::RenderWindow &window)
+void MovingSprite::draw(sf::RenderWindow &window)
 {
     static size_t dur_left = dur_;
 
-    if(anim_ == nullptr)
+    if(animated_)
     {
-        window.draw(sprite_);
-        sprite_.move(step_);
+        anim_sprite_->draw(window);
+        anim_sprite_->move(step_);
     }
     else
     {
-        anim_->draw(window);
-        anim_->move(step_);
+        window.draw(sprite_);
+        sprite_.move(step_);
     }
     if (--dur_ <= 0)
     {
@@ -93,17 +81,16 @@ void MovingEffect::draw(sf::RenderWindow &window)
 
 
 
-void MovingEffect::aim(sf::Vector2f from, sf::Vector2f to)
+void MovingSprite::aim(sf::Vector2f from, sf::Vector2f to)
 {
-    cout << "Moving Effect aim from" << from.x << "|" << from.y << " to " << to.x << "|" << to.y << endl;
-    if(anim_ != nullptr)
-        anim_->setPosition(from);
+    //cout << "Moving Effect aim from" << from.x << "|" << from.y << " to " << to.x << "|" << to.y << endl;
+    if(animated_)
+        anim_sprite_->setPosition(from);
     else
         sprite_.setPosition(from);
 
     sf::Vector2f path = (to - from);
     float path_length = getVectorLength(path);
-    cout << "Path length: " << path_length << endl;
 
     if(path_length == 0)
     {
@@ -114,13 +101,16 @@ void MovingEffect::aim(sf::Vector2f from, sf::Vector2f to)
 
     sf::Vector2f dir = path / path_length;
     step_ = dir * speed_;
-    cout << "Step: " << step_.x << "|" << step_.y << endl;
     dur_ = (size_t)(path_length / speed_);
-    cout << "Dur: " << dur_ << endl;
     active_ = true;
 }
 
 //----------------------------------------------
+
+ParticleEffect::ParticleEffect(sf::Color color, size_t count) : col_(color), count_(count)
+{
+    //this constructor just creates a template!
+}
 
 void ParticleEffect::draw(sf::RenderWindow &window)
 {
@@ -128,7 +118,7 @@ void ParticleEffect::draw(sf::RenderWindow &window)
     static size_t randomize_in = 0;
     static sf::Vector2f prev_pos;
 
-    if(current_room != room_ && target_ != current_player) //only draw in generated room!
+    if((current_room != room_) && (target_ != current_player)) //only draw in generated room!
         return;
 
     if(target_ != nullptr)
@@ -146,19 +136,6 @@ void ParticleEffect::draw(sf::RenderWindow &window)
     window.draw(particles_);
 }
 
-ParticleEffect::ParticleEffect(Position tile, sf::Color color, size_t count)
-{
-    pos_ = worldToScreen(tile);
-    generateParticles(color, count);
-}
-
-ParticleEffect::ParticleEffect(Character *target, sf::Color color, size_t count)
-{
-    target_ = target;
-    pos_ = worldToScreen(target_->getPosition());
-    generateParticles(color, count);
-}
-
 void ParticleEffect::generateParticles(sf::Color color, size_t count)
 {
     room_ = current_room;
@@ -171,4 +148,27 @@ void ParticleEffect::randomizeParticles()
     {
         particles_[i].position = pos_ + sf::Vector2f(rand() % TILE_SIZE, rand() % TILE_SIZE);
     }
+}
+
+
+void ParticleEffect::setPosition(sf::Vector2f pos)
+{
+    pos_ = pos;
+    active_ = true;
+}
+
+void ParticleEffect::setTarget(Character *character)
+{
+    target_ = character;
+    active_ = true;
+}
+
+Effect* ParticleEffect::createInstance()
+{
+    return new ParticleEffect(this);
+}
+
+ParticleEffect::ParticleEffect(ParticleEffect* orig) : col_(orig->col_), count_(orig->count_)
+{
+    generateParticles(col_, count_);
 }

@@ -1,24 +1,34 @@
 #include "AbilityEffectTypes.h"
 #include "UI.h"
 
-void AbilityEffect::remove()
+AbilityEffect::AbilityEffect(const string& name, const string& descr, size_t dur) : GameObject(name, descr), dur_(dur)
 {
-    if(effect != nullptr)
-        Effect::removeEffect(effect);
+
 }
+
+AbilityEffect::~AbilityEffect()
+{
+
+}
+
+AbilityEffect::AbilityEffect(AbilityEffect* orig, Character* target) :
+        GameObject(orig), dur_(orig->dur_), target_(target), effect_(orig->effect_->createInstance())
+{
+    cout << "AbilityEffect::cctor" << endl;
+    cout << "Applying effect" << endl;
+    target_->applyEffect(this);
+    cout << "Adding visual effect" << endl;
+    effect_->setTarget(target);
+    Effect::addEffect(effect_, true);
+}
+
 
 //-----------------------------------------------------------------------------//
 
-OverTimeEffect::OverTimeEffect(string name, string descr, bool harmful, int amount, size_t dur) :
-AbilityEffect(name, descr, dur), harmful_(harmful), amount_(amount)
+OverTimeEffect::OverTimeEffect(const string& name, const string& descr, bool harmful, int amount, size_t dur) :
+        AbilityEffect(name, descr, dur), harmful_(harmful), amount_(amount)
 {
 
-}
-
-void OverTimeEffect::apply(Character* target)
-{
-	target_ = target;
-    target_->applyEffect(this);
 }
 
 size_t OverTimeEffect::tick()
@@ -29,52 +39,48 @@ size_t OverTimeEffect::tick()
                     " by " + name_ + " (" + std::to_string(amount_) + ")");
     */
 
-    if(harmful_)
+    if (harmful_)
         target_->damage(amount_);
     else
         target_->heal(amount_);
     return dur_;
 }
 
+OverTimeEffect::OverTimeEffect(OverTimeEffect* orig, Character* target) :
+        AbilityEffect(orig, target), harmful_(orig->harmful_), amount_(orig->amount_)
+{
+    cout << "OTEffect::cctor" << endl;
+}
+
+AbilityEffect* OverTimeEffect::createInstance(Character* target)
+{
+    cout << "OTEffect::createInstance, " << name_ << endl;
+    AbilityEffect* e = new OverTimeEffect(this, target);
+    cout << "OTEffect::createInstance success!" << endl;
+    return e; //new OverTimeEffect(this, target);
+}
+
+
 //-----------------------------------------------------------------------------//
 
-StatEffect::StatEffect(string name, string descr, Stats delta, size_t dur) :
-AbilityEffect(name, descr, dur), delta_(delta)
+StatEffect::StatEffect(const string& name, const string& descr, Stats delta, size_t dur) :
+        AbilityEffect(name, descr, dur), delta_(delta)
 {
 
 }
 
-void StatEffect::apply(Character* target)
+StatEffect::StatEffect(StatEffect* orig, Character* target) :
+        AbilityEffect(orig, target), delta_(orig->delta_)
 {
-    target_ = target;
     target_->setStats(target_->getStats() + delta_);
-    target_->applyEffect(this);
 }
 
-void StatEffect::remove()
+StatEffect::~StatEffect()
 {
-    AbilityEffect::remove();
     target_->setStats(target_->getStats() - delta_);
-    //UI::displayText(name_ + " fades from " + target_->getName());
 }
 
-//-----------------------------------------------------------------------------//
-
-ConditionEffect::ConditionEffect(string name, string descr, ConditionType type, size_t dur) :
-AbilityEffect(name, descr, dur), type_(type)
+AbilityEffect* StatEffect::createInstance(Character* target)
 {
-
+    return new StatEffect(this, target);
 }
-
-void ConditionEffect::apply(Character* target)
-{
-    //target->applyEffect()
-    //oder
-    //target->setStatus()
-}
-
-size_t ConditionEffect::tick()
-{
-
-}
-

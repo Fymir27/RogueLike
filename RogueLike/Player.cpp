@@ -7,10 +7,12 @@ Player* current_player = NULL;
 
 Player::Player(string name, Position pos, Stats stats, string filename) : Character(name, pos, stats, filename)
 {
+    cout << "Spawning Player..." << endl;
     ability_bar_.resize(9);
     ability_bar_[0] = new Fireball();
     ability_bar_[1] = new Regeneration();
     ability_bar_[2] = new SyphonSoul();
+    cout << "Initiated Player abilites" << endl;
 }
 
 Inventory* Player::getInventory()
