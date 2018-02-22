@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "Types.h"
 
+//TODO: use custom Text class
 class Textbox
 {
 public:

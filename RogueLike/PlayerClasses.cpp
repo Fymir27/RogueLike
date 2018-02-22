@@ -1,6 +1,29 @@
 #include "PlayerClasses.h"
 #include "UI.h"
 
+
+
+map<string, PlayerClass> getPlayerClasses()
+{
+    static map<string, PlayerClass> classes = {
+            { "Warrior", WARR },
+            { "Mage", MAGE },
+            { "Thief", THIEF }
+    };
+    return classes;
+}
+
+Player* getPlayer(PlayerClass player_class, const string& player_name)
+{
+    Position spawn = current_room->getFreePosition();
+    switch(player_class)
+    {
+        case WARR: return new Warrior(player_name, spawn);
+        case MAGE: return new Mage(player_name, spawn);
+        case THIEF: return new Thief(player_name, spawn);
+    }
+}
+
 //--- Warrior ---//
 Stats Warrior::base_stats_(15,15,10,5,5);
 

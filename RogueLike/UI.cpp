@@ -8,6 +8,7 @@
 #include "Minimap.h"
 #include "Ressource.h"
 #include "Abilities.h"
+#include "PlayerClasses.h"
 
 Textbox* UI::textbox_ = NULL;
 sf::Font UI::Text::default_font_;
@@ -93,6 +94,36 @@ UI::CharacterInfo::CharacterInfo(sf::Vector2f pos, Character * source) : title_(
 }
 //-------------------------------------------------------------------------------------------------
 
+template <class T>
+UI::Menu::List<T>::List(sf::Vector2f pos, map<string, T> items) :
+        pos_(pos), items_(items), cursor_dot_(5), offset_(25)
+{
+    size_t entry_nr = 0;
+    for(auto const& el : items_)
+    {
+        entries_.push_back(Text(pos_ + sf::Vector2f(0, offset_ * entry_nr++), el.first ));
+    }
+    entry_count_ = entries_.size();
+}
+
+template <class T>
+void UI::Menu::List<T>::draw(sf::RenderWindow& window)
+{
+    for(auto& entry : entries_)
+    {
+        cout << "Drawing list entry " << entry.getString() << endl;
+        entry.draw(window);
+    }
+    cursor_dot_.setPosition(pos_ + sf::Vector2f(-5 - cursor_dot_.getRadius(), cursor_ * offset_ + offset_/3));
+    window.draw(cursor_dot_);
+}
+
+template <class T>
+T UI::Menu::List<T>::select()
+{
+    return items_[entries_[cursor_].getString()];
+}
+
 //-------------------------------------------------------------------------------------------------
 UI::UI() : pos_inv_        ({750, 0  }),
            pos_stats_      ({765, 200}),
@@ -102,13 +133,6 @@ UI::UI() : pos_inv_        ({750, 0  }),
            player_info_    ({500, 300}, current_player),
            abilities_      ({ 15, 450}, "Abilities:")
 {
-	//-- load default font --//
-    sf::Font font;
-	if (!font.loadFromFile("../fonts/8bitOperatorPlus-Regular.ttf"))
-		cout << "Failed to load UI font!" << endl;
-
-    Text::setDefaultFont(font);
-
 	//-- set fixed Text --//
 	stat_names_.setString("Strength\n"
 						  "Endurance\n"
@@ -116,7 +140,7 @@ UI::UI() : pos_inv_        ({750, 0  }),
 						  "Intelligence\n"
 						  "Willpower\n");
 
-	textbox_ = new Textbox(5, 20, font,
+	textbox_ = new Textbox(5, 20, Text::getDefaultFont(),
 		    pos_bottom_text_, 420, 120,
 			5, 5, sf::Color(100, 100, 100), sf::Color(50,50,50));
 			
@@ -125,6 +149,16 @@ UI::UI() : pos_inv_        ({750, 0  }),
 UI::~UI()
 {
 	delete textbox_;
+}
+
+void UI::setDefaultFont(string filename)
+{
+    sf::Font font;
+    if (!font.loadFromFile(filename))
+        cout << "Failed to load UI font!" << endl;
+
+    Text::setDefaultFont(font);
+
 }
 
 void UI::draw(sf::RenderWindow& window)
@@ -173,5 +207,41 @@ void UI::draw(sf::RenderWindow& window)
 void UI::displayText(string text)
 {
 	textbox_->displayText(text);
+}
+
+Player* UI::startMenu(sf::RenderWindow& window)
+{
+    Menu::List<PlayerClass> class_list({25,25}, getPlayerClasses());
+    
+    string player_name = "Oliver";
+    sf::Event event;
+    while (window.isOpen())
+    {
+        //-- get input --//
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+            }
+            else if (event.type == sf::Event::KeyPressed)
+            {
+                PlayerClass player_class;
+                sf::Keyboard::Key key = event.key.code;
+                if(key == sf::Keyboard::Down)
+                    class_list.moveCursorDown();
+                else if(key == sf::Keyboard::Up)
+                    class_list.moveCursorUp();
+                else if(key == sf::Keyboard::Return) //forwards to game
+                {
+                    player_class = class_list.select();
+                    return getPlayer(player_class, "Oliver");
+                }
+            }
+            window.clear(sf::Color::Black);
+            class_list.draw(window);
+            window.display();
+        }
+    }
 }
 //-------------------------------------------------------------------------------------------------

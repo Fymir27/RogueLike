@@ -13,6 +13,7 @@
 #include "Effects.h"
 #include <ctime>
 
+
 enum Turn
 {
     PLAYER,
@@ -29,7 +30,8 @@ enum InputType
 	MOVE,
 	ITEM,
 	SPELL,
-    ESC
+    ESC,
+    CONFIRM
 };
 
 struct Command
@@ -48,6 +50,8 @@ Command getCommand(const sf::Keyboard::Key& key)
         case sf::Keyboard::Escape:    c.type_ = ESC; break;
 
 		case sf::Keyboard::Space:	  c.type_ = REST; break;
+
+        case sf::Keyboard::Return:    c.type_ = CONFIRM; break;
 
 		case sf::Keyboard::Right:   c.type_ = MOVE; c.dir_ = RIGHT; break;
 		case sf::Keyboard::Left:    c.type_ = MOVE; c.dir_ = LEFT; break;
@@ -126,6 +130,10 @@ void processInput(const sf::Event& event, sf::RenderWindow& window)
         case INVALID:
             //just do nothing
             break;
+
+        case CONFIRM:
+            //nope
+            break;
 	}
     prev = com;
 	if (valid)
@@ -156,14 +164,20 @@ int main()
 
 	Character::init_exp_needed();
 
+    //-- create window --//
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
+    window.setFramerateLimit(60);
+    sf::Event event;
+
+
+    //-- Main menu --//
+	UI::setDefaultFont("../fonts/8bitOperatorPlus-Regular.ttf");
+    current_player = UI::startMenu(window);
+
 	//-- create player --//
-	current_player = new Mage("Oliver", current_room->getFreePosition());
+	//current_player = new Mage("Oliver", current_room->getFreePosition());
     //current_player = new Warrior("Oliver", current_room->getFreePosition());
     //current_player = new Thief("Oliver", current_room->getFreePosition());
-
-	//-- create window --//
-	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
-	window.setFramerateLimit(60);
 
 	UI* ui = new UI();
 	
@@ -180,7 +194,6 @@ int main()
 	//----------------------------//
 
 	//-- main loop --//
-	sf::Event event;
 	while (window.isOpen())
 	{
 		//-- get input --//
