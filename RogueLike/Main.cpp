@@ -164,22 +164,18 @@ int main()
 
 	Character::init_exp_needed();
 
-    //-- create window --//
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
-    window.setFramerateLimit(60);
-    sf::Event event;
-
-
     //-- Main menu --//
 	UI::setDefaultFont("../fonts/8bitOperatorPlus-Regular.ttf");
-    current_player = UI::startMenu(window);
+    current_player = UI::startMenu();
+    if(current_player == nullptr)     //player closed the start Menu
+        return 0;
 
 	//-- create player --//
 	//current_player = new Mage("Oliver", current_room->getFreePosition());
     //current_player = new Warrior("Oliver", current_room->getFreePosition());
     //current_player = new Thief("Oliver", current_room->getFreePosition());
 
-	UI* ui = new UI();
+	auto ui = new UI();
 	
 	cout << endl;
 	cout << "////////////////////////////////////////////////////////" << endl;
@@ -187,6 +183,11 @@ int main()
 	cout << "//                  Good Luck!                        //" << endl;
 	cout << "////////////////////////////////////////////////////////" << endl;
 	cout << endl;
+
+    //-- create main window --//
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
+    window.setFramerateLimit(60);
+    sf::Event event;
 
 	//------- Test Area ----------//
 	//current_player->grantExp(33);

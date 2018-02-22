@@ -111,7 +111,6 @@ void UI::Menu::List<T>::draw(sf::RenderWindow& window)
 {
     for(auto& entry : entries_)
     {
-        cout << "Drawing list entry " << entry.getString() << endl;
         entry.draw(window);
     }
     cursor_dot_.setPosition(pos_ + sf::Vector2f(-5 - cursor_dot_.getRadius(), cursor_ * offset_ + offset_/3));
@@ -209,11 +208,18 @@ void UI::displayText(string text)
 	textbox_->displayText(text);
 }
 
-Player* UI::startMenu(sf::RenderWindow& window)
+Player* UI::startMenu()
 {
-    Menu::List<PlayerClass> class_list({25,25}, getPlayerClasses());
-    
-    string player_name = "Oliver";
+    sf::RenderWindow window(sf::VideoMode(300, 200), "Create Your Character!", sf::Style::Default);
+
+    sf::RectangleShape player_name_bg({280,30});
+    player_name_bg.setFillColor(sf::Color(100,100,100));
+    player_name_bg.setPosition({10,10});
+    Text player_name_text({15, 15}, "_");
+    Menu::List<PlayerClass> class_list({25,50}, getPlayerClasses());
+
+
+    string player_name = "";
     sf::Event event;
     while (window.isOpen())
     {
@@ -223,6 +229,7 @@ Player* UI::startMenu(sf::RenderWindow& window)
             if (event.type == sf::Event::Closed)
             {
                 window.close();
+                return nullptr;
             }
             else if (event.type == sf::Event::KeyPressed)
             {
@@ -232,13 +239,29 @@ Player* UI::startMenu(sf::RenderWindow& window)
                     class_list.moveCursorDown();
                 else if(key == sf::Keyboard::Up)
                     class_list.moveCursorUp();
+                else if(key == sf::Keyboard::BackSpace)
+                {
+                    player_name.pop_back();
+                    player_name_text.setString(player_name);
+                }
                 else if(key == sf::Keyboard::Return) //forwards to game
                 {
                     player_class = class_list.select();
-                    return getPlayer(player_class, "Oliver");
+                    return getPlayer(player_class, player_name);
+                }
+            }
+            else if(event.type == sf::Event::TextEntered)
+            {
+                // Handle ASCII only
+                if (event.text.unicode < 128 && event.text.unicode > 31)
+                {
+                    player_name += static_cast<char>(event.text.unicode);
+                    player_name_text.setString(player_name);
                 }
             }
             window.clear(sf::Color::Black);
+            window.draw(player_name_bg);
+            player_name_text.draw(window);
             class_list.draw(window);
             window.display();
         }

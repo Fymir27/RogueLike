@@ -109,7 +109,7 @@ public:
     void draw(sf::RenderWindow& window);
     static void displayText(string text);
 
-    static Player* startMenu(sf::RenderWindow& window);
+    static Player* startMenu();
 
 private:
 
