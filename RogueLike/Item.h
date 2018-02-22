@@ -1,6 +1,6 @@
 #pragma once
 #include "Common.h"
-#include "Types.h"
+#include "Utils.h"
 #include "Singleton.h"
 
 using std::string;

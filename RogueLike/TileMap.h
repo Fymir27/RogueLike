@@ -2,7 +2,7 @@
 
 #include "Common.h"
 #include "Room.h"
-#include "Types.h"
+#include "Utils.h"
 
 class TileMap : public sf::Drawable, public sf::Transformable
 {

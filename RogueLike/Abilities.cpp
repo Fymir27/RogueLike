@@ -37,6 +37,8 @@ bool Ability::cast(Character *target)
         cout << "Adding Visual Effect" << endl;
         Effect::addEffect(effect_);
     }
+
+    cooldown_left_ = cooldown_ + 1; //+1 bec. will cool down once right after cast!
     return true;
 }
 

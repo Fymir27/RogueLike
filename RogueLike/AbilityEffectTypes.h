@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.h"
-#include "Types.h"
+#include "Utils.h"
 #include "GameObject.h"
 #include "Character.h"
 #include "Effects.h"

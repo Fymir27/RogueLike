@@ -19,11 +19,11 @@ void Effect::drawEffects(sf::RenderWindow &window)
     list<shared_ptr<Effect>> tmp = effects_persistent_;
     for(const shared_ptr<Effect>& e : tmp)
     {
-        cout << "Effect::drawEffects: use count: " << e.use_count() << endl;
+        //cout << "Effect::drawEffects: use count: " << e.use_count() << endl;
         if(e.use_count() == 2) //ability effect ran out
             effects_persistent_.remove(e);
 
-        e->draw(window); //should kill themselves once ability effect dies
+        e->draw(window);
     }
 
     //other effects:

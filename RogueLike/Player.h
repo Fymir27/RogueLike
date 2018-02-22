@@ -23,6 +23,7 @@ public:
     Character * findTarget(Direction dir);
     bool castSpell(int nr, Direction dir);
     bool castSpell(int nr, Character * target);
+	void coolDownAbilities();
 	//void damage(const int amount);
 	vector<Ability*> getAbilities() { return ability_bar_; };
 

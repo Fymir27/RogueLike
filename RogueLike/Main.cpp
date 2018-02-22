@@ -4,7 +4,7 @@
 #include "Player.h"
 #include "HealingPotion.h"
 #include "Item.h"
-#include "Types.h"
+#include "Utils.h"
 #include "Common.h"
 #include "UI.h"
 #include "Enemy.h"
@@ -140,6 +140,7 @@ void processInput(const sf::Event& event, sf::RenderWindow& window)
 	{
         turn = PLAYER_EFFECTS;
 		current_player->advanceEffects();
+		current_player->coolDownAbilities();
 	}
 }
 
@@ -163,38 +164,34 @@ int main()
 	current_dungeon->generate(15, 10);
 
 	Character::init_exp_needed();
-
-    //-- Main menu --//
 	UI::setDefaultFont("../fonts/8bitOperatorPlus-Regular.ttf");
-    current_player = UI::startMenu();
-    if(current_player == nullptr)     //player closed the start Menu
-        return 0;
 
-	//-- create player --//
-	//current_player = new Mage("Oliver", current_room->getFreePosition());
-    //current_player = new Warrior("Oliver", current_room->getFreePosition());
-    //current_player = new Thief("Oliver", current_room->getFreePosition());
-
-	auto ui = new UI();
-	
 	cout << endl;
 	cout << "////////////////////////////////////////////////////////" << endl;
-	cout << "//    The game is fully loaded and will start now.    //" << endl; 
+	cout << "//    The game is fully loaded and will start now.    //" << endl;
 	cout << "//                  Good Luck!                        //" << endl;
 	cout << "////////////////////////////////////////////////////////" << endl;
 	cout << endl;
 
-    //-- create main window --//
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
-    window.setFramerateLimit(60);
-    sf::Event event;
+    //-- Start-menu --//
+    current_player = UI::startMenu();
+    if(current_player == nullptr)     //player closed the start Menu
+        return 0;
+
+	//-- create main window --//
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RogueLike", sf::Style::Default);
+	window.setFramerateLimit(60);
+
+	auto ui = new UI();
 
 	//------- Test Area ----------//
 	//current_player->grantExp(33);
 	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
 	//----------------------------//
 
-	//-- main loop --//
+	sf::Event event;
+
+MAIN_LOOP:	//ignore this label (there is definitely no goto statement further down!)
 	while (window.isOpen())
 	{
 		//-- get input --//
@@ -250,8 +247,8 @@ int main()
 
 		if (current_player->dead())
 		{
-			delete current_player;
-			current_player = NULL;
+			//delete current_player;
+			//current_player = nullptr;
 			break;
 		}
 		
@@ -264,6 +261,14 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			if (event.type == sf::Event::KeyPressed)
+				if(event.key.code == sf::Keyboard::Space)
+				{
+					current_player = UI::startMenu();
+					if(current_player == nullptr)
+						return 0;
+					//goto MAIN_LOOP;
+				}
 		}
 	}
 

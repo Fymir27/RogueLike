@@ -1,6 +1,6 @@
 #include <sstream>
 #include "UI.h"
-#include "Types.h"
+#include "Utils.h"
 #include "Common.h"
 #include "Room.h"
 #include "Player.h"
@@ -168,14 +168,15 @@ void UI::draw(sf::RenderWindow& window)
 	//-- draw stats --//
 	stat_names_.draw(window);
 
+    std::stringstream ss;
 	Stats stats = current_player->getStats();
-	string buffer =
-					std::to_string(stats.str_)  + '\n' +
-					std::to_string(stats.end_)  + '\n' +
-					std::to_string(stats.dex_)  + '\n' +
-					std::to_string(stats.int_)  + '\n' +
-					std::to_string(stats.will_) + '\n';
-	stat_values_.setString(buffer.c_str());
+    ss << stats.str_ << newl;
+    ss << stats.end_ << newl;
+    ss << stats.dex_ << newl;
+    ss << stats.int_ << newl;
+    ss << stats.will_ << newl;
+
+	stat_values_.setString(ss.str());
 	stat_values_.draw(window);
 
 	textbox_->draw(window);
@@ -185,8 +186,8 @@ void UI::draw(sf::RenderWindow& window)
 	Minimap::draw(window);
 
     //-- Draw Abilites --//
-    std::stringstream s;
-    s << "Abilities:\n";
+    ss.str("");
+    ss << "Abilities:" << newl;
     vector<Ability*> player_abilities = current_player->getAbilities();
 
     size_t ab_nr = 1;
@@ -195,11 +196,14 @@ void UI::draw(sf::RenderWindow& window)
         if(ability == nullptr)
             continue;
 
-        s << '[' << ab_nr++ << ']' << " " << ability->getName() << " (" <<  ability->getCost()<< ')';
-        //s << " - " << ability->getDescription();
-        s << '\n';
+        ss << '[' << ab_nr++ << ']' << " " << ability->getName() << " (" <<  ability->getCost()<< ")";
+        if(ability->getCooldownLeft() == 0)
+            ss << " - Ready!";
+        else
+            ss << " - CD: " << ability->getCooldownLeft();
+        ss << newl;
     }
-    abilities_.setString(s.str());
+    abilities_.setString(ss.str());
     abilities_.draw(window);
 }
 

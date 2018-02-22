@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.h"
-#include "Types.h"
+#include "Utils.h"
 
 //TODO: use custom Text class
 class Textbox

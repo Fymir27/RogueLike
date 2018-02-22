@@ -8,7 +8,7 @@ Player* current_player = NULL;
 Player::Player(string name, Position pos, Stats stats, string filename) : Character(name, pos, stats, filename)
 {
     cout << "Spawning Player..." << endl;
-    ability_bar_.resize(9);
+    ability_bar_.resize(3);
     ability_bar_[0] = new Fireball();
     ability_bar_[1] = new Regeneration();
     ability_bar_[2] = new SyphonSoul();
@@ -118,5 +118,13 @@ bool Player::castSpell(int nr, Character* target)
 void Player::draw(sf::RenderWindow &window)
 {
     Character::draw(window);
+}
+
+void Player::coolDownAbilities()
+{
+    for(auto& ab : ability_bar_)
+    {
+        ab->coolDown();
+    }
 }
 

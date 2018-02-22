@@ -1,7 +1,7 @@
 #pragma once
 #include "Common.h"
 #include "Inventory.h"
-#include "Types.h"
+#include "Utils.h"
 #include "Ressource.h"
 //#include <SFML/Graphics.hpp>
 //#include <SFML/Window.hpp>

@@ -57,3 +57,5 @@ inline sf::Vector2f worldToScreen(Position pos)
 {
 	return sf::Vector2f(pos.x_ * TILE_SIZE, pos.y_ * TILE_SIZE);
 }
+
+const char newl = '\n';

@@ -2,7 +2,7 @@
 #include "Item.h"
 #include "Room.h"
 #include "Common.h"
-#include "Types.h"
+#include "Utils.h"
 #include "Player.h"
 
 Inventory::Inventory() : limit_(9), rows_(3)

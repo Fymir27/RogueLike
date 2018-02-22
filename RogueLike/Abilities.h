@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.h"
-#include "Types.h"
+#include "Utils.h"
 #include "GameObject.h"
 #include "AbilityEffectTypes.h"
 #include "Effects.h"
@@ -51,4 +51,12 @@ public:
     virtual bool cast(Character* target);
 private:
 	AbilityEffect* buff_;
+};
+
+class WildCharge : public Ability
+{
+public:
+	WildCharge();
+	virtual bool cast(Character* target);
+private:
 };
