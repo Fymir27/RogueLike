@@ -23,6 +23,7 @@ class UI
         void draw(sf::RenderWindow& target);
 
         void setFont(sf::Font& font);
+        void setColor(sf::Color& color);
 
         static void setDefaultFont(sf::Font& font)
         { default_font_ = font; };

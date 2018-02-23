@@ -1,6 +1,6 @@
 #include "AnimatedSprite.h"
 
-AnimatedSprite::AnimatedSprite(const string &filename, unsigned frames, unsigned int image_width)
+AnimatedSprite::AnimatedSprite(string const& filename, unsigned frames, unsigned int image_width)
 {
     if(!tex_.loadFromFile(filename))
     {

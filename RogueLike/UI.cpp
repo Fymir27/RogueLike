@@ -29,6 +29,11 @@ void UI::Text::setFont(sf::Font &font)
     font_loaded_ = true;
 }
 
+void UI::Text::setColor(sf::Color& color)
+{
+    text_.setColor(color);
+}
+
 void UI::Text::draw(sf::RenderWindow& window)
 {
     if(!font_loaded_)
@@ -196,6 +201,7 @@ void UI::draw(sf::RenderWindow& window)
         if(ability == nullptr)
             continue;
 
+        //TODO: Grey out unusable abilities
         ss << '[' << ab_nr++ << ']' << " " << ability->getName() << " (" <<  ability->getCost()<< ")";
         if(ability->getCooldownLeft() == 0)
             ss << " - Ready!";

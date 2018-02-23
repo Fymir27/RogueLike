@@ -42,7 +42,7 @@ bool Enemy::checkSurroundings()
 {
 	for(size_t i = 0; i < 4; i++)
 	{
-		if(current_room->getFieldStatus(pos_ + DELTA_POS[i]) == OCCUPIED)
+		if(current_room->getField(pos_ + DELTA_POS[i])->getFieldStatus() == OCCUPIED)
 		{
 			move(pos_ + DELTA_POS[i]);
 			if(pos_ + DELTA_POS[i] == current_player->getPosition())

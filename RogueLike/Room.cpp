@@ -23,21 +23,12 @@ Field* Room::getField(int x, int y)
         cout << "Invalid Field!" << endl;
         std::cout << e.what();
     }
-    return NULL;
+    return nullptr;
 }
 
 Field* Room::getField(Position pos)
 {
-    try
-    {
-        return map_.at(pos.y_).at(pos.x_);
-    }
-    catch (std::exception e)
-    {
-        cout << "Invalid Field!" << endl;
-        std::cout << e.what();
-    }
-    return NULL;
+    return getField(pos.x_, pos.y_);
 }
 
 void Room::initSpawnLocations()
@@ -94,18 +85,6 @@ void Room::initSpawnLocations()
 
 }
 
-FIELD_STATUS Room::getFieldStatus(Position pos)
-{
-    try
-    {
-        return map_.at(pos.y_).at(pos.x_)->status_;
-    }
-    catch (std::exception e)
-    {
-        cout << "Invalid Field!" << endl;
-        std::cout << e.what() << endl;
-    }
-}
 
 Position Room::getFreePosition()
 {

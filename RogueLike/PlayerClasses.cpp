@@ -1,5 +1,6 @@
 #include "PlayerClasses.h"
 #include "UI.h"
+#include "Abilities.h"
 
 
 
@@ -13,7 +14,7 @@ map<string, PlayerClass> getPlayerClasses()
     return classes;
 }
 
-Player* getPlayer(PlayerClass player_class, const string& player_name)
+Player* getPlayer(PlayerClass player_class, string const& player_name)
 {
     Position spawn = current_room->getFreePosition();
     switch(player_class)
@@ -30,6 +31,7 @@ Stats Warrior::base_stats_(15,15,10,5,5);
 Warrior::Warrior(string name, Position pos) : Player(name, pos, base_stats_, "../images/player_warrior.png")
 {
 	class_ = "Warrior";
+    ability_bar_.push_back(new WildCharge());
 } 
 
 void Warrior::attack(Character* target)

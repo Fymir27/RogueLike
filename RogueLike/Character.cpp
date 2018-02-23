@@ -107,7 +107,7 @@ void Character::levelUp()
     exp_ = Ressource(exp_needed_[level_], 0); //reinstantiate exp with new max
 }
 
-Character::Character(string name, Position pos, Stats stats, string filename) : name_(name), pos_(pos),
+Character::Character(string const& name, Position pos, Stats stats, string const& filename) : name_(name), pos_(pos),
                                                                                 stats_(stats),
                                                                                 inventory_(new Inventory())
 {
@@ -186,6 +186,44 @@ void Character::advanceEffects()
             delete effect;
         }
     }
+}
+
+bool Character::castSpell(size_t nr, Direction dir, bool self)
+{
+    Ability* ab = nullptr;
+
+    try
+    {
+        ab = ability_bar_.at(nr - 1); //Arrays start at 0 goddamnit! (and so do vectors)
+    }
+    catch(std::out_of_range const& e)
+    {
+        UI::displayText("No such Spell!");
+        return false;
+    }
+
+    if(mana_ < ab->getCost())
+    {
+        UI::displayText("Not enough Ressource!");
+        return false;
+    }
+
+    if(ab->getCooldownLeft() > 0)
+    {
+        UI::displayText("That Ability is still on cooldown!");
+        return false;
+    }
+
+    UI::displayText(name_ + " casts " + ab->getName() + "!");
+
+    if(ab->cast(this, dir, self))
+    {
+        mana_ -= ab->getCost();
+        ab->putOnCooldown();
+        return true;
+    }
+
+    return false;
 }
 
 

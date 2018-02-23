@@ -28,7 +28,6 @@ class Room
 		vector < vector<bool> > spawn_locations_;
 
 		Field* getField(int x, int y);
-		Field* getField(Position pos);
 
 		void initSpawnLocations();
 
@@ -40,7 +39,7 @@ class Room
 		size_t getRowCount() { return map_.size(); };
 
 		void addField(Field * field);
-		FIELD_STATUS getFieldStatus(Position pos);
+		Field* getField(Position pos);
 		Position getFreePosition();
 		Position getDoorPosition(Direction dir);
 		vector<vector<bool>> const& getSpawnLocations();

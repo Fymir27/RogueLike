@@ -8,9 +8,6 @@ class Player : public Character
 
 friend class Room;
 
-private:
-	vector<Ability*> ability_bar_;
-
 public:
 
 	Player(string name, Position pos, Stats stats, string filename = "../images/player.png");
@@ -21,8 +18,6 @@ public:
 	virtual bool move(Position new_pos);
 	void rest();
     Character * findTarget(Direction dir);
-    bool castSpell(int nr, Direction dir);
-    bool castSpell(int nr, Character * target);
 	void coolDownAbilities();
 	//void damage(const int amount);
 	vector<Ability*> getAbilities() { return ability_bar_; };

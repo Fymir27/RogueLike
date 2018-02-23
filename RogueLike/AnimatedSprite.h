@@ -5,7 +5,7 @@
 class AnimatedSprite //only sprite sheets with a single row!
 {
     public:
-    AnimatedSprite(const string& filename, unsigned frames, unsigned image_width = TILE_SIZE);
+    AnimatedSprite(string const& filename, unsigned frames, unsigned image_width = TILE_SIZE);
     void setPosition(sf::Vector2f pos);
     void move(sf::Vector2f delta);
     void draw(sf::RenderWindow& target);

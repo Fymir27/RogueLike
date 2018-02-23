@@ -14,7 +14,7 @@ void DijkstraMap2D::updateNeighbours(Position pos, size_t cur)
 		{
 			size_t& tmp = map_.at(new_y).at(new_x);
 
-			if (current_room->getFieldStatus(Position(new_x, new_y)) == SOLID)
+			if (current_room->getField({new_x, new_y})->getFieldStatus() == SOLID)
 			{
 				continue;
 			}

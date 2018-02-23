@@ -60,7 +60,7 @@ Character* Player::findTarget(Direction dir)
     do
     {
         pos = pos + DELTA_POS[dir];
-        status = current_room->getFieldStatus(pos);
+        status = current_room->getField(pos)->getFieldStatus();
 
         //special case for doors
         if(status == TRIGGER)
@@ -77,42 +77,6 @@ Character* Player::findTarget(Direction dir)
 
     } while (status != SOLID && status != OCCUPIED);
     return current_room->getCharacter(pos);
-}
-
-bool Player::castSpell(int nr, Direction dir)
-{
-    return castSpell(nr, findTarget(dir));
-}
-
-bool Player::castSpell(int nr, Character* target)
-{
-    try
-    {
-        Ability *ab = ability_bar_.at(nr - 1);
-
-        size_t cost = ab->getCost();
-        if (mana_ >= cost)
-        {
-            mana_ -= cost;
-            if (target == NULL)
-            {
-                UI::displayText(ab->getName() + " misses!");
-                return true;
-            }
-            UI::displayText(name_ + " casts " + ab->getName() + " on " + target->getName() + ".");
-            ab->cast(target);           
-        } 
-        else
-        {
-            UI::displayText("Not enough Ressource!");
-            return false;
-        }
-        return true;
-    }
-    catch(...)
-    {
-        UI::displayText("No such Spell!");
-    }
 }
 
 void Player::draw(sf::RenderWindow &window)

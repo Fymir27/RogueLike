@@ -1,7 +1,7 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject(const string &name, const string &descr) : name_(name), description_(descr)
+GameObject::GameObject(string const& name, string const& descr) : name_(name), description_(descr)
 {
 
 }

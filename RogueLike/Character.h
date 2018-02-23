@@ -27,6 +27,7 @@ struct Stats
 
 class Item;
 class AbilityEffect;
+class Ability;
 class Character
 {
 protected:
@@ -43,10 +44,13 @@ protected:
 	Stats     stats_;
 	list<AbilityEffect*> effects_;
 
-	sf::Texture texture_;
+    vector<Ability*> ability_bar_;
+
+
+    sf::Texture texture_;
 	sf::Sprite  sprite_;
 
-	Character(const string name, const Position pos, const Stats stats, string filename);
+	Character(string const& name, Position pos, const Stats stats, string const& filename);
 	
 
 public:
@@ -79,6 +83,7 @@ public:
 
 	virtual bool move(Position new_pos); //returns if the move was valid
 	virtual void attack(Character* target) = 0;
+	bool castSpell(size_t nr, Direction dir, bool self = false);
     virtual void advanceEffects();
 
 

@@ -99,7 +99,7 @@ void processInput(const sf::Event& event, sf::RenderWindow& window)
 	{
 		case REST:
             if (prev.type_ == SPELL)
-                valid = current_player->castSpell(prev.nr_, current_player);
+                valid = current_player->castSpell(prev.nr_, UP /*doesnt matter bec self cast*/, true);
             else
             {
                 valid = true;
@@ -174,7 +174,8 @@ int main()
 	cout << endl;
 
     //-- Start-menu --//
-    current_player = UI::startMenu();
+    //TODO: enable again: current_player = UI::startMenu();
+    current_player = new Warrior("Oli", current_room->getFreePosition());
     if(current_player == nullptr)     //player closed the start Menu
         return 0;
 

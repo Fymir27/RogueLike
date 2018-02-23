@@ -16,7 +16,7 @@ enum PlayerClass
 
 
 map<string, PlayerClass> getPlayerClasses();
-Player*                  getPlayer(PlayerClass player_class, const string& player_name);
+Player*                  getPlayer(PlayerClass player_class, string const& player_name);
 
 
 class Warrior : public Player

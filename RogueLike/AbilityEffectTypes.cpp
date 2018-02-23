@@ -1,7 +1,7 @@
 #include "AbilityEffectTypes.h"
 #include "UI.h"
 
-AbilityEffect::AbilityEffect(const string& name, const string& descr, size_t dur) : GameObject(name, descr), dur_(dur)
+AbilityEffect::AbilityEffect(string const& name, string const& descr, size_t dur) : GameObject(name, descr), dur_(dur)
 {
 
 }
@@ -25,7 +25,7 @@ AbilityEffect::AbilityEffect(AbilityEffect* orig, Character* target) :
 
 //-----------------------------------------------------------------------------//
 
-OverTimeEffect::OverTimeEffect(const string& name, const string& descr, bool harmful, int amount, size_t dur) :
+OverTimeEffect::OverTimeEffect(string const& name, string const& descr, bool harmful, int amount, size_t dur) :
         AbilityEffect(name, descr, dur), harmful_(harmful), amount_(amount)
 {
 
@@ -63,7 +63,7 @@ AbilityEffect* OverTimeEffect::createInstance(Character* target)
 
 //-----------------------------------------------------------------------------//
 
-StatEffect::StatEffect(const string& name, const string& descr, Stats delta, size_t dur) :
+StatEffect::StatEffect(string const& name, string const& descr, Stats delta, size_t dur) :
         AbilityEffect(name, descr, dur), delta_(delta)
 {
 
