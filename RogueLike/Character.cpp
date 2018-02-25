@@ -75,15 +75,11 @@ map<size_t, size_t> Character::exp_needed_;
 
 void Character::init_exp_needed()
 {
-    exp_needed_[1] = 10;
-    exp_needed_[2] = 15;
-    exp_needed_[3] = 20;
-    exp_needed_[4] = 30;
-    exp_needed_[5] = 40;
-    exp_needed_[6] = 55;
-    exp_needed_[7] = 70;
-    exp_needed_[8] = 95;
-    exp_needed_[9] = 120;
+    static size_t max_level = 25;
+    for (size_t i = 1; i < max_level; ++i)
+    {
+        exp_needed_[i] = 10 + (i - 1) * 5;
+    }
 }
 
 void Character::grantExp(size_t amount)
@@ -126,7 +122,7 @@ Character::Character(string const& name, Position pos, Stats stats, string const
 
 Character::~Character()
 {
-    for (auto const& effect : effects_)
+    for (auto const& effect : ability_effects_)
     {
            delete effect;
     }
@@ -137,17 +133,23 @@ Character::~Character()
 
 void Character::draw(sf::RenderWindow& window)
 {
-    sprite_.setPosition(sf::Vector2f(pos_.x_ * TILE_SIZE, pos_.y_ * TILE_SIZE));
+    sprite_.setPosition(worldToScreen(pos_));
     window.draw(sprite_);
+    for(auto& effect : effects_)
+    {
+        effect->setPosition(worldToScreen(pos_));
+        effect->update();
+        window.draw(*effect);
+    }
 }
 
-void Character::heal(const int amount)
+void Character::heal(unsigned amount)
 {
     hp_ += amount;
     cout << name_ << " healed for " << amount << endl;
 }
 
-void Character::damage(const int amount)
+void Character::damage(unsigned amount)
 {
     hp_ -= amount;
     cout << name_ << " damaged for " << amount << endl;
@@ -170,19 +172,19 @@ bool Character::move(Position new_pos)
     return valid;
 }
 
-void Character::applyEffect(AbilityEffect* effect)
+void Character::applyAbilityEffect(AbilityEffect* effect)
 {
-    effects_.push_back(effect);
+    ability_effects_.push_back(effect);
 }
 
 void Character::advanceEffects()
 {
-    auto effects_tmp = effects_; //copy so deleting is possible
+    auto effects_tmp = ability_effects_; //copy so deleting is possible
     for (auto effect : effects_tmp)
     {
         if (effect->tick() == 0) //check if effect has run out
         {
-            effects_.remove(effect);
+            ability_effects_.remove(effect);
             delete effect;
         }
     }
@@ -225,5 +227,16 @@ bool Character::castSpell(size_t nr, Direction dir, bool self)
 
     return false;
 }
+
+void Character::addVisualEffect(shared_ptr<Effect> e)
+{
+    effects_.push_back(e);
+}
+
+void Character::removeVisualEffect(shared_ptr<Effect> e)
+{
+    effects_.remove(e);
+}
+
 
 

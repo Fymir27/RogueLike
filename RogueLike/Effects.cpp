@@ -23,14 +23,14 @@ void Effect::drawEffects(sf::RenderWindow &window)
         if(e.use_count() == 2) //ability effect ran out
             effects_persistent_.remove(e);
 
-        e->draw(window);
+        window.draw(*e);
     }
 
     //other effects:
     tmp = effects_;
     for(const shared_ptr<Effect>& e : tmp)
     {
-        e->draw(window);
+        window.draw(*e);
         if(!e->active_)
         {
             effects_.remove(e);
@@ -38,6 +38,7 @@ void Effect::drawEffects(sf::RenderWindow &window)
     }
 }
 
+/*
 void Effect::removeEffect(shared_ptr<Effect>e)
 {
     effects_persistent_.remove(e);
@@ -171,4 +172,92 @@ Effect* ParticleEffect::createInstance()
 ParticleEffect::ParticleEffect(ParticleEffect* orig) : col_(orig->col_), count_(orig->count_)
 {
     generateParticles(col_, count_);
+}
+
+//--------------------------------------------------------
+
+ */
+BigParticleEffect::BigParticleEffect(sf::Color col, size_t count, unsigned max_size, unsigned min_size) :
+        col_(col), count_(count), min_size_(min_size), max_size_(max_size)
+{
+
+}
+
+Effect* BigParticleEffect::createInstance()
+{
+    return new BigParticleEffect(this);
+}
+
+void BigParticleEffect::draw(sf::RenderTarget& window, sf::RenderStates states) const
+{
+    //cout << "BPE draw" << endl;
+    states.transform = states.transform.translate(pos_);
+    for(auto& particle : particles_)
+    {
+        window.draw(particle.shape_, states);
+    }
+}
+
+BigParticleEffect::BigParticleEffect(BigParticleEffect* orig) :
+        col_(orig->col_), count_(orig->count_), min_size_(orig->min_size_), max_size_(orig->max_size_)
+{
+    generateParticles(col_, count_);
+}
+
+void BigParticleEffect::generateParticles(sf::Color col, size_t count)
+{
+    unsigned size_diff = max_size_ - min_size_;
+    unsigned max_overlap = 3; //overlap to other tiles
+    static sf::Color transparency_modifier(0,0,0,100); //gets subracted from color
+    for (int i = 0; i < count; ++i)
+    {
+        float size = min_size_ + (rand() % (size_diff + 1));
+        unsigned margin = max_size_ - max_overlap;
+        unsigned range = TILE_SIZE - 2 * margin;
+        sf::RectangleShape rect({size, size});
+        rect.setPosition(sf::Vector2f(margin + rand() % (range + 1), margin + rand() % (range + 1)));
+        rect.setFillColor(col  - transparency_modifier);
+        rect.setOutlineColor(sf::Color::Black - transparency_modifier);
+        rect.setOutlineThickness(0);
+        particles_.push_back({rect});
+    }
+}
+
+void BigParticleEffect::randomize_Particles()
+{
+
+}
+
+void BigParticleEffect::update()
+{
+    static float growth = 0.3f;
+    for(auto& particle : particles_)
+    {
+        if(particle.growing_)
+        {
+            if(particle.shape_.getSize().x < max_size_)
+            {
+                float new_size = particle.shape_.getSize().x + growth;
+                particle.shape_.setSize({new_size, new_size});
+                particle.shape_.setOrigin(new_size/2, new_size/2);
+            }
+            else
+            {
+                particle.growing_ = false;
+            }
+        }
+        else
+        {
+            if(particle.shape_.getSize().x > min_size_)
+            {
+                float new_size = particle.shape_.getSize().x - growth;
+                particle.shape_.setSize({new_size, new_size});
+                particle.shape_.setOrigin(new_size/2, new_size/2);
+            }
+            else
+            {
+                particle.growing_ = true;
+            }
+        }
+    }
 }

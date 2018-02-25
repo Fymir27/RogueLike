@@ -13,6 +13,11 @@ Player::Player(string name, Position pos, Stats stats, string filename) : Charac
     ability_bar_[1] = new Regeneration();
     ability_bar_[2] = new SyphonSoul();
     cout << "Initiated Player abilites" << endl;
+
+    //auto bpe = new BigParticleEffect(sf::Color::Red, 20);
+    //static auto e = shared_ptr<Effect>(bpe->createInstance());
+    //e->setPosition(worldToScreen(pos_));
+    //Effect::addEffect(e, true);
 }
 
 Inventory* Player::getInventory()

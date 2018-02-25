@@ -8,7 +8,7 @@ AbilityEffect::AbilityEffect(string const& name, string const& descr, size_t dur
 
 AbilityEffect::~AbilityEffect()
 {
-
+    target_->removeVisualEffect(effect_);
 }
 
 AbilityEffect::AbilityEffect(AbilityEffect* orig, Character* target) :
@@ -16,10 +16,9 @@ AbilityEffect::AbilityEffect(AbilityEffect* orig, Character* target) :
 {
     cout << "AbilityEffect::cctor" << endl;
     cout << "Applying effect" << endl;
-    target_->applyEffect(this);
+    target_->applyAbilityEffect(this);
     cout << "Adding visual effect" << endl;
-    effect_->setTarget(target);
-    Effect::addEffect(effect_, true);
+    target_->addVisualEffect(effect_);
 }
 
 

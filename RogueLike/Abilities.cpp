@@ -38,12 +38,17 @@ bool Ability::cast(vector<Position>& path)
 
 bool Ability::cast(Character *target)
 {
-    cout << "Ability::cast base" << endl;
 
-    if(damage_ > 0)
+    if (damage_ > 0)
+    {
+        UI::displayText(target->getName() + " gets hit for " + std::to_string(damage_) + " damage.");
         target->damage(damage_);
+    }
     if(healing_ > 0)
+    {
+        UI::displayText(target->getName() + " gets healed for " + std::to_string(healing_) + " damage.");
         target->heal(healing_);
+    }
 
     for(auto e : ab_effects_)
     {
@@ -109,7 +114,7 @@ Fireball::Fireball() : Ability("Fireball", "Deals additional damage over time.",
 {
     ab_effects_.push_back(new BurnEffect(10, 5));
     AnimatedSprite* anim = new AnimatedSprite("../images/ab_fireball_animated.png", 40);
-    effect_ = shared_ptr<Effect>(new MovingSprite(anim, 3));
+    //effect_ = shared_ptr<Effect>(new MovingSprite(anim, 3));
 }
 
 bool Fireball::cast(Character* target)
@@ -117,7 +122,7 @@ bool Fireball::cast(Character* target)
     Position from = current_player->getPosition();
     Position to = target->getPosition();
 
-    dynamic_cast<MovingSprite*>(effect_.get())->aim(worldToScreen(from), worldToScreen(to));
+    //dynamic_cast<MovingSprite*>(effect_.get())->aim(worldToScreen(from), worldToScreen(to));
 
     return Ability::cast(target);
 }
@@ -157,9 +162,16 @@ WildCharge::WildCharge() : Ability("Wild Charge", "Charges at the enemy", 70, 0,
 bool WildCharge::cast(vector<Position>& path)
 {
     //TODO: add effects
+
+    //ParticleEffect pe(sf::Color::Red, 20);
+    //static vector<shared_ptr<Effect>> effects;
+    //effects.clear();
     Field* cur = nullptr;
     for(size_t i = 0; i < (path.size() - 1); i++)
     {
+        //effects.push_back(shared_ptr<Effect>(pe.createInstance()));
+        //effects.back()->setPosition(worldToScreen(path[i]));
+        //Effect::addEffect(effects.back(), true);
         if(!caster_->move(path[i]))
         {
             break;

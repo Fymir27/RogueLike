@@ -174,8 +174,8 @@ int main()
 	cout << endl;
 
     //-- Start-menu --//
-    //TODO: enable again: current_player = UI::startMenu();
-    current_player = new Warrior("Oli", current_room->getFreePosition());
+    current_player = UI::startMenu();
+    //current_player = new Mage("Oli", current_room->getFreePosition());
     if(current_player == nullptr)     //player closed the start Menu
         return 0;
 

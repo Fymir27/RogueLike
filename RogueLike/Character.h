@@ -25,6 +25,7 @@ struct Stats
     Stats operator- (const Stats& right);
 };
 
+class Effect;
 class Item;
 class AbilityEffect;
 class Ability;
@@ -42,15 +43,17 @@ protected:
 	Ressource mana_;
 	Ressource exp_;
 	Stats     stats_;
-	list<AbilityEffect*> effects_;
+
+	list<AbilityEffect*> ability_effects_;
 
     vector<Ability*> ability_bar_;
 
 
     sf::Texture texture_;
 	sf::Sprite  sprite_;
+    list<shared_ptr<Effect>> effects_;
 
-	Character(string const& name, Position pos, const Stats stats, string const& filename);
+	Character(string const& name, Position pos, Stats stats, string const& filename);
 	
 
 public:
@@ -73,10 +76,11 @@ public:
     //--- Setters ---//
     void setStats(const Stats& stats) { stats_ = stats; };
 
-	virtual void heal(const int amount);
-	virtual void damage(const int amount);
-	void applyEffect(AbilityEffect* effect);
-	void removeEffect(AbilityEffect *effect);
+	virtual void heal(unsigned amount);
+	virtual void damage(unsigned amount);
+	void applyAbilityEffect(AbilityEffect* effect);
+	void addVisualEffect(shared_ptr<Effect> e);
+    void removeVisualEffect(shared_ptr<Effect> e);
 	bool dead() { return hp_.depleted(); }
 	
 	bool addItem(Item* item);

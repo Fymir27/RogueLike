@@ -7,25 +7,26 @@
 
 class Room;
 
-class Effect
+class Effect : public sf::Drawable
 {
 public:
     static void drawEffects(sf::RenderWindow& window);
     static void addEffect(shared_ptr<Effect> e, bool persistent = false);
-    static void removeEffect(shared_ptr<Effect> e);
     static size_t getEffectCount() { return effects_.size(); } //doesn't count persistent effects
     virtual Effect* createInstance() = 0;
-    virtual void setPosition(sf::Vector2f pos) {};
-    virtual void setTarget(Character* character) {};
+    void setPosition(sf::Vector2f pos) { pos_ = pos; };
+    virtual void update() = 0;
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 
 protected:
     static list<shared_ptr<Effect>> effects_; //game pauses while playing these
     static list<shared_ptr<Effect>> effects_persistent_; //removed manually
 
     bool active_ = true;
-    virtual void draw(sf::RenderWindow& window) = 0;
+    sf::Vector2f pos_;
 };
 
+/*
 class MovingSprite : public Effect
 {
 public:
@@ -57,7 +58,7 @@ private:
     sf::Color col_;
     size_t count_;
     sf::Vector2f pos_;
-    Character* target_;
+    Character* target_ = nullptr;
 
     sf::VertexArray particles_;
     Room* room_ = nullptr; //TODO: Maybe let every room keep track of its effects?
@@ -67,4 +68,31 @@ private:
     void randomizeParticles();
 };
 
+ */
+
+class BigParticleEffect : public Effect
+{
+public:
+    struct Particle
+    {
+        sf::RectangleShape shape_;
+        bool growing_ = true;
+    };
+    BigParticleEffect(sf::Color col_, size_t count, unsigned max_size = 7, unsigned min_size = 2);
+    virtual void setPosition(sf::Vector2f pos) { pos_ = pos; };
+    virtual Effect* createInstance();
+    void update();
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+private:
+    sf::Color col_;
+    size_t count_;
+    unsigned min_size_;
+    unsigned max_size_;
+    vector<Particle> particles_;
+
+    explicit BigParticleEffect(BigParticleEffect* orig);
+    void generateParticles(sf::Color col, size_t count);
+    void randomize_Particles();
+};
 
