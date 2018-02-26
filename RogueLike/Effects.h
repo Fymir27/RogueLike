@@ -10,42 +10,36 @@ class Room;
 class Effect : public sf::Drawable
 {
 public:
-    static void drawEffects(sf::RenderWindow& window);
-    static void addEffect(shared_ptr<Effect> e, bool persistent = false);
-    static size_t getEffectCount() { return effects_.size(); } //doesn't count persistent effects
     virtual Effect* createInstance() = 0;
     void setPosition(sf::Vector2f pos) { pos_ = pos; };
+    bool isActive() { return active_; }
     virtual void update() = 0;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 
 protected:
-    static list<shared_ptr<Effect>> effects_; //game pauses while playing these
-    static list<shared_ptr<Effect>> effects_persistent_; //removed manually
-
     bool active_ = true;
     sf::Vector2f pos_;
 };
 
-/*
+
 class MovingSprite : public Effect
 {
 public:
-    explicit MovingSprite(string filename, float speed = 1); //static sprite
     explicit MovingSprite(AnimatedSprite* anim, float speed = 1);
     void aim(sf::Vector2f from, sf::Vector2f to);
-    virtual Effect* createInstance() { cout << "Not implemented yet!" << endl; return nullptr; }
+    virtual Effect* createInstance();
+    virtual void update();
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    ~MovingSprite();
 private:
-    void draw(sf::RenderWindow& window);
+    explicit MovingSprite(MovingSprite* orig);
 
-    sf::Texture tex_;
-    sf::Sprite sprite_;
     AnimatedSprite* anim_sprite_;
-    bool animated_ = false;
     float speed_;
     sf::Vector2f step_;
     size_t dur_;
 };
-
+/*
 class ParticleEffect : public Effect
 {
 public:
@@ -61,13 +55,12 @@ private:
     Character* target_ = nullptr;
 
     sf::VertexArray particles_;
-    Room* room_ = nullptr; //TODO: Maybe let every room keep track of its effects?
+    Room* room_ = nullptr;
 
     explicit ParticleEffect(ParticleEffect* orig);
     void generateParticles(sf::Color, size_t count);
     void randomizeParticles();
 };
-
  */
 
 class BigParticleEffect : public Effect

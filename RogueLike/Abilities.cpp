@@ -59,7 +59,8 @@ bool Ability::cast(Character *target)
     if(effect_ != nullptr)
     {
         cout << "Adding Visual Effect" << endl;
-        Effect::addEffect(effect_);
+        auto e = shared_ptr<Effect>(effect_->createInstance());
+        current_room->addVisualEffect(e);
     }
 
     return true;
@@ -114,7 +115,7 @@ Fireball::Fireball() : Ability("Fireball", "Deals additional damage over time.",
 {
     ab_effects_.push_back(new BurnEffect(10, 5));
     AnimatedSprite* anim = new AnimatedSprite("../images/ab_fireball_animated.png", 40);
-    //effect_ = shared_ptr<Effect>(new MovingSprite(anim, 3));
+    effect_ = shared_ptr<Effect>(new MovingSprite(anim, 5));
 }
 
 bool Fireball::cast(Character* target)
@@ -122,7 +123,7 @@ bool Fireball::cast(Character* target)
     Position from = current_player->getPosition();
     Position to = target->getPosition();
 
-    //dynamic_cast<MovingSprite*>(effect_.get())->aim(worldToScreen(from), worldToScreen(to));
+    dynamic_cast<MovingSprite*>(effect_.get())->aim(worldToScreen(from), worldToScreen(to));
 
     return Ability::cast(target);
 }

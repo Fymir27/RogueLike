@@ -144,11 +144,6 @@ void processInput(const sf::Event& event, sf::RenderWindow& window)
 	}
 }
 
-bool turnReady()
-{
-    return (Effect::getEffectCount() == 0);
-}
-
 int main()
 {
 	cout << endl;
@@ -174,8 +169,8 @@ int main()
 	cout << endl;
 
     //-- Start-menu --//
-    current_player = UI::startMenu();
-    //current_player = new Mage("Oli", current_room->getFreePosition());
+    //current_player = UI::startMenu();
+    current_player = new Mage("Oli", current_room->getFreePosition());
     if(current_player == nullptr)     //player closed the start Menu
         return 0;
 
@@ -210,7 +205,7 @@ MAIN_LOOP:	//ignore this label (there is definitely no goto statement further do
 
 		//-- Game Logic --//
 
-        if(Effect::getEffectCount() == 0) //advances the phase when animations have finished playing
+        if(current_room->getEffectCount() == 0) //advances the phase when animations have finished playing
         {
             switch(turn)
             {
@@ -242,7 +237,6 @@ MAIN_LOOP:	//ignore this label (there is definitely no goto statement further do
 		
 		current_room->draw(window);   //draws Fields and enemies
 		current_player->draw(window);
-		Effect::drawEffects(window);
 		ui->draw(window);
 		window.display();
 

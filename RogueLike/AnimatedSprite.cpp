@@ -16,7 +16,7 @@ AnimatedSprite::AnimatedSprite(string const& filename, unsigned frames, unsigned
 }
 
 
-void AnimatedSprite::draw(sf::RenderWindow& target)
+void AnimatedSprite::draw(sf::RenderTarget& target)
 {
     static unsigned frames_elapsed = 0;
     static unsigned switch_time = frames_ / image_count_;

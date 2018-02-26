@@ -2,63 +2,64 @@
 #include "Room.h"
 #include "Player.h"
 
-list<shared_ptr<Effect>> Effect::effects_;
-list<shared_ptr<Effect>> Effect::effects_persistent_;
 
-void Effect::addEffect(shared_ptr<Effect>e, bool persistent)
+MovingSprite::MovingSprite(AnimatedSprite* anim, float speed) :
+        anim_sprite_(anim), speed_(speed), step_(0,0), dur_(1)
 {
-    if(persistent)
-        effects_persistent_.push_back(e);
-    else
-        effects_.push_back(e);
+    //cout << "MSprite ctor: " << this << endl;
 }
 
-void Effect::drawEffects(sf::RenderWindow &window)
+MovingSprite::MovingSprite(MovingSprite* orig) :
+        anim_sprite_(orig->anim_sprite_), speed_(orig->speed_), step_(orig->step_), dur_(orig->dur_)
 {
-    //persistent effects:
-    list<shared_ptr<Effect>> tmp = effects_persistent_;
-    for(const shared_ptr<Effect>& e : tmp)
-    {
-        //cout << "Effect::drawEffects: use count: " << e.use_count() << endl;
-        if(e.use_count() == 2) //ability effect ran out
-            effects_persistent_.remove(e);
+    //cout << "MSprite cctor: " << orig << "->" << this << endl;
+}
 
-        window.draw(*e);
+void MovingSprite::aim(sf::Vector2f from, sf::Vector2f to)
+{
+    //cout << "Moving Effect aim from " << from.x << "|" << from.y << " to " << to.x << "|" << to.y << endl;
+    anim_sprite_->setPosition(from);
+
+    sf::Vector2f path = (to - from);
+    float path_length = getVectorLength(path);
+
+    if(path_length == 0)
+    {
+        cout << "MovingSprite::aim -> path_length is 0!" << endl;
+        return;
     }
 
-    //other effects:
-    tmp = effects_;
-    for(const shared_ptr<Effect>& e : tmp)
+    sf::Vector2f dir = path / path_length;
+    step_ = dir * speed_;
+    dur_ = (size_t)(path_length / speed_);
+    //cout << "Step: " << step_.x << "|" << step_.y << endl;
+}
+
+Effect* MovingSprite::createInstance()
+{
+    return new MovingSprite(this);
+}
+
+void MovingSprite::update()
+{
+    if (--dur_ <= 0)
     {
-        window.draw(*e);
-        if(!e->active_)
-        {
-            effects_.remove(e);
-        }
+        active_ = false;
     }
+    anim_sprite_->move(step_);
 }
 
-/*
-void Effect::removeEffect(shared_ptr<Effect>e)
+void MovingSprite::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    effects_persistent_.remove(e);
+    anim_sprite_->draw(target);
 }
 
-
-//----------------------------------------------
-
-MovingSprite::MovingSprite(string filename, float speed) : speed_(speed)
+MovingSprite::~MovingSprite()
 {
-    if(!tex_.loadFromFile(filename))
-        cout << "Couln't load " << filename << endl;
-    sprite_.setTexture(tex_);
+    cout << "Moving Sprite dtor: " << this << endl;
 }
 
-MovingSprite::MovingSprite(AnimatedSprite* anim, float speed) : speed_(speed)
-{
-    anim_sprite_ = anim;
-    animated_ = true;
-}
+//------------------------------------------------------------------------------------
 
 void MovingSprite::draw(sf::RenderWindow &window)
 {
@@ -108,6 +109,7 @@ void MovingSprite::aim(sf::Vector2f from, sf::Vector2f to)
 
 //----------------------------------------------
 
+/*
 ParticleEffect::ParticleEffect(sf::Color color, size_t count) : col_(color), count_(count)
 {
     //this constructor just creates a template!
@@ -261,3 +263,4 @@ void BigParticleEffect::update()
         }
     }
 }
+

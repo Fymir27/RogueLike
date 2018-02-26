@@ -6,6 +6,7 @@
 #include "EnemyClasses.h"
 #include "DijkstraMap.h"
 #include "Dungeon.h"
+#include "Effects.h"
 
 #include <fstream>
 #include <sstream>
@@ -407,6 +408,21 @@ void Room::draw(sf::RenderWindow& window)
     {
         enemy->draw(window);
     }
+
+    auto tmp_effects = effects_;
+    for(auto& e : tmp_effects)
+    {
+        e->update();
+
+        if(e->isActive())
+        {
+            window.draw(*e);
+        }
+        else
+        {
+            effects_.remove(e);
+        }
+    }
 }
 
 
@@ -498,4 +514,14 @@ Enemy* Room::spawnEnemy(Position pos, EnemyType type)
             break;
     }
     return e;
+}
+
+void Room::addVisualEffect(shared_ptr<Effect>& e)
+{
+    effects_.push_back(shared_ptr<Effect>(e));
+}
+
+void Room::removeVisualEffect(shared_ptr<Effect>& e)
+{
+    effects_.remove(shared_ptr<Effect>(e));
 }

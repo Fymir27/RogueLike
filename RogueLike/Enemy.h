@@ -44,5 +44,5 @@ public:
     virtual bool step(); //returns false when the enemy is dead
 
     //void attack(Character* target);
-    void damage(const int amount);
+    void damage(unsigned int amount);
 };

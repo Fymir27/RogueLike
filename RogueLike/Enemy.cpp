@@ -67,7 +67,7 @@ void Enemy::moveRandomly()
 	} while (!move(Position(pos_.x_ + DELTA_X[r], pos_.y_ + DELTA_Y[r])));
 }
 
-void Enemy::damage(const int amount)
+void Enemy::damage(unsigned int amount)
 {
     Character::damage(amount);
     if(move_type_ == WAIT)
