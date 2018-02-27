@@ -61,52 +61,6 @@ MovingSprite::~MovingSprite()
 
 //------------------------------------------------------------------------------------
 
-void MovingSprite::draw(sf::RenderWindow &window)
-{
-    static size_t dur_left = dur_;
-
-    if(animated_)
-    {
-        anim_sprite_->draw(window);
-        anim_sprite_->move(step_);
-    }
-    else
-    {
-        window.draw(sprite_);
-        sprite_.move(step_);
-    }
-    if (--dur_ <= 0)
-    {
-        active_ = false;
-    }
-}
-
-
-
-void MovingSprite::aim(sf::Vector2f from, sf::Vector2f to)
-{
-    //cout << "Moving Effect aim from" << from.x << "|" << from.y << " to " << to.x << "|" << to.y << endl;
-    if(animated_)
-        anim_sprite_->setPosition(from);
-    else
-        sprite_.setPosition(from);
-
-    sf::Vector2f path = (to - from);
-    float path_length = getVectorLength(path);
-
-    if(path_length == 0)
-    {
-        dur_ = 1;
-        step_ = sf::Vector2f(0,0);
-        return;
-    }
-
-    sf::Vector2f dir = path / path_length;
-    step_ = dir * speed_;
-    dur_ = (size_t)(path_length / speed_);
-    active_ = true;
-}
-
 //----------------------------------------------
 
 /*

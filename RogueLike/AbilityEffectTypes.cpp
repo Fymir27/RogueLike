@@ -14,10 +14,8 @@ AbilityEffect::~AbilityEffect()
 AbilityEffect::AbilityEffect(AbilityEffect* orig, Character* target) :
         GameObject(orig), dur_(orig->dur_), target_(target), effect_(orig->effect_->createInstance())
 {
-    cout << "AbilityEffect::cctor" << endl;
-    cout << "Applying effect" << endl;
+    //cout << "AbilityEffect::cctor" << endl;
     target_->applyAbilityEffect(this);
-    cout << "Adding visual effect" << endl;
     target_->addVisualEffect(effect_);
 }
 
@@ -48,15 +46,13 @@ size_t OverTimeEffect::tick()
 OverTimeEffect::OverTimeEffect(OverTimeEffect* orig, Character* target) :
         AbilityEffect(orig, target), harmful_(orig->harmful_), amount_(orig->amount_)
 {
-    cout << "OTEffect::cctor" << endl;
+    //cout << "OTEffect::cctor" << endl;
 }
 
 AbilityEffect* OverTimeEffect::createInstance(Character* target)
 {
-    cout << "OTEffect::createInstance, " << name_ << endl;
-    AbilityEffect* e = new OverTimeEffect(this, target);
-    cout << "OTEffect::createInstance success!" << endl;
-    return e; //new OverTimeEffect(this, target);
+    //cout << "OTEffect::createInstance, " << name_ << endl;
+    return new OverTimeEffect(this, target);
 }
 
 
