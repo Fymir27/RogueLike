@@ -6,8 +6,9 @@
 #include "Effects.h"
 #include "AbilityEffects.h"
 
-Ability::Ability(string const& name, string const& descr, unsigned damage, unsigned healing, size_t cd, size_t cost) :
-GameObject(name, descr), damage_(damage), healing_(healing), cooldown_(cd), cost_(cost) 
+Ability::Ability(string const& name, string const& descr, unsigned damage, unsigned healing,
+                 size_t cd, size_t cost, size_t range) :
+        GameObject(name, descr), damage_(damage), healing_(healing), cooldown_(cd), cost_(cost), range_(range)
 {
 
 }
@@ -27,7 +28,7 @@ bool Ability::cast(Character* caster, Direction dir, bool self)
 
 bool Ability::cast(vector<Position>& path)
 {
-    Character* target = getTargetInRange(path, path.size());
+    Character* target = getTargetInRange(path);
     if(target == nullptr)
     {
         UI::displayText(name_ + " misses...");
@@ -106,26 +107,27 @@ vector<Position> Ability::getAbilityPath(Character* caster, Direction dir)
     return path;
 }
 
-vector<Character*> Ability::getTargetsInRange(vector<Position>& path, size_t range, size_t max_targets)
+vector<Character*> Ability::getTargetsInRange(vector<Position>& path, size_t max_targets)
 {
     vector<Character*> targets;
     Character* tmp = nullptr;
 
-    if(range > path.size())
-        range = path.size();
-
-    for(size_t i = 0; i < range; i++)
+    size_t range_counter = 0;
+    for(auto const& pos : path)
     {
-        tmp = current_room->getCharacter(path.at(i));
+        range_counter++;
+        tmp = current_room->getCharacter(pos);
         if(tmp != nullptr)
             targets.push_back(tmp);
+        if(range_counter >= range_)
+            break;
     }
     return targets;
 }
 
-Character* Ability::getTargetInRange(vector<Position>& path, size_t range)
+Character* Ability::getTargetInRange(vector<Position>& path)
 {
-    auto targets = getTargetsInRange(path, range, 1);
+    auto targets = getTargetsInRange(path, 1);
     if(targets.empty())
         return nullptr;
     return targets.front();
@@ -133,7 +135,7 @@ Character* Ability::getTargetInRange(vector<Position>& path, size_t range)
 
 //-----------------------------------------------------------------------------------------------------//
 
-Fireball::Fireball() : Ability("Fireball", "Deals additional damage over time.", 50, 0, 0, 50) 
+Fireball::Fireball() : Ability("Fireball", "Deals additional damage over time.", 50, 0, 0, 50, 50)
 {
     ab_effects_.push_back(new BurnEffect(10, 5));
     AnimatedSprite* anim = new AnimatedSprite("../images/ab_fireball_animated.png", 40);
@@ -152,14 +154,14 @@ bool Fireball::cast(Character* target)
 
 //-----------------------------------------------------------------------------------------------------//
 
-Regeneration::Regeneration() : Ability("Regeneration", "Heals over time", 0, 0, 3, 30)
+Regeneration::Regeneration() : Ability("Regeneration", "Heals over time", 0, 0, 3, 30, 50)
 {
     ab_effects_.push_back(new RegenerationEffect(10, 5));
 }
 
 //-----------------------------------------------------------------------------------------------------//
 
-SyphonSoul::SyphonSoul() : Ability("Syphon Soul", "Drains power from the enemy", 0, 0, 5, 70)
+SyphonSoul::SyphonSoul() : Ability("Syphon Soul", "Drains power from the enemy", 0, 0, 5, 70, 50)
 {
     ab_effects_.push_back(new AllStatsDown(5,5));
     buff_ = new AllStatsUp(5,5);
@@ -177,7 +179,7 @@ bool SyphonSoul::cast(Character* target)
 
 //-----------------------------------------------------------------------------------------------------//
 
-WildCharge::WildCharge() : Ability("Wild Charge", "Charges at the enemy", 50, 0, 10, 25)
+WildCharge::WildCharge() : Ability("Wild Charge", "Charges at the enemy", 50, 0, 10, 25, 50)
 {
 
 }
@@ -204,35 +206,23 @@ bool WildCharge::cast(vector<Position>& path)
 //-----------------------------------------------------------------------------------------------------//
 
 ShatteringBlow::ShatteringBlow() :
-        Ability("Shattering Blow", "Swings your weapon with all your might", 100, 0, 10, 25)
+        Ability("Shattering Blow", "Swings your weapon with all your might", 100, 0, 10, 25, 1)
 {
 
-}
-
-bool ShatteringBlow::cast(vector<Position>& path)
-{
-    auto target = getTargetInRange(path, 1);
-    if(target == nullptr)
-    {
-        UI::displayText(name_ + " misses...");
-        return true;
-    }
-    return Ability::cast(target);
 }
 
 //-----------------------------------------------------------------------------------------------------//
 
 Shockwave::Shockwave() :
         Ability("Shockwave", "Slams your weapon into the ground to cause a shockwave that "
-                "reaches three fields in front of you", 70, 0, 20, 50)
+                "reaches three fields in front of you", 70, 0, 20, 50, 3)
 {
 
 }
 
 bool Shockwave::cast(vector<Position>& path)
 {
-    size_t range = 3;
-    auto targets = getTargetsInRange(path, range, range);
+    auto targets = getTargetsInRange(path, range_);
 
     if(targets.empty())
         UI::displayText(name_ + " misses...");
@@ -241,6 +231,55 @@ bool Shockwave::cast(vector<Position>& path)
         Ability::cast(target);
 
     return true;
+}
+
+//-----------------------------------------------------------------------------------------------------//
+
+PoisonStab::PoisonStab() : Ability("Poison Stab", "Deals damage and inflicts Poision,", 50, 0, 5, 30, 1)
+{
+    ab_effects_.push_back(new PoisonEffect(5, 10));
+}
+
+//-----------------------------------------------------------------------------------------------------//
+
+ShadowStep::ShadowStep() : Ability("Shadow Step", "Teleports you behind your enemy and stabs them", 80, 0, 10, 40, 50)
+{
+
+}
+
+bool ShadowStep::cast(vector<Position>& path)
+{
+    //keep infinite range?
+    Character* target = nullptr;
+    Position teleport_location;
+    FIELD_STATUS status;
+    for(size_t i = 0; i < path.size(); i++)
+    {
+        target = current_room->getCharacter(path.at(i));
+        if(target == nullptr)
+            continue;
+        teleport_location = path.at(i+1);
+        status = current_room->getField(teleport_location)->getFieldStatus();
+        if(status == FREE || status == TRIGGER)
+        {
+            caster_->move(teleport_location);
+            return Ability::cast(target);
+        }
+        else
+        {
+            UI::displayText("There's not enough space!");
+            return false;
+        }
+    }
+    UI::displayText(name_ + " misses...");
+    return true;
+}
+
+//-----------------------------------------------------------------------------------------------------//
+
+DaggerThrow::DaggerThrow() : Ability("Dagger Throw", "Throws your dagger at the enemy", 50, 0, 0, 20, 50)
+{
+
 }
 
 //-----------------------------------------------------------------------------------------------------//

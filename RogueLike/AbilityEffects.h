@@ -13,6 +13,11 @@ public:
     BurnEffect(int damage, size_t dur);
 };
 
+class PoisonEffect : public OverTimeEffect
+{
+public:
+    PoisonEffect(int damage, size_t dur);
+};
 
 //#- Hots -#//
 

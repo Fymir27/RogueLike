@@ -13,7 +13,7 @@ class Character;
 class Ability : public GameObject
 {
 public:
-    Ability(string const& name, string const& descr, unsigned damage, unsigned healing, size_t cd, size_t cost);
+    Ability(string const& name, string const& descr, unsigned damage, unsigned healing, size_t cd, size_t cost, size_t range);
 
     //called in exactly this order
     virtual bool cast(Character* caster, Direction dir, bool self);
@@ -34,6 +34,7 @@ protected:
     size_t cooldown_ = 0;
     size_t cooldown_left_ = 0;
     size_t cost_ = 0;
+    size_t range_ = 0;
 
     Character* caster_ = nullptr;
 
@@ -41,8 +42,8 @@ protected:
     shared_ptr<Effect> effect_; //visual effect
 
     vector<Position> getAbilityPath(Character* caster, Direction dir);
-    vector<Character*> getTargetsInRange(vector<Position>& path, size_t range, size_t max_targets);
-    Character* getTargetInRange(vector<Position>& path, size_t range);
+    vector<Character*> getTargetsInRange(vector<Position>& path, size_t max_targets);
+    Character* getTargetInRange(vector<Position>& path);
 };
 
 //------- Mage ---------------------------------//
@@ -86,8 +87,6 @@ class ShatteringBlow : public Ability
 {
 public:
     ShatteringBlow();
-
-    virtual bool cast(vector<Position>& path);
 };
 
 class Shockwave : public Ability
@@ -99,3 +98,24 @@ public:
 };
 
 //------- Thief ---------------------------------//
+
+class PoisonStab : public Ability
+{
+public:
+    PoisonStab();
+};
+
+class ShadowStep : public Ability
+{
+public:
+    ShadowStep();
+
+    virtual bool cast(vector<Position>& path);
+};
+
+class DaggerThrow : public Ability
+{
+public:
+    DaggerThrow();
+};
+

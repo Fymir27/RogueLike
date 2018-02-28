@@ -69,6 +69,10 @@ Stats Thief::base_stats_(10,10,15,10,5);
 Thief::Thief(string name, Position pos) : Player(name, pos, base_stats_, "../images/player_thief.png")
 {
 	class_ = "Thief";
+
+	ability_bar_.push_back(new PoisonStab());
+	ability_bar_.push_back(new ShadowStep());
+	ability_bar_.push_back(new DaggerThrow());
 } 
 
 void Thief::attack(Character* target)
