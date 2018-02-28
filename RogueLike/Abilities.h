@@ -41,7 +41,11 @@ protected:
     shared_ptr<Effect> effect_; //visual effect
 
     vector<Position> getAbilityPath(Character* caster, Direction dir);
+    vector<Character*> getTargetsInRange(vector<Position>& path, size_t range, size_t max_targets);
+    Character* getTargetInRange(vector<Position>& path, size_t range);
 };
+
+//------- Mage ---------------------------------//
 
 class Fireball : public Ability
 {
@@ -68,12 +72,30 @@ private:
     AbilityEffect* buff_;
 };
 
+//------- Warrior ---------------------------------//
+
 class WildCharge : public Ability
 {
 public:
     WildCharge();
 
     virtual bool cast(vector<Position>& path);
-
-private:
 };
+
+class ShatteringBlow : public Ability
+{
+public:
+    ShatteringBlow();
+
+    virtual bool cast(vector<Position>& path);
+};
+
+class Shockwave : public Ability
+{
+public:
+    Shockwave();
+
+    virtual bool cast(vector<Position>& path);
+};
+
+//------- Thief ---------------------------------//

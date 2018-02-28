@@ -27,7 +27,7 @@ bool Ability::cast(Character* caster, Direction dir, bool self)
 
 bool Ability::cast(vector<Position>& path)
 {
-    Character* target = current_room->getField(path.back())->getCharacter();
+    Character* target = getTargetInRange(path, path.size());
     if(target == nullptr)
     {
         UI::displayText(name_ + " misses...");
@@ -79,7 +79,6 @@ void Ability::putOnCooldown()
 
 vector<Position> Ability::getAbilityPath(Character* caster, Direction dir)
 {
-    //TODO: Implement Ability range
     vector<Position> path;
     Position pos = caster->getPosition();
     Field* current_field = nullptr;
@@ -103,11 +102,34 @@ vector<Position> Ability::getAbilityPath(Character* caster, Direction dir)
             }
         }
         path.push_back(pos);
-    } while (status != SOLID && status != OCCUPIED);
+    } while (status != SOLID);
     return path;
 }
 
+vector<Character*> Ability::getTargetsInRange(vector<Position>& path, size_t range, size_t max_targets)
+{
+    vector<Character*> targets;
+    Character* tmp = nullptr;
 
+    if(range > path.size())
+        range = path.size();
+
+    for(size_t i = 0; i < range; i++)
+    {
+        tmp = current_room->getCharacter(path.at(i));
+        if(tmp != nullptr)
+            targets.push_back(tmp);
+    }
+    return targets;
+}
+
+Character* Ability::getTargetInRange(vector<Position>& path, size_t range)
+{
+    auto targets = getTargetsInRange(path, range, 1);
+    if(targets.empty())
+        return nullptr;
+    return targets.front();
+}
 
 //-----------------------------------------------------------------------------------------------------//
 
@@ -155,7 +177,7 @@ bool SyphonSoul::cast(Character* target)
 
 //-----------------------------------------------------------------------------------------------------//
 
-WildCharge::WildCharge() : Ability("Wild Charge", "Charges at the enemy", 70, 0, 10, 50)
+WildCharge::WildCharge() : Ability("Wild Charge", "Charges at the enemy", 50, 0, 10, 25)
 {
 
 }
@@ -164,19 +186,61 @@ bool WildCharge::cast(vector<Position>& path)
 {
     //TODO: add effects
 
-    //ParticleEffect pe(sf::Color::Red, 20);
-    //static vector<shared_ptr<Effect>> effects;
-    //effects.clear();
     Field* cur = nullptr;
-    for(size_t i = 0; i < (path.size() - 1); i++)
+    for(size_t i = 0; i < path.size(); i++)
     {
-        //effects.push_back(shared_ptr<Effect>(pe.createInstance()));
-        //effects.back()->setPosition(worldToScreen(path[i]));
-        //Effect::addEffect(effects.back(), true);
+        if(current_room->getCharacter(path[i]) != nullptr)
+        {
+            return Ability::cast(current_room->getCharacter(path[i]));
+        }
         if(!caster_->move(path[i]))
         {
-            break;
+            UI::displayText(name_ + " misses...");
+            return true;
         }
     }
-    return Ability::cast(path);
 }
+
+//-----------------------------------------------------------------------------------------------------//
+
+ShatteringBlow::ShatteringBlow() :
+        Ability("Shattering Blow", "Swings your weapon with all your might", 100, 0, 10, 25)
+{
+
+}
+
+bool ShatteringBlow::cast(vector<Position>& path)
+{
+    auto target = getTargetInRange(path, 1);
+    if(target == nullptr)
+    {
+        UI::displayText(name_ + " misses...");
+        return true;
+    }
+    return Ability::cast(target);
+}
+
+//-----------------------------------------------------------------------------------------------------//
+
+Shockwave::Shockwave() :
+        Ability("Shockwave", "Slams your weapon into the ground to cause a shockwave that "
+                "reaches three fields in front of you", 70, 0, 20, 50)
+{
+
+}
+
+bool Shockwave::cast(vector<Position>& path)
+{
+    size_t range = 3;
+    auto targets = getTargetsInRange(path, range, range);
+
+    if(targets.empty())
+        UI::displayText(name_ + " misses...");
+
+    for(auto target : targets)
+        Ability::cast(target);
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------------------------------//

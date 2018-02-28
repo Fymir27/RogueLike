@@ -31,7 +31,10 @@ Stats Warrior::base_stats_(15,15,10,5,5);
 Warrior::Warrior(string name, Position pos) : Player(name, pos, base_stats_, "../images/player_warrior.png")
 {
 	class_ = "Warrior";
+
     ability_bar_.push_back(new WildCharge());
+	ability_bar_.push_back(new ShatteringBlow());
+	ability_bar_.push_back(new Shockwave());
 } 
 
 void Warrior::attack(Character* target)
@@ -47,6 +50,10 @@ Stats Mage::base_stats_(5,10,5,15,15);
 Mage::Mage(string name, Position pos) : Player(name, pos, base_stats_, "../images/player_mage.png")
 {
 	class_ = "Mage";
+
+	ability_bar_.push_back(new Fireball());
+	ability_bar_.push_back(new Regeneration());
+	ability_bar_.push_back(new SyphonSoul());
 } 
 
 void Mage::attack(Character* target)

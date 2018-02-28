@@ -164,7 +164,7 @@ void BigParticleEffect::generateParticles(sf::Color col, size_t count)
 {
     unsigned size_diff = max_size_ - min_size_;
     unsigned max_overlap = 3; //overlap to other tiles
-    static sf::Color transparency_modifier(0,0,0,100); //gets subracted from color
+    static sf::Color transparency_modifier(0,0,0,100); //gets subtracted from color
     for (int i = 0; i < count; ++i)
     {
         float size = min_size_ + (rand() % (size_diff + 1));
