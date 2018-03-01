@@ -187,6 +187,7 @@ int main()
 	//current_player->grantExp(33);
 	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
     auto ghost = enemy_manager->createEnemy("Ghost");
+    ghost->move({3,3});
     current_room->addEnemy(ghost.get());
 	//----------------------------//
 

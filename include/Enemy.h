@@ -6,11 +6,11 @@
 
 enum MoveType
 {
-    SLEEP,
-    STAY,
-    WAIT,
-    FOLLOW,
-    RANDOM
+    SLEEP, //do nothing
+    STAY,  //stay stationary, but attack
+    WAIT,  //wait until attacked/someone near then FOLLOW
+    FOLLOW,//follow player
+    RANDOM //move randomly
 };
 
 #define ENEMY_TYPE_COUNT 3
@@ -34,12 +34,14 @@ private:
 protected:
     size_t exp_reward_;
     string attack_verb_;
+    float scaling_[5];
 
 public:
 
     //-ctors-//
-    Enemy(string name, Position pos, Stats stats, MoveType move_type, string texture = "../images/enemy.png");
-    Enemy(string name, string texture, Stats stats, size_t exp_reward, string attack_verb = "attacks");
+    Enemy(string name, Position pos, Stats stats, MoveType move_type, string texture = "../images/enemy.png"); //deprecated
+    Enemy(string name, string texture, Stats stats, size_t exp_reward,
+          string attack_verb, float scaling[5], MoveType move_type);
     Enemy(Enemy* orig);
 
     ~Enemy();

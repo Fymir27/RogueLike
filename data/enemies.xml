@@ -22,6 +22,16 @@
             <exp>0</exp>
             <item>ItemName</item>
         </reward>
+        <behaviour>
+            <!-- move values:
+            0: SLEEP,  //do nothing
+            1: STAY,   //stay stationary, but attack
+            2: WAIT,   //wait until attacked/someone near then FOLLOW
+            3: FOLLOW, //follow player
+            4: RANDOM  //move randomly
+            -->
+            <move>0</move>
+        </behaviour>
     </enemy>
 
     <enemy class = "Ghost" texture = "images/ghost.png">
@@ -45,6 +55,61 @@
         <reward>
             <exp>5</exp>
         </reward>
+        <behaviour>
+            <move>3</move>
+        </behaviour>
+    </enemy>
+
+    <enemy class = "Spider" texture = "images/spider.png">
+        <stats>
+            <str>5</str>
+            <end>2</end>
+            <dex>10</dex>
+            <int>0</int>
+            <wil>5</wil>
+        </stats>
+        <attack>
+            <verb>bites</verb>
+            <scaling>
+                <str>0.5</str>
+                <end>0</end>
+                <dex>1.0</dex>
+                <int>0</int>
+                <wil>0</wil>
+            </scaling>
+        </attack>
+        <reward>
+            <exp>2</exp>
+        </reward>
+        <behaviour>
+            <move>4</move>
+        </behaviour>
+    </enemy>
+
+    <enemy class = "Golem" texture = "images/golem.png">
+        <stats>
+            <str>15</str>
+            <end>10</end>
+            <dex>5</dex>
+            <int>5</int>
+            <wil>10</wil>
+        </stats>
+        <attack>
+            <verb>smashes</verb>
+            <scaling>
+                <str>1.5</str>
+                <end>0</end>
+                <dex>0</dex>
+                <int>0</int>
+                <wil>0</wil>
+            </scaling>
+        </attack>
+        <reward>
+            <exp>10</exp>
+        </reward>
+        <behaviour>
+            <move>2</move>
+        </behaviour>
     </enemy>
 
 </enemies>

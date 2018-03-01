@@ -19,6 +19,7 @@ struct Stats
 	int wil_; //Willpower
 	Stats(int str, int end, int dex, int intel, int will);
 	Stats() {};
+    Stats(xml_node const& stats_node);
 	Stats& operator+= (const Stats& other);
 	Stats& operator-= (const Stats& other);
     Stats operator+ (const Stats& right);

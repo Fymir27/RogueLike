@@ -80,23 +80,28 @@ Enemy::~Enemy()
 	current_player->grantExp(exp_reward_);
 }
 
-Enemy::Enemy(string name, string texture, Stats stats, size_t exp_reward, string attack_verb) :
-		Character(name, {1,1}, stats, texture), exp_reward_(exp_reward), attack_verb_(attack_verb)
+Enemy::Enemy(string name, string texture, Stats stats, size_t exp_reward, string attack_verb, float scaling[5], MoveType move_type) :
+		Character(name, {0,0}, stats, texture), move_type_(move_type), exp_reward_(exp_reward), attack_verb_(attack_verb)
 {
-    move_type_ = FOLLOW;
+    std::copy(scaling, scaling + 5, scaling_);
 }
 
 void Enemy::attack(Character* target)
 {
-    int damage = 42; //TODO: Scaling
+    auto damage = (unsigned)std::roundf(  stats_.str_ * scaling_[0] +
+                                    stats_.end_ * scaling_[1] +
+                                    stats_.dex_ * scaling_[2] +
+                                    stats_.int_ * scaling_[3] +
+                                    stats_.wil_ * scaling_[4] );
+
     UI::displayText(name_ + ' ' + attack_verb_ + ' ' + target->getName() + " for " + std::to_string(damage) + " damage.");
     target->damage(damage);
 }
 
-Enemy::Enemy(Enemy* orig) : Character(orig), exp_reward_(orig->exp_reward_),
-                            attack_verb_(orig->attack_verb_), move_type_(orig->move_type_)
+Enemy::Enemy(Enemy* orig) : Character(orig), move_type_(orig->move_type_),
+                            exp_reward_(orig->exp_reward_), attack_verb_(orig->attack_verb_)
 {
-
+    std::copy(orig->scaling_, orig->scaling_ + 5, scaling_);
 }
 
 

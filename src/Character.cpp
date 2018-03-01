@@ -69,6 +69,15 @@ Stats::Stats(int str, int end, int dex, int intel, int will) :
 
 }
 
+Stats::Stats(xml_node const& stats_node)
+{
+    str_ = std::stoi(stats_node.child("str").child_value());
+    end_ = std::stoi(stats_node.child("end").child_value());
+    dex_ = std::stoi(stats_node.child("dex").child_value());
+    int_ = std::stoi(stats_node.child("int").child_value());
+    wil_ = std::stoi(stats_node.child("wil").child_value());
+}
+
 bool Character::addItem(Item* item)
 {
     return inventory_->addItem(item);
