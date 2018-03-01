@@ -3,16 +3,30 @@
 #include "UI.h"
 #include "Abilities.h"
 
+#include "pugixml.hpp"
+#include <fstream>
+
+using namespace pugi;
+
+
 Player* current_player = NULL;
 
 Player::Player(string name, Position pos, Stats stats, string filename) : Character(name, pos, stats, filename)
 {
     cout << "Spawning Player..." << endl;
 
-    //auto bpe = new BigParticleEffect(sf::Color::Red, 20);
-    //static auto e = shared_ptr<Effect>(bpe->createInstance());
-    //e->setPosition(worldToScreen(pos_));
-    //Effect::addEffect(e, true);
+    cout << "------- Testing XML Parsing ----------" << endl;
+    std::ifstream file("test.xml");
+    if(!file.is_open())
+        cout << "Failed to open file" << endl;
+
+    xml_document doc;
+    xml_parse_result res = doc.load(file);
+    cout << "Parsing result: " << res.description() << endl;
+    cout << doc.child("enemy").attribute("class").value() << endl;
+    cout << doc.child("enemy").child("stats").attribute("str").value() << endl;
+    cout << doc.child("enemy").child("stats").attribute("dex").value() << endl;
+
 }
 
 Inventory* Player::getInventory()
