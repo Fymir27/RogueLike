@@ -89,6 +89,7 @@ public:
 	bool addItem(Item* item);
 
 	virtual bool move(Position new_pos); //returns if the move was valid
+	void setPosition(Position pos) { pos_ = pos; }
 	virtual void attack(Character* target) = 0;
 	bool castSpell(size_t nr, Direction dir, bool self = false);
     virtual void advanceEffects();

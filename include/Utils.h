@@ -58,5 +58,14 @@ inline sf::Vector2f worldToScreen(Position pos)
 	return sf::Vector2f(pos.x_ * TILE_SIZE, pos.y_ * TILE_SIZE);
 }
 
+template <typename T>
+inline void clamp(T& val, T min, T max)
+{
+    if(val <  min)
+        val = min;
+    if(val > max)
+        val = max;
+}
+
 const char newl = '\n';
 const string separator(50, '-');

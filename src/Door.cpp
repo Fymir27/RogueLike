@@ -15,7 +15,6 @@ Position Door::trigger(Character* character)
 	if(character != current_player)
 		return character->getPosition();
 
-	cout << "Stepped on a Door!" << endl;
 	current_room->freeField(character->getPosition());
 	current_dungeon->changeRoom(dir_);
 	return current_room->getDoorPosition(opposite(dir_)) + DELTA_POS[dir_];

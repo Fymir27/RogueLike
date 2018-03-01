@@ -9,6 +9,6 @@ GameObject::GameObject(string const& name, string const& descr) : name_(name), d
 /* = default */
 GameObject::GameObject(GameObject* src) : name_(src->name_), description_(src->description_)
 {
-    cout << "GameObject::cctor" << endl;
+    //cout << "GameObject::cctor" << endl;
 }
-//*/
+

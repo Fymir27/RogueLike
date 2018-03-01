@@ -44,7 +44,8 @@ void Room::initSpawnLocations()
             if (f->status_ == FREE)
             {
                 spawn_locations_[y].push_back(true);
-            } else
+            }
+            else
             {
                 spawn_locations_[y].push_back(false);
             }
@@ -251,6 +252,7 @@ Position Room::getPathToPlayer(Position from)
     return dm_player_->getNextPosition(from);
 }
 
+/*
 //--- returns path from "from" to "to" (backwards!!) ---//
 vector<Position> Room::getShortestPath(Position from, Position to)
 {
@@ -282,11 +284,9 @@ vector<Position> Room::getShortestPath(Position from, Position to)
 
         while (true)
         {
-            /*
             for (auto& line : nodes)
                 for (auto& node : line)
                     cout << node;
-            */
 
 
             //-- find node with shortest distance to from--//
@@ -353,8 +353,6 @@ vector<Position> Room::getShortestPath(Position from, Position to)
                 }
             }
         } //while
-
-        return vector<Position>();
     }
     catch (std::out_of_range& e)
     {
@@ -362,6 +360,7 @@ vector<Position> Room::getShortestPath(Position from, Position to)
         cout << e.what();
     }
 }
+*/
 
 void Room::freeField(Position pos)
 {
@@ -398,24 +397,27 @@ void Room::draw(sf::RenderWindow& window)
         tile_map_->load("images/tileset.png", map_, TILE_SIZE, (int) getColCount(), (int) getRowCount());
     }
     window.draw(*tile_map_);
-    for (auto row : map_)
+
+    //TODO: let items draw themselves
+    for (auto& row : map_)
     {
-        for (auto field : row)
+        for (auto& field : row)
         {
             field->draw(window);
         }
     }
-    for (auto enemy : enemies_)
+
+    for (auto& enemy : enemies_)
     {
         enemy->draw(window);
     }
 
     auto tmp_effects = effects_;
-    for(auto& e : tmp_effects)
+    for (auto& e : tmp_effects)
     {
         e->update();
 
-        if(e->isActive())
+        if (e->isActive())
         {
             window.draw(*e);
         }
@@ -448,14 +450,6 @@ void Room::addEnemy(shared_ptr<Enemy> enemy)
     enemies_.push_back(enemy);
 }
 
-/*
-void Room::removeEnemy(Enemy* enemy)
-{
-    enemies_.remove(enemy);
-    //dead_enemies_.push_back(enemy);
-}
-*/
-
 void Room::stepEnemies()
 {
     if (dm_player_ == nullptr)
@@ -465,7 +459,7 @@ void Room::stepEnemies()
 
     for (auto e = enemies_.begin(); e != enemies_.end();)
     {
-        if(!(*e)->step()) // if dead
+        if (!(*e)->step()) // if dead
             e = enemies_.erase(e);
         else
             e++;
@@ -473,52 +467,36 @@ void Room::stepEnemies()
 
 }
 
-void Room::spawnEnemies(size_t count)
+void Room::spawnEnemy(string class_name, Position pos)
 {
-    auto em = EnemyManager::getInstance();
-    auto enemy_classes = em->getEnemyClasses();
-    size_t r = rand() % enemy_classes.size();
-    for (size_t i = 0; i < count; i++)
-    {
-        auto enemy = em->createEnemy(enemy_classes.at(r));
-        enemy->move(current_room->getFreePosition());
-        enemies_.push_back(enemy);
-
-    }
-}
-
-/*
-Enemy* Room::spawnEnemy(Position pos, EnemyType type)
-{
-    Enemy* e = NULL;
-
     if (pos == Position(0, 0))
         pos = getFreePosition();
 
-    if (type == RANDOM_ENEMY)
-        type = (EnemyType) (1 + (rand() % (ENEMY_TYPE_COUNT)));
-
-    switch (type)
+    Field* spawn = getField(pos);
+    if (spawn->status_ != FREE)
     {
-        case SPIDER:
-            e = new Spider(pos);
-            break;
-
-        case GHOST:
-            e = new Ghost(pos);
-            break;
-
-        case GOLEM:
-            e = new Golem(pos);
-            break;
-
-        default:
-            cout << "Unknown enemy type!" << endl;
-            break;
+        cout << "You can't spawn an enemy here! " << pos << " status:" << spawn->status_ << endl;
+        return;
     }
-    return e;
+
+    auto em = EnemyManager::getInstance();
+    auto enemy = em->createEnemy(class_name);
+    spawn->occupy(enemy.get());
+    enemy->setPosition(pos);
+    enemies_.push_back(enemy);
 }
- */
+
+void Room::spawnEnemies(size_t count)
+{
+    auto enemy_classes = EnemyManager::getInstance()->getEnemyClasses();
+    size_t r;
+    size_t class_count = enemy_classes.size();
+    for (size_t i = 0; i < count; i++)
+    {
+        r = rand() % class_count;
+        spawnEnemy(enemy_classes.at(r));
+    }
+}
 
 void Room::addVisualEffect(shared_ptr<Effect>& e)
 {
@@ -529,3 +507,5 @@ void Room::removeVisualEffect(shared_ptr<Effect>& e)
 {
     effects_.remove(shared_ptr<Effect>(e));
 }
+
+

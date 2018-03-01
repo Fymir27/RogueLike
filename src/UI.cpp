@@ -135,7 +135,7 @@ UI::UI() : pos_inv_        ({750, 0  }),
            stat_values_    ({900, 200}, "Statvalue"),
            pos_bottom_text_({ 10, 300}),
            player_info_    ({500, 300}, current_player),
-           abilities_      ({ 15, 450}, "Abilities:")
+           abilities_      ({ 15, 425}, "Abilities:")
 {
 	//-- set fixed Text --//
 	stat_names_.setString("Strength\n"
@@ -207,6 +207,8 @@ void UI::draw(sf::RenderWindow& window)
             ss << " - Ready!";
         else
             ss << " - CD: " << ability->getCooldownLeft();
+        ss << newl;
+        ss << "[ " << ability->getDescription() << " ]" << newl;
         ss << newl;
     }
     abilities_.setString(ss.str());

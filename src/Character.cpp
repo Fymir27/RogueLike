@@ -142,8 +142,6 @@ Character::Character(Character* orig) : name_(orig->name_), pos_(orig->pos_), st
     exp_ = Ressource(exp_needed_[1], 0);
 
     sprite_.setTexture(texture_);
-
-    current_room->occupyField(pos_, this);
 }
 
 Character::~Character()

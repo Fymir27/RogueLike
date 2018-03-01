@@ -88,6 +88,7 @@ public:
 
     void stepEnemies();
 
+    void spawnEnemy(string class_name, Position pos = {0,0});
     void spawnEnemies(size_t count);
 };
 

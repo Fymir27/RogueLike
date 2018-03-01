@@ -54,7 +54,6 @@ bool Ability::cast(Character *target)
     for(auto e : ab_effects_)
     {
         e->createInstance(target);
-        cout << e->getName() << " created successfully!" << endl;
     }
 
     if(effect_ != nullptr)
@@ -214,8 +213,7 @@ ShatteringBlow::ShatteringBlow() :
 //-----------------------------------------------------------------------------------------------------//
 
 Shockwave::Shockwave() :
-        Ability("Shockwave", "Slams your weapon into the ground to cause a shockwave that "
-                "reaches three fields in front of you", 70, 0, 20, 50, 3)
+        Ability("Shockwave", "Your weapon causes a shockwave three fields in front of you", 70, 0, 20, 50, 3)
 {
 
 }
@@ -235,7 +233,7 @@ bool Shockwave::cast(vector<Position>& path)
 
 //-----------------------------------------------------------------------------------------------------//
 
-PoisonStab::PoisonStab() : Ability("Poison Stab", "Deals damage and inflicts Poision,", 50, 0, 5, 30, 1)
+PoisonStab::PoisonStab() : Ability("Poison Stab", "Deals damage and inflicts Poision", 50, 0, 5, 30, 1)
 {
     ab_effects_.push_back(new PoisonEffect(5, 10));
 }

@@ -172,8 +172,8 @@ int main()
 	cout << endl;
 
     //-- Start-menu --//
-    //current_player = UI::startMenu();
-    current_player = new Mage("Oli", current_room->getFreePosition());
+    current_player = UI::startMenu();
+    //current_player = new Mage("Oli", current_room->getFreePosition());
     if(current_player == nullptr)     //player closed the start Menu
         return 0;
 
@@ -184,11 +184,7 @@ int main()
 	auto ui = new UI();
 
 	//------- Test Area ----------//
-	//current_player->grantExp(33);
 	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
-    //auto ghost = enemy_manager->createEnemy("Ghost");
-    //ghost->move({3,3});
-    //current_room->addEnemy(ghost.get());
 	//----------------------------//
 
 	sf::Event event;
@@ -218,7 +214,6 @@ MAIN_LOOP:	//ignore this label (there is definitely no goto statement further do
                 case PLAYER_EFFECTS:
                     turn = ENEMY;
                     current_room->stepEnemies();
-                    //current_room->deleteDeadEnemies();
                     break;
 
                 case ENEMY:

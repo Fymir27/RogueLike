@@ -61,7 +61,7 @@ void Minimap::print()
 
 void Minimap::draw(sf::RenderWindow& window)
 {
-	static Position pos(750, 400);
+	static Position pos(750, 350);
 	const int SIZE = 10;
 	const int BORDER_WIDTH = 10;
 

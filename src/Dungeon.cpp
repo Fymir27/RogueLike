@@ -72,7 +72,7 @@ void Dungeon::connect(Room* from, Direction dir, Room* to)
 
 bool Dungeon::hasNeighbour(Position pos, Direction dir)
 {
-    return (getRoom(pos.x_, pos.y_)->neighbours_[dir] != NULL);
+    return (getRoom(pos.x_, pos.y_)->neighbours_[dir] != nullptr);
 }
 
 /*
@@ -178,14 +178,11 @@ void Dungeon::generate(size_t width, size_t height)
 	height_ = height;
 	
 	//-- Create two crossing lines and branch out from them randomly --//
-	//TODO: add more lines the bigger the room is
-	size_t margin_hor  = 0; //from left
-	size_t margin_ver =  0; //from top
-
-	while(margin_hor < 2 || margin_hor > width - 2)
-		margin_hor =  rand() % width;
-	while(margin_ver < 2 || margin_ver > width - 2)
-		margin_ver =  rand() % height;
+	size_t margin_min = 2; //from both sides!
+	size_t margin_hor = rand() % width; //from left
+	size_t margin_ver = rand() % height; //from top
+	clamp<size_t>(margin_hor, margin_min, width - margin_min);
+	clamp<size_t>(margin_ver, margin_min, height - margin_min);
 
 	cout << "Margins (hor/ver): " << margin_hor << "/" << margin_ver << endl;
 
@@ -362,41 +359,11 @@ RoomHeightClass const & Dungeon::getRoomParts(size_t height)
 	return room_parts_.at(height);
 }
 
-//TODO: make simpler (use DELTA)
 void Dungeon::changeRoom(Direction dir)
 {
 	Position pos = current_room->pos_ + DELTA_POS[dir];
 
-	/*
-	switch(dir)
-	{
-		case UP:
-		pos.y_--;
-		entry = DOWN;
-		break;
-
-		case DOWN:
-		pos.y_++;
-		entry = UP;
-		break;
-
-		case LEFT:
-		pos.x_--;
-		entry = RIGHT;
-		break;
-
-		case RIGHT:
-		pos.x_++;
-		entry = LEFT;
-		break;
-
-		default:
-		cout << "Dungeon::changeRoom: Unknown direction!" << endl;
-		break;
-	}
-	*/
-
-	cout << "New Room is at Pos. " << pos << " in Dungeon!" << endl; 
+	//cout << "New Room is at Pos. " << pos << " in Dungeon!" << endl;
 	current_room = layout_.at(pos.y_).at(pos.x_);
 	if(!Minimap::isExplored(pos))
 	{
