@@ -10,6 +10,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <EnemyManager.h>
 
 Room* current_room = NULL;
 
@@ -391,7 +392,7 @@ void Room::addNeighbour(Direction dir, Room* other)
 
 void Room::draw(sf::RenderWindow& window)
 {
-    if (!tile_map_)
+    if (tile_map_ == nullptr)
     {
         tile_map_ = new TileMap();
         tile_map_->load("images/tileset.png", map_, TILE_SIZE, (int) getColCount(), (int) getRowCount());
@@ -428,8 +429,8 @@ void Room::draw(sf::RenderWindow& window)
 
 void Room::addField(Field* field)
 {
-    unsigned int x = field->pos_.x_;
-    unsigned int y = field->pos_.y_;
+    int x = field->pos_.x_;
+    int y = field->pos_.y_;
 
     if (y >= map_.size() || x >= map_.at(y).size())
     {
@@ -442,49 +443,51 @@ void Room::addField(Field* field)
 
 }
 
-void Room::addEnemy(Enemy* enemy)
+void Room::addEnemy(shared_ptr<Enemy> enemy)
 {
     enemies_.push_back(enemy);
 }
 
+/*
 void Room::removeEnemy(Enemy* enemy)
 {
     enemies_.remove(enemy);
     //dead_enemies_.push_back(enemy);
 }
-
-void Room::deleteDeadEnemies()
-{
-    //cout << "Cleaning up Enemies" << endl;
-    for (auto enemy : dead_enemies_)
-    {
-        enemies_.remove(enemy);
-        delete enemy;
-    }
-    dead_enemies_.clear();
-}
+*/
 
 void Room::stepEnemies()
 {
-    if (!dm_player_)
+    if (dm_player_ == nullptr)
         dm_player_ = new DijkstraMap2D(getColCount(), getRowCount(), current_player->getPosition());
     dm_player_->updateSource(current_player->getPosition());
 
-    for (Enemy* enemy : enemies_)
+
+    for (auto e = enemies_.begin(); e != enemies_.end();)
     {
-        enemy->step();
-        if (enemy->dead())
-            dead_enemies_.push_back(enemy);
+        if(!(*e)->step()) // if dead
+            e = enemies_.erase(e);
+        else
+            e++;
     }
 
 }
 
 void Room::spawnEnemies(size_t count)
 {
+    auto em = EnemyManager::getInstance();
+    auto enemy_classes = em->getEnemyClasses();
+    size_t r = rand() % enemy_classes.size();
     for (size_t i = 0; i < count; i++)
-        spawnEnemy(Position(0, 0), RANDOM_ENEMY);
+    {
+        auto enemy = em->createEnemy(enemy_classes.at(r));
+        enemy->move(current_room->getFreePosition());
+        enemies_.push_back(enemy);
+
+    }
 }
 
+/*
 Enemy* Room::spawnEnemy(Position pos, EnemyType type)
 {
     Enemy* e = NULL;
@@ -515,6 +518,7 @@ Enemy* Room::spawnEnemy(Position pos, EnemyType type)
     }
     return e;
 }
+ */
 
 void Room::addVisualEffect(shared_ptr<Effect>& e)
 {

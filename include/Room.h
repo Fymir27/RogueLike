@@ -23,7 +23,8 @@ private:
     Map map_; //Fields
     size_t width_;
     size_t height_;
-    list<Enemy*> enemies_;
+    list<shared_ptr<Enemy>> enemies_;
+    //list<Enemy*> enemies_;
     list<Enemy*> dead_enemies_;
     string name;
     Position pos_; //Position in Dungeon
@@ -83,17 +84,11 @@ public:
     { return effects_.size(); }
     void draw(sf::RenderWindow& window);
 
-    void addEnemy(Enemy* enemy);
-
-    void removeEnemy(Enemy* enemy);
-
-    void deleteDeadEnemies();
+    void addEnemy(shared_ptr<Enemy> enemy);
 
     void stepEnemies();
 
     void spawnEnemies(size_t count);
-
-    Enemy* spawnEnemy(Position pos = Position(0, 0), EnemyType type = RANDOM_ENEMY);
 };
 
 extern Room* current_room;

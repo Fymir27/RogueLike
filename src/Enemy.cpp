@@ -5,8 +5,9 @@
 
 bool Enemy::step()
 {
-	//cout << "Enemy::step()" << endl;
     advanceEffects();
+    if(dead())
+        return false;
 
 	switch (move_type_)
 	{
@@ -35,7 +36,7 @@ bool Enemy::step()
 
 Enemy::Enemy(string name, Position pos, Stats stats, MoveType move_type, string texture) : Character(name, pos, stats, texture), move_type_(move_type)
 {
-	current_room->addEnemy(this);
+	//current_room->addEnemy(this);
 }
 
 bool Enemy::checkSurroundings()

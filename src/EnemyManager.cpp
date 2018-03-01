@@ -36,6 +36,8 @@ EnemyManager::EnemyManager()
         if(class_name == "Template")
             continue;
 
+        class_names_.push_back(class_name);
+
         cout << separator << endl;
         cout << "Enemy: " <<  class_name << endl;
         string texture = enemy.attribute("texture").value();
@@ -89,4 +91,9 @@ void EnemyManager::destroy()
 {
     delete instance_;
     instance_ = nullptr;
+}
+
+vector<string> EnemyManager::getEnemyClasses()
+{
+    return class_names_;
 }

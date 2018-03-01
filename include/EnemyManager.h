@@ -19,11 +19,13 @@ private:
 
 public:
     shared_ptr<Enemy> createEnemy(string class_name);
+    vector<string> getEnemyClasses();
 private:
     EnemyManager();
 
     //class_name -> template entity
     map<string, unique_ptr<Enemy>> enemy_classes_;
+    vector<string> class_names_;
 };
 
 
