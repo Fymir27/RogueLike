@@ -16,7 +16,7 @@ struct Stats
 	int end_; //Endurance
 	int dex_; //Dexterity
 	int int_; //Intelligence
-	int will_; //Willpower
+	int wil_; //Willpower
 	Stats(int str, int end, int dex, int intel, int will);
 	Stats() {};
 	Stats& operator+= (const Stats& other);
@@ -24,6 +24,8 @@ struct Stats
     Stats operator+ (const Stats& right);
     Stats operator- (const Stats& right);
 };
+
+extern std::ostream& operator<<(std::ostream& out, Stats stats);
 
 class Effect;
 class Item;
@@ -54,7 +56,7 @@ protected:
     list<shared_ptr<Effect>> effects_;
 
 	Character(string const& name, Position pos, Stats stats, string const& filename);
-	
+    Character(Character* orig);
 
 public:
 	virtual ~Character();

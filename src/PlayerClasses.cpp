@@ -58,7 +58,7 @@ Mage::Mage(string name, Position pos) : Player(name, pos, base_stats_, "images/p
 
 void Mage::attack(Character* target)
 {
-	size_t damage = stats_.int_ + stats_.will_/2;
+	size_t damage = stats_.int_ + stats_.wil_/2;
 	UI::displayText(name_ + " zaps " + target->getName() + " for " + std::to_string(damage) + " damage.");
 	target->damage(damage);
 }

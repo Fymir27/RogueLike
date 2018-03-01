@@ -33,16 +33,19 @@ private:
 
 protected:
     size_t exp_reward_;
+    string attack_verb_;
 
 public:
 
     //-ctors-//
     Enemy(string name, Position pos, Stats stats, MoveType move_type, string texture = "../images/enemy.png");
+    Enemy(string name, string texture, Stats stats, size_t exp_reward, string attack_verb = "attacks");
+    Enemy(Enemy* orig);
 
     ~Enemy();
 
     virtual bool step(); //returns false when the enemy is dead
 
-    //void attack(Character* target);
+    virtual void attack(Character* target);
     void damage(unsigned int amount);
 };

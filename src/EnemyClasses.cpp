@@ -10,7 +10,7 @@ Ghost::Ghost(Position pos) : Enemy("Ghost", pos, Stats(0, 10, 0, 10, 5), FOLLOW,
 
 void Ghost::attack(Character* target)
 {
-    int damage = stats_.int_ + stats_.will_/2;
+    int damage = stats_.int_ + stats_.wil_/2;
 	UI::displayText(name_ + " spooks " + target->getName() + " for " + std::to_string(damage) + " damage.");
 	target->damage(damage);
 }

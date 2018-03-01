@@ -1,0 +1,50 @@
+<enemies>
+
+    <enemy class = "Template" texture = "images/file.png">
+        <stats>
+            <str>0</str>
+            <end>0</end>
+            <dex>0</dex>
+            <int>0</int>
+            <wil>0</wil>
+        </stats>
+        <attack>
+            <verb>attacks</verb>
+            <scaling>
+                <str>0</str>
+                <end>0</end>
+                <dex>0</dex>
+                <int>0</int>
+                <wil>0</wil>
+            </scaling>
+        </attack>
+        <reward>
+            <exp>0</exp>
+            <item>ItemName</item>
+        </reward>
+    </enemy>
+
+    <enemy class = "Ghost" texture = "images/ghost.png">
+        <stats>
+            <str>0</str>
+            <end>10</end>
+            <dex>0</dex>
+            <int>10</int>
+            <wil>5</wil>
+        </stats>
+        <attack>
+            <verb>spooks</verb>
+            <scaling>
+                <str>0</str>
+                <end>0</end>
+                <dex>0</dex>
+                <int>1.0</int>
+                <wil>0.5</wil>
+            </scaling>
+        </attack>
+        <reward>
+            <exp>5</exp>
+        </reward>
+    </enemy>
+
+</enemies>

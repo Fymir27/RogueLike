@@ -10,10 +10,13 @@
 
 std::ostream& operator<<(std::ostream& out, Stats stats)
 {
-    out << "Strength:    " << stats.str_ << endl;
-    out << "Intelligence:" << stats.int_ << endl;
-    out << "Dexterity:   " << stats.dex_ << endl;
-
+    out << "-------" << " Stats " << "------" << endl;
+    out << "Strength:     " << stats.str_ << endl;
+    out << "Endurance:    " << stats.end_ << endl;
+    out << "Dexterity:    " << stats.dex_ << endl;
+    out << "Intelligence: " << stats.int_ << endl;
+    out << "Willpower:    " << stats.wil_ << endl;
+    out << "-------------------" << endl;
     return out;
 }
 
@@ -23,7 +26,7 @@ Stats& Stats::operator+=(const Stats& other)
     this->end_ += other.end_;
     this->dex_ += other.dex_;
     this->int_ += other.int_;
-    this->will_ += other.will_;
+    this->wil_ += other.wil_;
     return *this;
 }
 
@@ -33,7 +36,7 @@ Stats& Stats::operator-=(const Stats& other)
     this->end_ -= other.end_;
     this->dex_ -= other.dex_;
     this->int_ -= other.int_;
-    this->will_ -= other.will_;
+    this->wil_ -= other.wil_;
     return *this;
 }
 
@@ -44,7 +47,7 @@ Stats Stats::operator+(const Stats& right)
     res.end_ = this->end_ + right.end_;
     res.dex_ = this->dex_ + right.dex_;
     res.int_ = this->int_ + right.int_;
-    res.will_ = this->will_ + right.will_;
+    res.wil_ = this->wil_ + right.wil_;
     return res;
 }
 
@@ -55,13 +58,13 @@ Stats Stats::operator-(const Stats& right)
     res.end_ = this->end_ - right.end_;
     res.dex_ = this->dex_ - right.dex_;
     res.int_ = this->int_ - right.int_;
-    res.will_ = this->will_ - right.will_;
+    res.wil_ = this->wil_ - right.wil_;
     return res;
 }
 
 
 Stats::Stats(int str, int end, int dex, int intel, int will) :
-        str_(str), end_(end), dex_(dex), int_(intel), will_(will)
+        str_(str), end_(end), dex_(dex), int_(intel), wil_(will)
 {
 
 }
@@ -110,6 +113,20 @@ Character::Character(string const& name, Position pos, Stats stats, string const
     //cout << "-~=# " << name_ << " #=~-" << endl;
     if (!texture_.loadFromFile(filename))
         cout << "Failed to load character texture!" << endl;
+
+    hp_ = Ressource(stats_.end_ * 10);
+    mana_ = Ressource(stats_.int_ * 10);
+    exp_ = Ressource(exp_needed_[1], 0);
+
+    sprite_.setTexture(texture_);
+
+    if(current_room != nullptr)
+        current_room->occupyField(pos_, this);
+}
+
+Character::Character(Character* orig) : name_(orig->name_), pos_(orig->pos_), stats_(orig->stats_), inventory_(new Inventory())
+{
+    texture_ = orig->texture_;
 
     hp_ = Ressource(stats_.end_ * 10);
     mana_ = Ressource(stats_.int_ * 10);
@@ -237,6 +254,8 @@ void Character::removeVisualEffect(shared_ptr<Effect> e)
 {
     effects_.remove(e);
 }
+
+
 
 
 

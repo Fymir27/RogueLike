@@ -59,3 +59,4 @@ inline sf::Vector2f worldToScreen(Position pos)
 }
 
 const char newl = '\n';
+const string separator(50, '-');

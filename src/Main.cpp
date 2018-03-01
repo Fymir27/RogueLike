@@ -12,6 +12,7 @@
 #include "PlayerClasses.h"
 #include "Effects.h"
 #include <ctime>
+#include "EnemyManager.h"
 
 
 enum Turn
@@ -152,6 +153,8 @@ int main()
 	cout << "#################################" << endl;
 	cout << endl;
 
+	auto enemy_manager = EnemyManager::getInstance();
+
 	srand((unsigned int)std::time(NULL));
 	current_dungeon = new Dungeon();	
 	current_dungeon->readRoomPartsFromFile();
@@ -183,6 +186,8 @@ int main()
 	//------- Test Area ----------//
 	//current_player->grantExp(33);
 	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
+    auto ghost = enemy_manager->createEnemy("Ghost");
+    current_room->addEnemy(ghost.get());
 	//----------------------------//
 
 	sf::Event event;

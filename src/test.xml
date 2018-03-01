@@ -1,6 +1,0 @@
-<enemy class = "Ghost">
-    <stats
-        str = "10"
-        dex = "20"
-    />
-</enemy>

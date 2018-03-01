@@ -179,7 +179,7 @@ void UI::draw(sf::RenderWindow& window)
     ss << stats.end_ << newl;
     ss << stats.dex_ << newl;
     ss << stats.int_ << newl;
-    ss << stats.will_ << newl;
+    ss << stats.wil_ << newl;
 
 	stat_values_.setString(ss.str());
 	stat_values_.draw(window);
