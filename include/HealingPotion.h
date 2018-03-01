@@ -18,5 +18,5 @@ class SmallHealingPotion : public HealingPotion
 {
 public:
 	SmallHealingPotion(int count = 1) : 
-	HealingPotion("Small Healing Potion", "Restores 20 HP", count, 10, 20, "../images/item_small_healing_potion.png") {};
+	HealingPotion("Small Healing Potion", "Restores 20 HP", count, 10, 20, "images/item_small_healing_potion.png") {};
 };
