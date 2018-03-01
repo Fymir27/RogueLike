@@ -138,7 +138,7 @@ Character* Ability::getTargetInRange(vector<Position>& path)
 Fireball::Fireball() : Ability("Fireball", "Deals additional damage over time.", 50, 0, 0, 50, 50)
 {
     ab_effects_.push_back(new BurnEffect(10, 5));
-    AnimatedSprite* anim = new AnimatedSprite("../images/ab_fireball_animated.png", 40);
+    AnimatedSprite* anim = new AnimatedSprite("images/ab_fireball_animated.png", 40);
     effect_ = shared_ptr<Effect>(new MovingSprite(anim, 5));
 }
 

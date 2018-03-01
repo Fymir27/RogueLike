@@ -394,7 +394,7 @@ void Room::draw(sf::RenderWindow& window)
     if (!tile_map_)
     {
         tile_map_ = new TileMap();
-        tile_map_->load("../images/tileset.png", map_, TILE_SIZE, (int) getColCount(), (int) getRowCount());
+        tile_map_->load("images/tileset.png", map_, TILE_SIZE, (int) getColCount(), (int) getRowCount());
     }
     window.draw(*tile_map_);
     for (auto row : map_)

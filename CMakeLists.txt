@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.5.0)
 project(RogueLike)
 set(EXECUTABLE_NAME ${PROJECT_NAME})
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/RogueLike)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-include_directories(RogueLike)
+include_directories(include)
 include_directories(/usr/bin/include/SFML)
-file(GLOB SOURCES "RogueLike/*.cpp")
+file(GLOB SOURCES "src/*.cpp")
 
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
 

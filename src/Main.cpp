@@ -159,7 +159,7 @@ int main()
 	current_dungeon->generate(15, 10);
 
 	Character::init_exp_needed();
-	UI::setDefaultFont("../fonts/8bitOperatorPlus-Regular.ttf");
+	UI::setDefaultFont("fonts/8bitOperatorPlus-Regular.ttf");
 
 	cout << endl;
 	cout << "////////////////////////////////////////////////////////" << endl;
@@ -169,8 +169,8 @@ int main()
 	cout << endl;
 
     //-- Start-menu --//
-    current_player = UI::startMenu();
-    //current_player = new Mage("Oli", current_room->getFreePosition());
+    //current_player = UI::startMenu();
+    current_player = new Mage("Oli", current_room->getFreePosition());
     if(current_player == nullptr)     //player closed the start Menu
         return 0;
 

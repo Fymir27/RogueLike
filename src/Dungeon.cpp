@@ -311,9 +311,9 @@ void Dungeon::readRoomPartsFromFile()
 	cout << "Reading parts from file" << endl;
 
 	string filename[3];
-	filename[0] = "room_parts_left.txt";
-	filename[1] = "room_parts_middle.txt";
-	filename[2] = "room_parts_right.txt";
+	filename[0] = "data/room_parts_left.txt";
+	filename[1] = "data/room_parts_middle.txt";
+	filename[2] = "data/room_parts_right.txt";
 
 	std::ifstream file;
 	for (size_t i = 0; i < 3; i++)

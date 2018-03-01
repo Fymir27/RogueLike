@@ -16,7 +16,7 @@ Player::Player(string name, Position pos, Stats stats, string filename) : Charac
     cout << "Spawning Player..." << endl;
 
     cout << "------- Testing XML Parsing ----------" << endl;
-    std::ifstream file("test.xml");
+    std::ifstream file("src/test.xml");
     if(!file.is_open())
         cout << "Failed to open file" << endl;
 

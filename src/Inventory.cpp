@@ -7,10 +7,10 @@
 
 Inventory::Inventory() : limit_(9), rows_(3)
 {
-	if (!background_.loadFromFile("../images/inventory_background.png"))
+	if (!background_.loadFromFile("images/inventory_background.png"))
 		cout << "Failed to load Inventory background!" << endl;
 
-	if (!font_.loadFromFile("../fonts/8bitOperatorPlus-Regular.ttf"))
+	if (!font_.loadFromFile("fonts/8bitOperatorPlus-Regular.ttf"))
 		cout << "Failed to load Inventory font!" << endl;
 
 	items_.resize(limit_);
