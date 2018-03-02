@@ -12,7 +12,6 @@ Player* current_player = NULL;
 Player::Player(string name, Position pos, Stats stats, string filename) : Character(name, pos, stats, filename)
 {
     cout << "Spawning Player..." << endl;
-
 }
 
 Inventory* Player::getInventory()
@@ -24,7 +23,7 @@ Inventory* Player::getInventory()
 bool Player::move(Position new_pos)
 {
 	if (Character::move(new_pos)) //check if move is valid
-	{ 
+	{
 		return true;
 	}
 	return false;

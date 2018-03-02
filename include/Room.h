@@ -23,27 +23,22 @@ private:
     Map map_; //Fields
     size_t width_;
     size_t height_;
+
     list<shared_ptr<Enemy>> enemies_;
-    //list<Enemy*> enemies_;
-    list<Enemy*> dead_enemies_;
-    string name;
+    vector<vector<bool> > spawn_locations_;
+
     Position pos_; //Position in Dungeon
     Position door_pos_[4];
     Room* neighbours_[4] = {NULL, NULL, NULL, NULL};
     DijkstraMap2D* dm_player_ = NULL;
-    vector<vector<bool> > spawn_locations_;
 
 	list<shared_ptr<Effect>> effects_; //visual effects
 
     Field* getField(int x, int y);
-
     void initSpawnLocations();
 
 public:
     Room(Position pos, size_t height);
-
-    std::string getName()
-    { return name; };
 
     size_t getColCount()
     { return map_.front().size(); };
@@ -67,11 +62,8 @@ public:
 
     Position getPathToPlayer(Position from);
 
-    vector<Position> getShortestPath(Position from, Position to);
-
     bool stepOn(Position to, Character* who, Position& new_pos); //returns new Position of Character
     void freeField(Position pos);
-
     void occupyField(Position pos, Character* who);
 
     void placeItem(Position pos, Item* item);
@@ -80,14 +72,13 @@ public:
 
     void addVisualEffect(shared_ptr<Effect>& e);
     void removeVisualEffect(shared_ptr<Effect>& e);
+
     size_t getEffectCount()
     { return effects_.size(); }
     void draw(sf::RenderWindow& window);
 
     void addEnemy(shared_ptr<Enemy> enemy);
-
     void stepEnemies();
-
     void spawnEnemy(string class_name, Position pos = {0,0});
     void spawnEnemies(size_t count);
 };
