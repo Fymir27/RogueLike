@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "Utils.h"
 #include "Character.h"
+#include "Factory.h"
 
 enum MoveType
 {
@@ -11,15 +12,6 @@ enum MoveType
     WAIT,  //wait until attacked/someone near then FOLLOW
     FOLLOW,//follow player
     RANDOM //move randomly
-};
-
-#define ENEMY_TYPE_COUNT 3
-enum EnemyType
-{
-    RANDOM_ENEMY,
-    SPIDER,
-    GHOST,
-    GOLEM
 };
 
 class Enemy : public Character
@@ -51,3 +43,20 @@ public:
     virtual void attack(Character* target);
     void damage(unsigned int amount);
 };
+
+template<>
+Factory<Enemy>::Factory();
+
+/*
+template<>
+class Factory<Enemy> : public Singleton<Factory<Enemy>>
+{
+public:
+    Factory()
+    {
+        cout << typeid(this).name() << " ctor" << endl;
+    }
+};
+ */
+
+

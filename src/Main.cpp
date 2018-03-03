@@ -12,7 +12,7 @@
 #include "PlayerClasses.h"
 #include "Effects.h"
 #include <ctime>
-#include "EnemyManager.h"
+#include "Enemy.h"
 
 
 enum Turn
@@ -153,7 +153,8 @@ int main()
 	cout << "#################################" << endl;
 	cout << endl;
 
-	auto enemy_manager = EnemyManager::getInstance();
+    // init singletons
+	Factory<Enemy>::get();
 
 	srand((unsigned int)std::time(NULL));
 	current_dungeon = new Dungeon();	
@@ -268,6 +269,8 @@ MAIN_LOOP:	//ignore this label (there is definitely no goto statement further do
 		}
 	}
 
+    // destory singletons
+    Factory<Enemy>::destroy();
 	delete ui;
 	delete current_dungeon;
 	return 0;

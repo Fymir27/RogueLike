@@ -5,13 +5,14 @@ class Singleton
 {
 public:
     static T* get();
+    static void destroy();
 
 private:
     static T* instance_;
 };
 
 template<class T>
-T* Singleton<T>::instance_ = NULL;
+T* Singleton<T>::instance_ = nullptr;
 
 template<class T>
 T* Singleton<T>::get()
@@ -22,3 +23,10 @@ T* Singleton<T>::get()
 	}
 	return instance_;
 };
+
+template <class T>
+void Singleton<T>::destroy()
+{
+    delete instance_;
+    instance_ = nullptr;
+}

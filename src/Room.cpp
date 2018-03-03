@@ -7,9 +7,7 @@
 #include "Dungeon.h"
 #include "Effects.h"
 
-#include <fstream>
 #include <sstream>
-#include <EnemyManager.h>
 
 Room* current_room = NULL;
 
@@ -368,8 +366,8 @@ void Room::spawnEnemy(string class_name, Position pos)
         return;
     }
 
-    auto em = EnemyManager::getInstance();
-    auto enemy = em->createEnemy(class_name);
+    auto factory = Factory<Enemy>::get();
+    auto enemy = factory->createEntity(class_name);
     spawn->occupy(enemy.get());
     enemy->setPosition(pos);
     enemies_.push_back(enemy);
@@ -377,7 +375,7 @@ void Room::spawnEnemy(string class_name, Position pos)
 
 void Room::spawnEnemies(size_t count)
 {
-    auto enemy_classes = EnemyManager::getInstance()->getEnemyClasses();
+    auto enemy_classes = Factory<Enemy>::get()->getEntityNames();
     size_t r;
     size_t class_count = enemy_classes.size();
     for (size_t i = 0; i < count; i++)

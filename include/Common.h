@@ -27,6 +27,9 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+//--- File I/O ---//
+#include <fstream>
+
 //--- STL Containers ---//
 #include <vector>
 #include <list>

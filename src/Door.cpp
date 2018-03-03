@@ -1,4 +1,3 @@
-#include "Door.h"
 #include "Field.h"
 #include "Dungeon.h"
 #include "Room.h"
