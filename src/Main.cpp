@@ -11,8 +11,8 @@
 #include "Ressource.h"
 #include "PlayerClasses.h"
 #include "Effects.h"
+#include "Biome.h"
 #include <ctime>
-#include "Enemy.h"
 
 
 enum Turn
@@ -186,6 +186,10 @@ int main()
 
 	//------- Test Area ----------//
 	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
+    Biomes::Biome desert = { 40, 10, Biomes::SAND };
+    //Biomes::Temperature temp = { 40 };
+    auto likes_it_warm = new Biomes::AttributeCondition<Biomes::Temperature>(30, Biomes::BIGGER);
+    cout << "likes_it_warm satisfied: " << (likes_it_warm->isSatisfiedBy(desert) ? "yes" : "no") << endl;
 	//----------------------------//
 
 	sf::Event event;
@@ -269,7 +273,7 @@ MAIN_LOOP:	//ignore this label (there is definitely no goto statement further do
 		}
 	}
 
-    // destory singletons
+    // destroy singletons
     Factory<Enemy>::destroy();
 	delete ui;
 	delete current_dungeon;
