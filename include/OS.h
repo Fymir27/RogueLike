@@ -1,2 +1,2 @@
 #pragma once
-#define OS_LIN
+#define OS_WIN

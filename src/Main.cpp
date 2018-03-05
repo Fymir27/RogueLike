@@ -186,18 +186,20 @@ int main()
 
 	//------- Test Area ----------//
 	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
-    //Biomes::Temperature temp = { 40 };
     Biomes::Biome desert = { 40, 50, Biomes::SAND };
     Biomes::Condition<Biomes::Temperature> likes_it_warm = { 30, Biomes::BIGGER };
     Biomes::Condition<Biomes::Temperature> likes_it_cold = { 20, Biomes::SMALLER };
     Biomes::Condition<Biomes::FloorType> likes_sand = { Biomes::SAND, Biomes::EQUAL };
     //auto likes_it_warm = Biomes::Condition<Biomes::Temperature, int>(new Biomes::Temperature(30), Biomes::BIGGER);
     cout << "likes_it_warm: " << (desert.satisfies(likes_it_warm) ? "yes" : "no") << endl;
-    cout << "likes_it_cold: " << (desert.satisfies(likes_it_cold) ? "yes" : "no") << endl;
-    cout << "likes_sand: " << (desert.satisfies(likes_sand) ? "yes" : "no") << endl;
+    cout << "likes_it_cold: " << (desert.satisfies(likes_it_warm) ? "yes" : "no") << endl;
+    cout << "likes_sand: " << (desert.satisfies(likes_it_warm) ? "yes" : "no") << endl;
 	//----------------------------//
 
 	sf::Event event;
+    sf::RenderTexture lighting;
+    lighting.create(WINDOW_WIDTH, WINDOW_HEIGHT);
+
 
 MAIN_LOOP:	//ignore this label (there is definitely no goto statement further down!)
 	while (window.isOpen())
@@ -248,7 +250,52 @@ MAIN_LOOP:	//ignore this label (there is definitely no goto statement further do
 		
 		current_room->draw(window);   //draws Fields and enemies
 		current_player->draw(window);
-		ui->draw(window);
+
+        //-- Lighting test ---------------------------------------------------------------------------------------------
+        /*
+        lighting.clear();
+
+        //latern/character light
+        auto subtractAlpha = sf::BlendMode(sf::BlendMode::Zero, sf::BlendMode::DstColor, sf::BlendMode::Equation::Add,
+                                         sf::BlendMode::Zero, sf::BlendMode::Factor::OneMinusSrcAlpha, sf::BlendMode::Equation::Add);
+        sf::RectangleShape light(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+
+
+        light.setFillColor(sf::Color(0,0,0,200));
+        light.setPosition(worldToScreen(current_player->getPosition()));
+        lighting.draw(light, subtractAlpha);
+
+        light.setFillColor(sf::Color(0,0,0,140));
+        for(int i = 0; i < 4; i++) //direct neighbours
+        {
+            light.setPosition(worldToScreen(current_player->getPosition() + DELTA_POS[i]));
+            lighting.draw(light, subtractAlpha);
+        }
+
+        //diagonal neighbours
+        light.setFillColor(sf::Color(0,0,0,100));
+        light.setPosition(worldToScreen(current_player->getPosition() + Position(-1,-1))); lighting.draw(light, subtractAlpha);
+        light.setPosition(worldToScreen(current_player->getPosition() + Position(1,-1)));  lighting.draw(light, subtractAlpha);
+        light.setPosition(worldToScreen(current_player->getPosition() + Position(-1,1)));  lighting.draw(light, subtractAlpha);
+        light.setPosition(worldToScreen(current_player->getPosition() + Position(1,1)));   lighting.draw(light, subtractAlpha);
+
+        //2-away neighbours
+        light.setFillColor(sf::Color(0,0,0,40));
+        light.setPosition(worldToScreen(current_player->getPosition() + Position(0,-2)));  lighting.draw(light, subtractAlpha);
+        light.setPosition(worldToScreen(current_player->getPosition() + Position(2,0)));   lighting.draw(light, subtractAlpha);
+        light.setPosition(worldToScreen(current_player->getPosition() + Position(0,2)));   lighting.draw(light, subtractAlpha);
+        light.setPosition(worldToScreen(current_player->getPosition() + Position(-2,0)));  lighting.draw(light, subtractAlpha);
+
+
+        lighting.display();
+        sf::Sprite finished_lighting(lighting.getTexture());
+        int darkness = 100;
+        finished_lighting.setColor(sf::Color(0,0,0, darkness));
+        window.draw(finished_lighting);
+        */
+
+
+        ui->draw(window);
 		window.display();
 
 		if (current_player->dead())
