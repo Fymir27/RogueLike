@@ -19,7 +19,8 @@ UI::Text::Text(sf::Vector2f pos, string content, unsigned int size, sf::Color co
 {
     text_.setPosition(pos);
     text_.setCharacterSize(size);
-    text_.setColor(color);
+    //text_.setColor(color);
+    text_.setFillColor(color);
     text_.setString(content);
 }
 
@@ -31,7 +32,8 @@ void UI::Text::setFont(sf::Font &font)
 
 void UI::Text::setColor(sf::Color& color)
 {
-    text_.setColor(color);
+   //text_.setColor(color);
+    text_.setFillColor(color);
 }
 
 void UI::Text::draw(sf::RenderWindow& window)

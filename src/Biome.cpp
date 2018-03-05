@@ -6,62 +6,55 @@
 
 namespace Biomes
 {
-    Attribute<int> const& Temperature::getAttribute(Biome const& b)
-    {
-        return b.temp_;
-    }
 
-    Attribute<int> const& Humidity::getAttribute(Biome const& b)
-    {
-        return b.hum_;
-    }
-
-    Attribute<EFloorType> const& FloorType::getAttribute(Biome const& b)
-    {
-        return b.floor_;
-    }
-
-    template<>
-    AttributeCondition<Temperature>::AttributeCondition(Temperature attr, Equality eq) : attr_(attr), eq_(eq)
+    template <typename T>
+    Attribute<T>::Attribute(T value) : value_(value)
     {
 
     }
 
-    template<>
-    AttributeCondition<Attribute<int>>::AttributeCondition(Attribute<int> attr, Equality eq) : attr_(attr), eq_(eq)
+    template <typename T>
+    bool Attribute<T>::compare(EComparison comp, Attribute<T> other) const
     {
-
-    }
-
-
-    template <>
-    bool AttributeCondition<Temperature>::isSatisfiedBy(Biome const& b)
-    {
-        switch (eq_)
+        switch(comp)
         {
-            case SMALLER: return attr_.value_ <  attr_.getAttribute(b).value_;
-            case EQUAL  : return attr_.value_ == attr_.getAttribute(b).value_;
-            case BIGGER : return attr_.value_ >  attr_.getAttribute(b).value_;
+            case SMALLER: return value_ <  other.value_;
+            case EQUAL:   return value_ == other.value_;
+            case BIGGER:  return value_ >  other.value_;
         }
     }
 
+    //------------------------------------------------------------
 
-    //-----------------------------------------------------------------------
-
-    bool AtLeastOneCondition::isSatisfiedBy(Biome const& b)
-    {
-        for(auto& cond : conditions_)
-        {
-            if(cond->isSatisfiedBy(b))
-                return true;
-        }
-        return false;
-    }
-
-    AtLeastOneCondition::AtLeastOneCondition(list<ICondition*> conditions) : conditions_(conditions)
+    Temperature::Temperature(int value) : Attribute(value)
     {
 
     }
 
+    Humidity::Humidity(int value) : Attribute(value)
+    {
 
+    }
+
+    FloorType::FloorType(EFloorType value) : Attribute(value)
+    {
+
+    }
+
+    //------------------------------------------------------------
+
+    bool Biome::satisfies(Condition<Temperature> cond)
+    {
+        return temp_.compare(cond.eq_, cond.attribute_);
+    }
+
+    bool Biome::satisfies(Condition<Humidity> cond)
+    {
+        return hum_.compare(cond.eq_, cond.attribute_);
+    }
+
+    bool Biome::satisfies(Condition<FloorType> cond)
+    {
+        return  floor_.compare(cond.eq_, cond.attribute_);
+    }
 }

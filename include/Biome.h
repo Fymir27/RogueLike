@@ -4,6 +4,7 @@
 
 #pragma once
 
+
 #include "Common.h"
 
 namespace Biomes
@@ -19,72 +20,60 @@ namespace Biomes
         ICE,
     };
 
-    enum Equality { SMALLER, EQUAL, BIGGER };
+    enum EComparison
+    {
+        SMALLER, EQUAL, BIGGER
+    };
 
-    struct Biome;
-
-    template <class T>
+    template <typename T>
     class Attribute
     {
-    public:
-        T value_;
-        Attribute(T value) : value_(value) {};
-        //returns the attribute of this type from Biome
-        virtual Attribute<T> const& getAttribute(Biome const& b);// = 0;
+        public:
+        const T value_;
+        bool compare(EComparison comp, Attribute<T> other) const;
+
+        protected:
+        explicit Attribute(T value);
     };
 
     class Temperature : public Attribute<int>
     {
-    public:
-        Temperature(int value) : Attribute(value) {};
-        Attribute<int> const& getAttribute(Biome const& b) final;
+        public:
+        Temperature(int value);
     };
 
     class Humidity : public Attribute<int>
     {
-    public:
-        Humidity(int value) : Attribute(value) {};
-        Attribute<int> const& getAttribute(Biome const& b) final;
+        public:
+        Humidity(int value);
     };
 
     class FloorType : public Attribute<EFloorType>
     {
-    public:
-        FloorType(EFloorType value) : Attribute(value) {};
-        Attribute<EFloorType> const& getAttribute(Biome const& b) final;
+        public:
+        FloorType(EFloorType value);
+    };
+
+    template <typename T>
+    struct Condition
+    {
+        public:
+        //TODO: Condition(xml_node condition_node);
+        const T attribute_;
+        const EComparison eq_;
     };
 
     struct Biome
     {
+        //TODO: Biome(xml_node biome_node);
+
         Temperature temp_;
-        Humidity hum_;
-        FloorType floor_;
+        Humidity    hum_;
+        FloorType   floor_;
+
+        bool satisfies(Condition<Temperature> cond);
+        bool satisfies(Condition<Humidity> cond);
+        bool satisfies(Condition<FloorType> cond);
     };
 
-    class ICondition
-    {
-    public:
-        virtual bool isSatisfiedBy(Biome const& b) = 0;
-    };
-
-    template <class T>
-    class AttributeCondition : ICondition
-    {
-    public:
-        AttributeCondition(T attr, Equality eq);
-        bool isSatisfiedBy(Biome const& b) final;
-
-    private:
-        T attr_;
-        Equality eq_;
-    };
-
-    class AtLeastOneCondition : ICondition
-    {
-    public:
-        AtLeastOneCondition(list<ICondition*> conditions);
-        bool isSatisfiedBy(Biome const& b) final;
-    private:
-        list<ICondition*> conditions_;
-    };
 }
