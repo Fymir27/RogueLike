@@ -191,7 +191,7 @@ int main()
 
 	//------- Test Area ----------//
 	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
-    Biome desert = { 40, 50, Biomes::SAND };
+    Biome desert = { "Desert", 40, 50, Biomes::SAND };
     Biomes::Condition<Biomes::Temperature> likes_it_warm = { 30, Biomes::BIGGER };
     Biomes::Condition<Biomes::Temperature> likes_it_cold = { 20, Biomes::SMALLER };
     Biomes::Condition<Biomes::FloorType> likes_sand = { Biomes::SAND, Biomes::EQUAL };

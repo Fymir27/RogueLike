@@ -6,7 +6,7 @@
 
 namespace Biomes
 {
-    Biome::Biome(const string const& name, int temp, int hum, EFloorType floor) : name_(name), temp_(temp), hum_(hum), floor_(floor)
+    Biome::Biome(string const& name, int temp, int hum, EFloorType floor) : name_(name), temp_(temp), hum_(hum), floor_(floor)
     {
 
     }

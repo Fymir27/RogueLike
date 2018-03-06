@@ -70,7 +70,7 @@ namespace Biomes
         Humidity    hum_;
         FloorType   floor_;
 
-        Biome(const string const& name, int temp, int hum, EFloorType floor);
+        Biome(string const& name, int temp, int hum, EFloorType floor);
         Biome(Biome* orig);
 
         bool satisfies(Condition<Temperature> cond);
