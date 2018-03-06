@@ -113,7 +113,7 @@ Factory<Enemy>::Factory()
     std::ifstream file(filename);
     if(!file.is_open())
     {
-        cout << "EnemyManager failed to open file " << filename << endl;
+        cout << "Factory<Enemy> failed to open file " << filename << endl;
         return;
     }
     //-----------------------------------------------------------------------------------
@@ -131,15 +131,15 @@ Factory<Enemy>::Factory()
 
     for(auto enemy : enemies.children())
     {
-        string class_name = enemy.attribute("class").value();
+        string name = enemy.attribute("name").value();
 
-        if (class_name == "Template")
+        if (name == "Template")
             continue;
 
-        entity_names_.push_back(class_name);
+        entity_names_.push_back(name);
 
         cout << separator << endl;
-        cout << "Enemy: " << class_name << endl;
+        cout << "Enemy: " << name << endl;
         string texture = enemy.attribute("texture").value();
         //-----------------------------------------------------------------------------------
         auto stats_node = enemy.child("stats");
@@ -168,7 +168,7 @@ Factory<Enemy>::Factory()
         cout << "Move type: " << move_type << endl;
         //-----------------------------------------------------------------------------------
 
-        entity_templates_[class_name] = std::make_unique<Enemy>(class_name, texture, stats, exp_reward,
+        entity_templates_[name] = std::make_unique<Enemy>(name, texture, stats, exp_reward,
                                                                 attack_verb, scaling, move_type);
         cout << separator << endl << endl;
     }

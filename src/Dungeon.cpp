@@ -272,35 +272,40 @@ void Dungeon::generate(size_t width, size_t height)
 	*/
 
 	//-- DEBUG --//
+
 	for (auto& row : layout_)
 	{
+        /*
 		for (Room* room : row)
 		{
 			if (room != NULL)
 				cout << ' ' << (char)(room->neighbours_[UP] ? '|' : ' ') << ' ';
-			else
-				cout << "...";
+            else
+                cout << "   ";
 		}
+
 		cout << endl;
+        */
 		for (auto room : row)
 		{
 			if (room != NULL)
 				cout << (char)(room->neighbours_[LEFT] ? '-' : ' ') << '#' << (char)(room->neighbours_[RIGHT] ? '-' : ' ');
 			else
-				cout << "...";
+				cout << " . ";
 		}
 		cout << endl;
 		for (auto room : row)
 		{
 			if (room)
 				cout << ' ' << (char)(room->neighbours_[DOWN] ? '|' : ' ') << ' ';
-			else
-				cout << "...";
+            else
+                cout << "   ";
 		}
 		cout << endl;
 	}
 	cout << endl;
-	DijkstraMap2D DM(current_room->getColCount(), current_room->getRowCount(), Position(1, 1));
+
+	//DijkstraMap2D DM(current_room->getColCount(), current_room->getRowCount(), Position(1, 1));
 }
 
 void Dungeon::readRoomPartsFromFile()
@@ -372,3 +377,198 @@ void Dungeon::changeRoom(Direction dir)
 	}
 	Minimap::setActiveRoom(pos);	
 }
+
+void Dungeon::spread(Room* room, char biome, Direction from, size_t life_time)
+{
+    /*
+    static list<Room*> todo; //queue
+    cout << "### spread: " << room->pos_ << ", " << biome << ", from: " << from << ", lifetime: " << life_time << " ###" << endl;
+
+    if(room->getBiome() != ' ') //biome has already been set
+        return;
+
+    room->setBiome(biome);
+    life_time--;
+
+    for (int i = 0; i < 4; ++i) //check all neighbours
+    {
+        if(nei)
+    }
+
+    if(life_time == 0)
+    {
+        cout << biome << " died of natural cause, new one: ";
+        life_time     = 20;
+        biome         = available_biomes_.at(rand() % available_biomes_.size());
+        cout << biome << endl;
+    }
+
+
+    vector<Direction> todo_dir;
+
+    cout << "TODO: ";
+    for(int i = 0; i < 4; i++)
+    {
+        Direction dir = static_cast<Direction>(i);
+        if(dir != from && room->neighbours_[dir] != NULL)
+        {
+            cout << dir << ' ';
+            todo.push_back(room->neighbours_[dir]);
+            todo_dir.push_back(dir);
+        }
+    }
+    cout << endl;
+
+    if(todo.empty())
+	{
+		cout << "Dead End!" << endl;
+		return;
+	}
+
+    auto new_life_time = std::ceil((float)life_time / (float)todo.size());
+
+    for (size_t i = 0; i < todo.size(); ++i)
+    {
+        if(life_time <= 0) //choose new biome
+        {
+            cout << biome << " died due to splitting itself too much, new one: ";
+            life_time = 20;
+            new_life_time = (size_t)std::ceil((float)life_time / (float)(todo.size() - i));
+            biome         = available_biomes_.at(rand() % available_biomes_.size());
+            cout << biome << endl;
+        }
+
+        spreadBiome(todo.at(i), biome, opposite(todo_dir.at(i)), new_life_time);
+        life_time -= new_life_time;
+        if(life_time < new_life_time)
+        {
+            new_life_time = life_time;
+        }
+    }
+     */
+}
+
+void Dungeon::generateBiomes(Room* start)
+{
+    start->biome_ = '@';
+
+    for(int i = 0; i < 4; i++)
+    {
+        Direction dir = static_cast<Direction>(i);
+        if(start->neighbours_[dir] != NULL)
+        {
+            start->room_count_in_dir_[dir] = getRoomCountFromDirection(start->neighbours_[dir], opposite(dir), 0);
+        }
+    }
+    cout << "Room " << start->pos_ << " room_count_in_dir: ";
+    for (int i = 0; i < 4; ++i)
+    {
+        cout << start->room_count_in_dir_[i] << ',';
+    }
+    cout << endl;
+
+    //-- DEBUG --//
+    for(auto& row : layout_)
+    {
+        for(auto& room : row)
+        {
+            if(room)
+                printf(" ## %2d ## ", (int)room->room_count_in_dir_[UP]);
+            else
+                cout << string(10, ' ');
+        }
+        cout << endl;
+
+        for(auto& room : row)
+        {
+            if(room)
+                printf(" %2d %2d %2d ", (int)room->room_count_in_dir_[LEFT], (int)room->distance_from_spawn_, (int)room->room_count_in_dir_[RIGHT]);
+            else
+                cout << string(10, ' ');
+        }
+        cout << endl;
+
+        for(auto& room : row)
+        {
+            if(room)
+                printf(" ## %2d ## ", (int)room->room_count_in_dir_[DOWN]);
+            else
+                cout << string(10, ' ');
+        }
+        cout << endl;
+
+        for(auto& room : row)
+        {
+            cout << string(10, ' ');
+        }
+        cout << endl;
+    }
+}
+
+size_t Dungeon::getRoomCountFromDirection(Room* room, Direction from, size_t prev_distance)
+{
+    if(room->visited_for_room_count_) //prevent loops
+        return 0;
+
+    room->distance_from_spawn_ = prev_distance + 1;
+
+    size_t result = 1; //count yourself
+    room->visited_for_room_count_ = true;
+    for(int i = 0; i < 4; i++)
+    {
+        Direction dir = static_cast<Direction>(i);
+        if(dir == from)
+            continue;
+        if(room->neighbours_[dir] == NULL)
+        {
+            room->room_count_in_dir_[dir] = 0;
+        }
+        else
+        {
+            room->room_count_in_dir_[dir] = getRoomCountFromDirection(room->neighbours_[dir], opposite(dir), room->distance_from_spawn_);
+            result += room->room_count_in_dir_[dir];
+        }
+    }
+    cout << "Room " << room->pos_ << " room_count_in_dir: ";
+    for (int i = 0; i < 4; ++i)
+    {
+        cout << room->room_count_in_dir_[i] << ',';
+    }
+    cout << " dist from spawn: " << room->distance_from_spawn_ << endl;
+    return result;
+}
+
+
+void Dungeon::printBiomes()
+{
+	for (auto& row : layout_)
+	{
+		/*
+		for (Room* room : row)
+		{
+			if (room != NULL)
+				cout << ' ' << (char)(room->neighbours_[UP] ? '|' : ' ') << ' ';
+			else
+				cout << "...";
+		}
+		 */
+		for (auto room : row)
+		{
+			if (room != NULL)
+				cout << (char)(room->neighbours_[LEFT] ? '-' : ' ') << room->getBiome() << (char)(room->neighbours_[RIGHT] ? '-' : ' ');
+			else
+				cout << " . ";
+		}
+		cout << endl;
+		for (auto room : row)
+		{
+			if (room)
+				cout << ' ' << (char)(room->neighbours_[DOWN] ? '|' : ' ') << ' ';
+			else
+				cout << "   ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+}
+

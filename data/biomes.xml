@@ -1,0 +1,67 @@
+<biomes>
+
+    <biome name = "Template" texture = "images/image.png">
+        <attributes>
+            <temperature>0</temperature>
+            <humidity>0</humidity>
+            <!-- floor types:
+            0:  STONE,
+            1:  SAND,
+            2:  GRASS,
+            3:  FOREST,
+            4:  SNOW,
+            5:  ICE,
+               -->
+            <floor>0</floor>
+        </attributes>
+    </biome>
+
+    <biome name = "Mountain" texture = "images/image.png">
+        <attributes>
+            <temperature>10</temperature>
+            <humidity>50</humidity>
+            <!-- floor types:
+            0:  STONE,
+            1:  SAND,
+            2:  GRASS,
+            3:  FOREST,
+            4:  SNOW,
+            5:  ICE,
+               -->
+            <floor>0</floor>
+        </attributes>
+    </biome>
+
+    <biome name = "Desert" texture = "images/image.png">
+        <attributes>
+            <temperature>40</temperature>
+            <humidity>10</humidity>
+            <!-- floor types:
+            0:  STONE,
+            1:  SAND,
+            2:  GRASS,
+            3:  FOREST,
+            4:  SNOW,
+            5:  ICE,
+               -->
+            <floor>1</floor>
+        </attributes>
+    </biome>
+
+    <biome name = "Forest" texture = "images/image.png">
+        <attributes>
+            <temperature>15</temperature>
+            <humidity>30</humidity>
+            <!-- floor types:
+            0:  STONE,
+            1:  SAND,
+            2:  GRASS,
+            3:  FOREST,
+            4:  SNOW,
+            5:  ICE,
+               -->
+            <floor>3</floor>
+        </attributes>
+    </biome>
+
+</biomes>

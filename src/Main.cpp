@@ -14,6 +14,7 @@
 #include "Biome.h"
 #include <ctime>
 
+using Biomes::Biome;
 
 enum Turn
 {
@@ -155,12 +156,16 @@ int main()
 
     // init singletons
 	Factory<Enemy>::get();
+    Factory<Biome>::get();
 
 	srand((unsigned int)std::time(NULL));
 	current_dungeon = new Dungeon();	
 	current_dungeon->readRoomPartsFromFile();
 	cout << "Dungeon Layout:" << endl;
 	current_dungeon->generate(15, 10);
+
+    current_dungeon->generateBiomes(current_room);
+    current_dungeon->printBiomes();
 
 	Character::init_exp_needed();
 	UI::setDefaultFont("fonts/8bitOperatorPlus-Regular.ttf");
@@ -186,7 +191,7 @@ int main()
 
 	//------- Test Area ----------//
 	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
-    Biomes::Biome desert = { 40, 50, Biomes::SAND };
+    Biome desert = { 40, 50, Biomes::SAND };
     Biomes::Condition<Biomes::Temperature> likes_it_warm = { 30, Biomes::BIGGER };
     Biomes::Condition<Biomes::Temperature> likes_it_cold = { 20, Biomes::SMALLER };
     Biomes::Condition<Biomes::FloorType> likes_sand = { Biomes::SAND, Biomes::EQUAL };
@@ -325,6 +330,8 @@ int main()
 
     // destroy singletons
     Factory<Enemy>::destroy();
+    Factory<Biome>::destroy();
+
 	delete ui;
 	delete current_dungeon;
 	return 0;

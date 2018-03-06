@@ -1,6 +1,6 @@
 <enemies>
 
-    <enemy class = "Template" texture = "images/file.png">
+    <enemy name = "Template" texture = "images/file.png">
         <stats>
             <str>0</str>
             <end>0</end>
@@ -23,7 +23,7 @@
             <item>ItemName</item>
         </reward>
         <behaviour>
-            <!-- move values:
+            <!-- move types:
             0: SLEEP,  //do nothing
             1: STAY,   //stay stationary, but attack
             2: WAIT,   //wait until attacked/someone near then FOLLOW
@@ -34,7 +34,7 @@
         </behaviour>
     </enemy>
 
-    <enemy class = "Ghost" texture = "images/ghost.png">
+    <enemy name = "Ghost" texture = "images/ghost.png">
         <stats>
             <str>0</str>
             <end>10</end>
@@ -60,7 +60,7 @@
         </behaviour>
     </enemy>
 
-    <enemy class = "Spider" texture = "images/spider.png">
+    <enemy name = "Spider" texture = "images/spider.png">
         <stats>
             <str>5</str>
             <end>2</end>
@@ -86,7 +86,7 @@
         </behaviour>
     </enemy>
 
-    <enemy class = "Golem" texture = "images/golem.png">
+    <enemy name = "Golem" texture = "images/golem.png">
         <stats>
             <str>15</str>
             <end>10</end>

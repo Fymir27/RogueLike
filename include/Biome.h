@@ -6,6 +6,7 @@
 
 
 #include "Common.h"
+#include "Factory.h"
 
 namespace Biomes
 {
@@ -58,22 +59,26 @@ namespace Biomes
     struct Condition
     {
         public:
-        //TODO: Condition(xml_node condition_node);
         const T attribute_;
         const EComparison eq_;
     };
 
     struct Biome
     {
-        //TODO: Biome(xml_node biome_node);
-
+        string      name_;
         Temperature temp_;
         Humidity    hum_;
         FloorType   floor_;
+
+        Biome(const string const& name, int temp, int hum, EFloorType floor);
+        Biome(Biome* orig);
 
         bool satisfies(Condition<Temperature> cond);
         bool satisfies(Condition<Humidity> cond);
         bool satisfies(Condition<FloorType> cond);
     };
-
 }
+
+//Facotry constructor
+template <>
+Factory<Biomes::Biome>::Factory();

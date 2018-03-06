@@ -27,6 +27,11 @@ private:
     list<shared_ptr<Enemy>> enemies_;
     vector<vector<bool> > spawn_locations_;
 
+    char biome_ = ' ';
+    size_t room_count_in_dir_[4] = { 0, 0, 0, 0 };
+    bool visited_for_room_count_ = false;
+    size_t distance_from_spawn_ = 0;
+
     Position pos_; //Position in Dungeon
     Position door_pos_[4];
     Room* neighbours_[4] = {NULL, NULL, NULL, NULL};
@@ -81,6 +86,11 @@ public:
     void stepEnemies();
     void spawnEnemy(string class_name, Position pos = {0,0});
     void spawnEnemies(size_t count);
+
+    char getBiome()
+    { return biome_; }
+    void setBiome(char b)
+    { biome_ = b; }
 };
 
 extern Room* current_room;
