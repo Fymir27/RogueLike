@@ -197,11 +197,9 @@ int main()
 	//----------------------------//
 
 	sf::Event event;
-    sf::RenderTexture lighting;
-    lighting.create(WINDOW_WIDTH, WINDOW_HEIGHT);
+    //sf::RenderTexture lighting;
+    //lighting.create(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-
-MAIN_LOOP:	//ignore this label (there is definitely no goto statement further down!)
 	while (window.isOpen())
 	{
 		//-- get input --//

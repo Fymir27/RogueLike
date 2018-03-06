@@ -19,6 +19,9 @@ void print(const std::vector<std::vector<T>>& v)
 	}
 }
 
+const char newl = '\n';
+const string separator(50, '-');
+
 struct Position
 {
 	int x_;
@@ -67,5 +70,14 @@ inline void clamp(T& val, T min, T max)
         val = max;
 }
 
-const char newl = '\n';
-const string separator(50, '-');
+template <typename T>
+inline size_t absolute(T i)
+{
+    return i > 0 ? i : i*(-1);
+};
+
+inline bool roll(size_t count, size_t out_of)
+{
+    static std::default_random_engine random_engine((unsigned)std::time(0));
+    return ((random_engine() % out_of) < count);
+}

@@ -52,13 +52,11 @@ using std::shared_ptr;
 #include "pugixml.hpp"
 using namespace pugi;
 
-inline size_t absolute(int i) { return i > 0 ? i : i*(-1); };
-inline bool roll(size_t count, size_t out_of) {return ((rand() % out_of) < count);}
-
-
 //--- Utility ---//
 #include <cstdlib>
 #include <cmath>
+#include <random>
+#include "Utils.h"
 
 //---  ---//
 #include "GameObject.h"
