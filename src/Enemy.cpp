@@ -57,7 +57,7 @@ bool Enemy::checkSurroundings()
 void Enemy::moveRandomly()
 {
 	int counter = 0;
-	int r = rand() % 4;
+	int r = random_engine() % 4;
 	do 
 	{ 
 		r = (r+1) % 4; 
@@ -105,6 +105,19 @@ Enemy::Enemy(Enemy* orig) : Character(orig), move_type_(orig->move_type_),
 {
     std::copy(orig->scaling_, orig->scaling_ + 5, scaling_);
 }
+
+void Enemy::setSpawnConditions(list<Biomes::Condition*> conditions)
+{
+    cout << "Setting SpawnConditions" << endl;
+    spawn_conditions_ = conditions;
+}
+
+list<Biomes::Condition*> Enemy::getSpawnConditions() const
+{
+    return spawn_conditions_;
+}
+
+
 
 template<>
 Factory<Enemy>::Factory()
@@ -167,10 +180,37 @@ Factory<Enemy>::Factory()
         MoveType move_type = static_cast<MoveType>(std::stoi(behaviour_node.child("move").child_value()));
         cout << "Move type: " << move_type << endl;
         //-----------------------------------------------------------------------------------
+        auto condition_node = enemy.child("conditions");
+        cout << "Spawn conditions:" << endl;
+        list<Biomes::Condition*> conditions;
+        for(auto condition : condition_node)
+        {
+            cout << condition.name() << " " << condition.attribute("equality").value() << " " << condition.child_value() << endl;
+            if(string(condition.name()) == "temperature")
+            {
+                Biomes::Temperature attr = { std::stoi(condition.child_value()) };
+                auto comp = getEnumFromAttribute<EComparison>(condition.attribute("comparison"));
+                conditions.push_back(new Biomes::AttributeCondition<Biomes::Temperature>(attr, comp));
+            }
+            else if(string(condition.name()) == "humidity")
+            {
+                Biomes::Humidity attr = { std::stoi(condition.child_value()) };
+                auto comp = getEnumFromAttribute<EComparison>(condition.attribute("comparison"));
+                conditions.push_back(new Biomes::AttributeCondition<Biomes::Humidity>(attr, comp));
+            }
+            else if(string(condition.name()) == "floor")
+            {
+                Biomes::FloorType attr = { getEnumFromNode<Biomes::EFloorType>(condition) };
+                auto comp = getEnumFromAttribute<EComparison>(condition.attribute("comparison"));
+                conditions.push_back(new Biomes::AttributeCondition<Biomes::FloorType>(attr, comp));
+            }
+        }
+
+        //-----------------------------------------------------------------------------------
 
         entity_templates_[name] = std::make_unique<Enemy>(name, texture, stats, exp_reward,
                                                                 attack_verb, scaling, move_type);
-        cout << separator << endl << endl;
+        entity_templates_[name]->setSpawnConditions(conditions);
     }
 }
 

@@ -91,7 +91,7 @@ Position Room::getFreePosition()
     Position pos;
     do
     {
-        pos = Position(1 + (rand() % (width_ - 2)), 1 + (rand() % (height_ - 2)));
+        pos = Position(1 + (random_engine() % (width_ - 2)), 1 + (random_engine() % (height_ - 2)));
     } while (!spawn_locations_.at(pos.y_).at(pos.x_) || getField(pos)->status_ == OCCUPIED);
     return pos;
 }
@@ -119,7 +119,7 @@ void Room::generate()
     map_.resize(height_);
     for (size_t i = 0; i < 3; i++) //for every section
     {
-        size_t r = rand() % room_parts[i].size();  //pick random part
+        size_t r = random_engine() % room_parts[i].size();  //pick random part
         vector<string> const& part = room_parts[i][r];
         for (size_t y = 0; y < height_; y++)
         {
@@ -375,13 +375,33 @@ void Room::spawnEnemy(string class_name, Position pos)
 
 void Room::spawnEnemies(size_t count)
 {
-    auto enemy_classes = Factory<Enemy>::get()->getEntityNames();
+    cout << "Spawning " << count << " enemies..." << endl;
+    auto factory = Factory<Enemy>::get();
+    auto enemy_classes = factory->getEntityNames();
     size_t r;
-    size_t class_count = enemy_classes.size();
+    string class_name;
+
     for (size_t i = 0; i < count; i++)
     {
-        r = rand() % class_count;
-        spawnEnemy(enemy_classes.at(r));
+        bool satisfied = false;
+        while(!satisfied) // find enemy that can spawn in this room
+        {
+            r = random_engine() % enemy_classes.size();;
+            class_name = enemy_classes.at(r);
+            auto template_enemy = factory->getTemplateEntity(class_name);
+
+            satisfied = true;
+            for(auto& condition : template_enemy->getSpawnConditions())
+            {
+                if(!condition->isSatisfiedBy(*biome_))
+                {
+                    satisfied = false;
+                    enemy_classes.erase(enemy_classes.begin() + r);
+                    break;
+                }
+            }
+        }
+        spawnEnemy(class_name);
     }
 }
 

@@ -18,10 +18,13 @@ class Factory : public Singleton<Factory<Entity>>
 {
 public:
     // creates entity by calling its cctor
-    shared_ptr<Entity> createEntity(const string& entity_name);
+    shared_ptr<Entity> createEntity(string const& entity_name);
 
     // returns names to all PEs
     vector<string> getEntityNames();
+
+    // returns the template entities
+    Entity const* getTemplateEntity(string const& entity_name);
 
     // Implementation (Specialization) of this constructor should:
     // - Initialize templates for all PEs
@@ -39,7 +42,7 @@ private:
 
 
 template <class Entity>
-shared_ptr<Entity> Factory<Entity>::createEntity(const string& entity_name)
+shared_ptr<Entity> Factory<Entity>::createEntity(string const& entity_name)
 {
     return std::make_shared<Entity>(entity_templates_[entity_name].get());
 }
@@ -48,5 +51,11 @@ template<class Entity>
 vector<string> Factory<Entity>::getEntityNames()
 {
     return entity_names_;
+}
+
+template <class Entity>
+Entity const* Factory<Entity>::getTemplateEntity(string const& entity_name)
+{
+    return entity_templates_[entity_name].get();
 }
 

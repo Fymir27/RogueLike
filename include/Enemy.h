@@ -4,6 +4,7 @@
 #include "Utils.h"
 #include "Character.h"
 #include "Factory.h"
+#include "Biome.h"
 
 enum MoveType
 {
@@ -27,6 +28,7 @@ protected:
     size_t exp_reward_;
     string attack_verb_;
     float scaling_[5];
+    list<Biomes::Condition*> spawn_conditions_;
 
 public:
 
@@ -42,6 +44,9 @@ public:
 
     virtual void attack(Character* target);
     void damage(unsigned int amount);
+
+    void setSpawnConditions(list<Biomes::Condition*> conditions);
+    list<Biomes::Condition*> getSpawnConditions() const;
 };
 
 template<>

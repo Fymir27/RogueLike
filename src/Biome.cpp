@@ -57,19 +57,28 @@ namespace Biomes
 
     //------------------------------------------------------------
 
-    bool Biome::satisfies(Condition<Temperature> cond)
+    template <typename T>
+    bool AttributeCondition<T>::isSatisfiedBy(Biome const& biome)
     {
-        return temp_.compare(cond.eq_, cond.attribute_);
+        return false;
     }
 
-    bool Biome::satisfies(Condition<Humidity> cond)
+    template<>
+    bool AttributeCondition<Temperature>::isSatisfiedBy(Biome const& biome)
     {
-        return hum_.compare(cond.eq_, cond.attribute_);
+        return biome.temp_.compare(comp_, attribute_);
     }
 
-    bool Biome::satisfies(Condition<FloorType> cond)
+    template<>
+    bool AttributeCondition<Humidity>::isSatisfiedBy(Biome const& biome)
     {
-        return floor_.compare(cond.eq_, cond.attribute_);
+        return biome.hum_.compare(comp_, attribute_);
+    }
+
+    template<>
+    bool AttributeCondition<FloorType>::isSatisfiedBy(Biome const& biome)
+    {
+        return biome.floor_.compare(comp_, attribute_);
     }
 }
 

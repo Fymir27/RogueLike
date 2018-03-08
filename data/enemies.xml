@@ -1,6 +1,6 @@
 <enemies>
 
-    <enemy name = "Template" texture = "images/file.png">
+    <enemy name = "Template" texture = "images/enemies/enemy.png">
         <stats>
             <str>0</str>
             <end>0</end>
@@ -32,9 +32,19 @@
             -->
             <move>0</move>
         </behaviour>
+        <conditions>
+            <!-- comparison tpyes:
+            0: SMALLER
+            1: EQUAL
+            2: BIGGER
+            -->
+            <temperature comparison = "2">0</temperature>
+            <humidity    comparison = "0">0</humidity>
+            <floor       comparison = "1">0</floor> <!-- see biomes.xml for floor info -->
+        </conditions>
     </enemy>
 
-    <enemy name = "Ghost" texture = "images/ghost.png">
+    <enemy name = "Ghost" texture = "images/enemies/ghost.png">
         <stats>
             <str>0</str>
             <end>10</end>
@@ -58,9 +68,12 @@
         <behaviour>
             <move>3</move>
         </behaviour>
+        <conditions>
+            <!-- Ghosts can spawn everywhere, what did you think? -->
+        </conditions>
     </enemy>
 
-    <enemy name = "Spider" texture = "images/spider.png">
+    <enemy name = "Spider" texture = "images/enemies/spider.png">
         <stats>
             <str>5</str>
             <end>2</end>
@@ -79,14 +92,18 @@
             </scaling>
         </attack>
         <reward>
-            <exp>2</exp>
+            <exp>1</exp>
         </reward>
         <behaviour>
             <move>4</move>
         </behaviour>
+        <conditions>
+            <temperature comparison = "0">30</temperature>
+            <humidity    comparison = "2">20</humidity>
+        </conditions>
     </enemy>
 
-    <enemy name = "Golem" texture = "images/golem.png">
+    <enemy name = "Golem" texture = "images/enemies/golem.png">
         <stats>
             <str>15</str>
             <end>10</end>
@@ -110,6 +127,39 @@
         <behaviour>
             <move>2</move>
         </behaviour>
+        <conditions>
+            <floor   comparison = "1">0</floor>
+        </conditions>
+    </enemy>
+
+    <enemy name = "Scarab" texture = "images/enemies/scarab.png">
+        <stats>
+            <str>5</str>
+            <end>5</end>
+            <dex>10</dex>
+            <int>5</int>
+            <wil>10</wil>
+        </stats>
+        <attack>
+            <verb>pinches</verb>
+            <scaling>
+                <str>0</str>
+                <end>0</end>
+                <dex>1</dex>
+                <int>0</int>
+                <wil>0.5</wil>
+            </scaling>
+        </attack>
+        <reward>
+            <exp>3</exp>
+        </reward>
+        <behaviour>
+            <move>3</move>
+        </behaviour>
+        <conditions>
+            <temperature comparison = "2">30</temperature>
+            <floor   comparison = "1">1</floor>
+        </conditions>
     </enemy>
 
 </enemies>

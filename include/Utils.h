@@ -47,6 +47,11 @@ enum Direction
 	LEFT
 };
 
+enum EComparison
+{
+	SMALLER, EQUAL, BIGGER
+};
+
 inline Direction opposite(Direction dir)
 {
 	return (Direction)((dir + 2) % 4);
@@ -81,4 +86,16 @@ inline size_t absolute(T i)
 inline bool roll(size_t count, size_t out_of)
 {
     return ((random_engine() % out_of) < count);
+}
+
+template <typename T>
+inline T getEnumFromNode(xml_node node)
+{
+	return static_cast<T>(std::stoi(node.child_value()));
+}
+
+template <typename T>
+inline T getEnumFromAttribute(xml_attribute attr)
+{
+	return static_cast<T>(std::stoi(attr.value()));
 }

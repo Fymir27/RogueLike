@@ -167,11 +167,11 @@ void BigParticleEffect::generateParticles(sf::Color col, size_t count)
     static sf::Color transparency_modifier(0,0,0,100); //gets subtracted from color
     for (int i = 0; i < count; ++i)
     {
-        float size = min_size_ + (rand() % (size_diff + 1));
+        float size = min_size_ + (random_engine() % (size_diff + 1));
         unsigned margin = max_size_ - max_overlap;
         unsigned range = TILE_SIZE - 2 * margin;
         sf::RectangleShape rect({size, size});
-        rect.setPosition(sf::Vector2f(margin + rand() % (range + 1), margin + rand() % (range + 1)));
+        rect.setPosition(sf::Vector2f(margin + random_engine() % (range + 1), margin + random_engine() % (range + 1)));
         rect.setFillColor(col  - transparency_modifier);
         rect.setOutlineColor(sf::Color::Black - transparency_modifier);
         rect.setOutlineThickness(0);

@@ -154,7 +154,7 @@ size_t Dungeon::getRandomRoomHeight()
 	size_t h;
 	do
 	{
-		h = (rand() % 7) + 4; //max room height 10?
+		h = (random_engine() % 7) + 4; //max room height 10?
 	} while (room_parts_.find(h) == room_parts_.end());
 	return h;
 }
@@ -179,8 +179,8 @@ void Dungeon::generate(size_t width, size_t height)
 	
 	//-- Create two crossing lines and branch out from them randomly --//
 	size_t margin_min = 2; //from both sides!
-	size_t margin_hor = rand() % width; //from left
-	size_t margin_ver = rand() % height; //from top
+	size_t margin_hor = random_engine() % width; //from left
+	size_t margin_ver = random_engine() % height; //from top
 	clamp<size_t>(margin_hor, margin_min, width - margin_min);
 	clamp<size_t>(margin_ver, margin_min, height - margin_min);
 
@@ -251,7 +251,7 @@ void Dungeon::generate(size_t width, size_t height)
 
 	//random starting room
 	while (current_room == NULL)
-		current_room = getRoom(rand() % width, rand() % height);
+		current_room = getRoom(random_engine() % width, random_engine() % height);
 
 	current_room->initSpawnLocations();
 
@@ -373,7 +373,7 @@ void Dungeon::changeRoom(Direction dir)
 	if(!Minimap::isExplored(pos))
 	{
 		current_room->initSpawnLocations();
-		current_room->spawnEnemies(rand() % 3);
+		current_room->spawnEnemies(1+ random_engine() % 2);
 	}
 	Minimap::setActiveRoom(pos);	
 }

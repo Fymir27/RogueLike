@@ -7,6 +7,7 @@
 
 #include "Common.h"
 #include "Factory.h"
+#include "Utils.h"
 
 namespace Biomes
 {
@@ -19,11 +20,6 @@ namespace Biomes
         FOREST,
         SNOW,
         ICE,
-    };
-
-    enum EComparison
-    {
-        SMALLER, EQUAL, BIGGER
     };
 
     template <typename T>
@@ -55,12 +51,20 @@ namespace Biomes
         FloorType(EFloorType value);
     };
 
-    template <typename T>
+    struct Biome;
     struct Condition
+    {
+        virtual bool isSatisfiedBy(Biome const& biome) = 0;
+    };
+
+    template <typename T>
+    struct AttributeCondition : Condition
     {
         public:
         const T attribute_;
-        const EComparison eq_;
+        const EComparison comp_;
+        AttributeCondition(T attribute, EComparison comp) : attribute_(attribute), comp_(comp) {}
+        bool isSatisfiedBy(Biome const& biome);
     };
 
     struct Biome
@@ -73,10 +77,6 @@ namespace Biomes
 
         Biome(string const& name = "Template", int temp = 0, int hum = 0, EFloorType floor = GRASS, string const& texture = "images/tileset.png");
         Biome(Biome* orig);
-
-        bool satisfies(Condition<Temperature> cond);
-        bool satisfies(Condition<Humidity> cond);
-        bool satisfies(Condition<FloorType> cond);
 
         bool operator==(Biome const& other) { return name_ == other.name_; }
     };
