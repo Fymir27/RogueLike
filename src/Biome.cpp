@@ -3,15 +3,18 @@
 //
 
 #include "Biome.h"
+#include "Utils.h"
 
 namespace Biomes
 {
-    Biome::Biome(string const& name, int temp, int hum, EFloorType floor) : name_(name), temp_(temp), hum_(hum), floor_(floor)
+    Biome::Biome(string const& name, int temp, int hum, EFloorType floor, string const& texture) :
+            name_(name), temp_(temp), hum_(hum), floor_(floor), texture_(texture)
     {
 
     }
 
-    Biome::Biome(Biome* orig) : name_(orig->name_), temp_(orig->temp_), hum_(orig->hum_), floor_(orig->floor_)
+    Biome::Biome(Biome* orig) : name_(orig->name_), temp_(orig->temp_), hum_(orig->hum_),
+                                floor_(orig->floor_),  texture_(orig->texture_)
     {
 
     }
@@ -115,7 +118,7 @@ Factory<Biomes::Biome>::Factory()
         cout << "Floor type: " << floor << endl;
         //-----------------------------------------------------------------------------------
 
-        entity_templates_[name] = std::make_unique<Biomes::Biome>(name, temperature, humidity, floor);
+        entity_templates_[name] = std::make_unique<Biomes::Biome>(name, temperature, humidity, floor, texture);
         cout << separator << endl << endl;
     }
 }

@@ -378,94 +378,153 @@ void Dungeon::changeRoom(Direction dir)
 	Minimap::setActiveRoom(pos);	
 }
 
-void Dungeon::spread(Room* room, char biome, Direction from, size_t life_time)
+void Dungeon::updateRoomInfo(Room* spawn)
 {
-    /*
-    static list<Room*> todo; //queue
-    cout << "### spread: " << room->pos_ << ", " << biome << ", from: " << from << ", lifetime: " << life_time << " ###" << endl;
+    cout << "Updating Room info..." << endl;
 
-    if(room->getBiome() != ' ') //biome has already been set
-        return;
+    queue<Room*> todo;
+	map<Room*, Room*> prev;               // previous room in the Algorithm
+    map<Room*, Direction> prev_direction; // where is the room relative to its prev room
+	Room* cur_room = nullptr;
+    Direction dir;
 
-    room->setBiome(biome);
-    life_time--;
+    prev[spawn] = nullptr; //to prevent updating spawn again
+    todo.push(spawn);
 
-    for (int i = 0; i < 4; ++i) //check all neighbours
-    {
-        if(nei)
-    }
-
-    if(life_time == 0)
-    {
-        cout << biome << " died of natural cause, new one: ";
-        life_time     = 20;
-        biome         = available_biomes_.at(rand() % available_biomes_.size());
-        cout << biome << endl;
-    }
-
-
-    vector<Direction> todo_dir;
-
-    cout << "TODO: ";
-    for(int i = 0; i < 4; i++)
-    {
-        Direction dir = static_cast<Direction>(i);
-        if(dir != from && room->neighbours_[dir] != NULL)
-        {
-            cout << dir << ' ';
-            todo.push_back(room->neighbours_[dir]);
-            todo_dir.push_back(dir);
-        }
-    }
-    cout << endl;
-
-    if(todo.empty())
+	while(!todo.empty())
 	{
-		cout << "Dead End!" << endl;
-		return;
+        cur_room = todo.front();
+        rooms_sorted_.push_back(cur_room);
+        cout << "Room " << cur_room->pos_ << endl;
+
+		for (int i = 0; i < 4; ++i) //all neighbours
+		{
+			dir = static_cast<Direction>(i);
+			Room* cur_neighbour = cur_room->neighbours_[dir];
+
+			if(cur_neighbour == nullptr)
+			{
+				continue;
+			}
+			else if(prev.find(cur_neighbour) == prev.end()) //neighbour hasn't been visited
+			{
+				cur_neighbour->distance_from_spawn_ = cur_room->distance_from_spawn_ + 1;
+				prev[cur_neighbour] = cur_room;
+                prev_direction[cur_neighbour] = dir;
+				todo.push(cur_neighbour);
+			}
+		}
+
+        todo.pop();
 	}
 
-    auto new_life_time = std::ceil((float)life_time / (float)todo.size());
-
-    for (size_t i = 0; i < todo.size(); ++i)
+    //iterate over sorted rooms backwards to calculate rooms_in_distance_
+    /*
+    auto it = rooms_sorted_.end();
+    do
     {
-        if(life_time <= 0) //choose new biome
+        it--;
+        cur_room = (*it);
+        size_t room_sum = 0;
+        for (int j = 0; j < 4; ++j) //sum the counts from each direction
         {
-            cout << biome << " died due to splitting itself too much, new one: ";
-            life_time = 20;
-            new_life_time = (size_t)std::ceil((float)life_time / (float)(todo.size() - i));
-            biome         = available_biomes_.at(rand() % available_biomes_.size());
-            cout << biome << endl;
+            room_sum += cur_room->room_count_in_dir_[j];
         }
 
-        spreadBiome(todo.at(i), biome, opposite(todo_dir.at(i)), new_life_time);
-        life_time -= new_life_time;
-        if(life_time < new_life_time)
-        {
-            new_life_time = life_time;
-        }
-    }
+        if(prev[cur_room] == nullptr) //spawn
+            break;
+
+        prev[cur_room]->room_count_in_dir_[prev_direction[cur_room]] = room_sum + 1;
+    } while(it != rooms_sorted_.begin());
      */
 }
 
 void Dungeon::generateBiomes(Room* start)
 {
-    start->biome_ = '@';
+    updateRoomInfo(start);
 
-    for(int i = 0; i < 4; i++)
+    auto biome_factory = Factory<Biomes::Biome>::get();
+    auto available_biomes = biome_factory->getEntityNames();
+
+    size_t min_biome_size = 5;
+    size_t max_biome_size = 8;
+
+    list<Room*> todo = rooms_sorted_;
+    Room* cur_room = nullptr;
+    size_t life_time = 0;
+    string biome_name;
+    shared_ptr<Biomes::Biome> biome;
+
+    cout << "### Spreading biomes... ###" << endl;
+
+    size_t spread_count = 0;
+    while(!todo.empty())
     {
-        Direction dir = static_cast<Direction>(i);
-        if(start->neighbours_[dir] != NULL)
+        life_time = min_biome_size + (random_engine() % (max_biome_size - min_biome_size));
+        biome_name = available_biomes.at((random_engine() % available_biomes.size()));
+        biome     = biome_factory->createEntity(biome_name);
+        list<Room*> cur_biome;
+        cout << "|~ biome | lifetime: " << biome << " | " << life_time << endl;
+        list<Room*> neighbours = { todo.front() }; //possible rooms to spread to
+        while (life_time > 0)
         {
-            start->room_count_in_dir_[dir] = getRoomCountFromDirection(start->neighbours_[dir], opposite(dir), 0);
+            if(neighbours.empty())
+            {
+                if(cur_biome.size() < min_biome_size)
+                {
+                    // find neighbouring room with different biome
+                    // and adapt the current one because it is too small
+                    for(auto room : cur_biome)
+                    {
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            Room* neighbour = room->neighbours_[i];
+                            if(neighbour != nullptr && neighbour->biome_ != biome)
+                            {
+                                for(auto room : cur_biome)
+                                {
+                                    room->biome_ = neighbour->biome_;
+                                }
+                                goto BIOME_ADAPTED;
+                            }
+                        }
+                    }
+                }
+BIOME_ADAPTED:  cout << "Biome cell died with " << life_time << " left... how sad..." << endl;
+                break;
+            }
+
+            cur_room = neighbours.front();
+            cout << "cur room: " << cur_room->pos_ << endl;
+
+            cur_room->biome_ = biome;
+            todo.remove(cur_room);
+			neighbours.remove(cur_room);
+            life_time--;
+            cur_biome.push_back(cur_room);
+            spread_count++;
+            for (int i = 0; i < 4; ++i)  //spread biome to neighbours
+            {
+                if(cur_room->neighbours_[i] != nullptr)
+                {
+					if(cur_room->neighbours_[i]->biome_ == nullptr) //not yet spread to
+					{
+						neighbours.push_back(cur_room->neighbours_[i]);
+					}
+                }
+            }
+
+			//-- DEBUG --//
+			cout << "Neighbours: ";
+			for(auto const& room : neighbours)
+			{
+				cout << room->pos_;
+			}
+			cout << endl;
         }
     }
-    cout << "Room " << start->pos_ << " room_count_in_dir: ";
-    for (int i = 0; i < 4; ++i)
-    {
-        cout << start->room_count_in_dir_[i] << ',';
-    }
-    cout << endl;
+
+    cout << "### DONE! room count / spread count: " << rooms_sorted_.size() << " / " << spread_count << " ###" << endl;
 
     //-- DEBUG --//
     for(auto& row : layout_)
@@ -505,39 +564,6 @@ void Dungeon::generateBiomes(Room* start)
     }
 }
 
-size_t Dungeon::getRoomCountFromDirection(Room* room, Direction from, size_t prev_distance)
-{
-    if(room->visited_for_room_count_) //prevent loops
-        return 0;
-
-    room->distance_from_spawn_ = prev_distance + 1;
-
-    size_t result = 1; //count yourself
-    room->visited_for_room_count_ = true;
-    for(int i = 0; i < 4; i++)
-    {
-        Direction dir = static_cast<Direction>(i);
-        if(dir == from)
-            continue;
-        if(room->neighbours_[dir] == NULL)
-        {
-            room->room_count_in_dir_[dir] = 0;
-        }
-        else
-        {
-            room->room_count_in_dir_[dir] = getRoomCountFromDirection(room->neighbours_[dir], opposite(dir), room->distance_from_spawn_);
-            result += room->room_count_in_dir_[dir];
-        }
-    }
-    cout << "Room " << room->pos_ << " room_count_in_dir: ";
-    for (int i = 0; i < 4; ++i)
-    {
-        cout << room->room_count_in_dir_[i] << ',';
-    }
-    cout << " dist from spawn: " << room->distance_from_spawn_ << endl;
-    return result;
-}
-
 
 void Dungeon::printBiomes()
 {
@@ -555,7 +581,7 @@ void Dungeon::printBiomes()
 		for (auto room : row)
 		{
 			if (room != NULL)
-				cout << (char)(room->neighbours_[LEFT] ? '-' : ' ') << room->getBiome() << (char)(room->neighbours_[RIGHT] ? '-' : ' ');
+				cout << (char)(room->neighbours_[LEFT] ? '-' : ' ') << room->biome_->name_.at(0) << (char)(room->neighbours_[RIGHT] ? '-' : ' ');
 			else
 				cout << " . ";
 		}

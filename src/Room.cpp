@@ -281,7 +281,7 @@ void Room::draw(sf::RenderWindow& window)
     if (tile_map_ == nullptr)
     {
         tile_map_ = new TileMap();
-        tile_map_->load("images/tileset.png", map_, TILE_SIZE, (int) getColCount(), (int) getRowCount());
+        tile_map_->load(biome_->texture_.c_str(), map_, TILE_SIZE, (int) getColCount(), (int) getRowCount());
     }
     window.draw(*tile_map_);
 
@@ -394,5 +394,7 @@ void Room::removeVisualEffect(shared_ptr<Effect>& e)
 {
     effects_.remove(shared_ptr<Effect>(e));
 }
+
+
 
 

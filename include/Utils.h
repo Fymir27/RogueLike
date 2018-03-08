@@ -6,6 +6,8 @@ class Field;
 typedef std::vector<Field*> Row;
 typedef std::vector<Row> Map;
 
+extern std::default_random_engine random_engine;
+
 template<class T>
 void print(const std::vector<std::vector<T>>& v)
 {
@@ -78,6 +80,5 @@ inline size_t absolute(T i)
 
 inline bool roll(size_t count, size_t out_of)
 {
-    static std::default_random_engine random_engine((unsigned)std::time(0));
     return ((random_engine() % out_of) < count);
 }

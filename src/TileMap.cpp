@@ -26,8 +26,8 @@ bool TileMap::load(const char* filename, const Map& map,
 			int tile_nr = map.at(y).at(x)->getTileNr();
 			int index = width * y + x; //linear index
 
-			int tex_x = (tile_nr * 64) % tileset_.getSize().x;
-			int tex_y = (tile_nr * 64) / tileset_.getSize().x;
+			int tex_x = (tile_nr * 32) % tileset_.getSize().x;
+			int tex_y = (tile_nr * 32) / tileset_.getSize().x;
 
 
 			sf::Vertex* quad = &vertices_[index * 4];
@@ -47,9 +47,9 @@ bool TileMap::load(const char* filename, const Map& map,
 			*/
 
 			quad[0].texCoords = sf::Vector2f(tex_x, tex_y);
-			quad[1].texCoords = sf::Vector2f(tex_x + 64, tex_y);
-			quad[2].texCoords = sf::Vector2f(tex_x + 64, tex_y + 64);
-			quad[3].texCoords = sf::Vector2f(tex_x, tex_y + 64);
+			quad[1].texCoords = sf::Vector2f(tex_x + 32, tex_y);
+			quad[2].texCoords = sf::Vector2f(tex_x + 32, tex_y + 32);
+			quad[3].texCoords = sf::Vector2f(tex_x, tex_y + 32);
 		}
 	}
 	return true;

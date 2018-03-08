@@ -158,7 +158,9 @@ int main()
 	Factory<Enemy>::get();
     Factory<Biome>::get();
 
-	srand((unsigned int)std::time(NULL));
+	srand((unsigned int)std::time(0));
+    random_engine.seed((unsigned)std::time(0));
+
 	current_dungeon = new Dungeon();	
 	current_dungeon->readRoomPartsFromFile();
 	cout << "Dungeon Layout:" << endl;

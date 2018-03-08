@@ -5,6 +5,7 @@
 #include "Utils.h"
 #include "TileMap.h"
 #include "Enemy.h"
+#include "Biome.h"
 
 class Enemy;
 
@@ -27,9 +28,8 @@ private:
     list<shared_ptr<Enemy>> enemies_;
     vector<vector<bool> > spawn_locations_;
 
-    char biome_ = ' ';
+    shared_ptr<Biomes::Biome> biome_;
     size_t room_count_in_dir_[4] = { 0, 0, 0, 0 };
-    bool visited_for_room_count_ = false;
     size_t distance_from_spawn_ = 0;
 
     Position pos_; //Position in Dungeon
@@ -87,10 +87,6 @@ public:
     void spawnEnemy(string class_name, Position pos = {0,0});
     void spawnEnemies(size_t count);
 
-    char getBiome()
-    { return biome_; }
-    void setBiome(char b)
-    { biome_ = b; }
 };
 
 extern Room* current_room;

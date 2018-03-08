@@ -4,7 +4,7 @@
 #include "Character.h"
 #include "Player.h"
 
-Door::Door(Position pos, Direction dir) : Field(pos, 5, TRIGGER), dir_(dir)
+Door::Door(Position pos, Direction dir) : Field(pos, 2, TRIGGER), dir_(dir)
 {
 
 }

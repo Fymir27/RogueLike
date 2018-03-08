@@ -69,13 +69,16 @@ namespace Biomes
         Temperature temp_;
         Humidity    hum_;
         FloorType   floor_;
+        string      texture_;
 
-        Biome(string const& name, int temp, int hum, EFloorType floor);
+        Biome(string const& name = "Template", int temp = 0, int hum = 0, EFloorType floor = GRASS, string const& texture = "images/tileset.png");
         Biome(Biome* orig);
 
         bool satisfies(Condition<Temperature> cond);
         bool satisfies(Condition<Humidity> cond);
         bool satisfies(Condition<FloorType> cond);
+
+        bool operator==(Biome const& other) { return name_ == other.name_; }
     };
 }
 

@@ -36,13 +36,14 @@ using std::endl;
 #include <map>
 #include <string>
 #include <array>
-#include <algorithm>
+#include <queue>
 using std::array;
 using std::vector;
 using std::list;
 using std::map;
 using std::pair;
 using std::string;
+using std::queue;
 
 #include <memory>
 using std::unique_ptr;
@@ -53,10 +54,10 @@ using std::shared_ptr;
 using namespace pugi;
 
 //--- Utility ---//
+#include <algorithm>
 #include <cstdlib>
 #include <cmath>
 #include <random>
-#include "Utils.h"
 
 //---  ---//
 #include "GameObject.h"

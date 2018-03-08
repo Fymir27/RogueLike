@@ -1,5 +1,7 @@
 #include "Utils.h"
 
+std::default_random_engine random_engine;
+
 Position::Position(int x, int y) : x_(x), y_(y)
 {
 	

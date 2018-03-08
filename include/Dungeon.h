@@ -15,15 +15,11 @@ private:
 	unsigned int height_;
 	unsigned int width_;
 	map<string, Room*> loaded_rooms_;
-	vector<vector<Room*>> layout_; //currently used
+	vector<vector<Room*>> layout_;
+    list<Room*> rooms_sorted_;   // all the rooms sorted by distance to spawn in ascending order
 	map<size_t, RoomHeightClass> room_parts_;  // room_parts[height][section][random index][row]
 
-    vector<char> available_biomes_ = { 'X', 'O', 'M', 'F', 'V'};
-    void spread(Room* room, char biome, Direction from, size_t life_time);
-
-    //counts how many rooms are behind each door except "from"
-    //also sets distance from player
-    size_t getRoomCountFromDirection(Room* room, Direction from, size_t prev_distance);
+	void updateRoomInfo(Room* spawn);
 
 public:
 	void generateBiomes(Room* start);
