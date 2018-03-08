@@ -58,7 +58,7 @@ bool Ability::cast(Character *target)
 
     if(effect_ != nullptr)
     {
-        cout << "Adding Visual Effect" << endl;
+        //cout << "Adding Visual Effect" << endl;
         auto e = shared_ptr<Effect>(effect_->createInstance());
         current_room->addVisualEffect(e);
     }

@@ -395,7 +395,7 @@ void Dungeon::updateRoomInfo(Room* spawn)
 	{
         cur_room = todo.front();
         rooms_sorted_.push_back(cur_room);
-        cout << "Room " << cur_room->pos_ << endl;
+        //cout << "Room " << cur_room->pos_ << endl;
 
 		for (int i = 0; i < 4; ++i) //all neighbours
 		{
@@ -453,57 +453,65 @@ void Dungeon::generateBiomes(Room* start)
     Room* cur_room = nullptr;
     size_t life_time = 0;
     string biome_name;
-    shared_ptr<Biomes::Biome> biome;
-
     cout << "### Spreading biomes... ###" << endl;
 
     size_t spread_count = 0;
     while(!todo.empty())
     {
-        life_time = min_biome_size + (random_engine() % (max_biome_size - min_biome_size));
+        life_time  = min_biome_size + (random_engine() % (max_biome_size - min_biome_size));
         biome_name = available_biomes.at((random_engine() % available_biomes.size()));
-        biome     = biome_factory->createEntity(biome_name);
+
         list<Room*> cur_biome;
-        cout << "|~ biome | lifetime: " << biome << " | " << life_time << endl;
         list<Room*> neighbours = { todo.front() }; //possible rooms to spread to
+
+        cout << "# biome: " << biome_name << ", size: " << life_time << ", start: " << start->pos_ << endl;
+
+        string adjacent_biome_name = "None";
+        for (int i = 0; i < 4; ++i)
+        {
+            // start doesnt have any adjacent rooms
+            // and also doesnt need any because it can always spread fully
+            if(todo.front() == start)
+                break;
+
+            Room* neighbour = todo.front()->neighbours_[i];
+            if(neighbour != nullptr && neighbour->biome_ != nullptr)
+            {
+                adjacent_biome_name = todo.front()->neighbours_[i]->biome_->name_;
+            }
+        }
+
+
+
         while (life_time > 0)
         {
             if(neighbours.empty())
             {
-                if(cur_biome.size() < min_biome_size)
+                if (cur_biome.size() < min_biome_size)
                 {
-                    // find neighbouring room with different biome
-                    // and adapt the current one because it is too small
-                    for(auto room : cur_biome)
+                    // cur biome too small
+                    // adapt it to adjacent biome
+                    for (auto room : cur_biome)
                     {
-                        for (int i = 0; i < 4; ++i)
-                        {
-                            Room* neighbour = room->neighbours_[i];
-                            if(neighbour != nullptr && neighbour->biome_ != biome)
-                            {
-                                for(auto room : cur_biome)
-                                {
-                                    room->biome_ = neighbour->biome_;
-                                }
-                                goto BIOME_ADAPTED;
-                            }
-                        }
+                        room->biome_ = biome_factory->createEntity(adjacent_biome_name);
                     }
                 }
-BIOME_ADAPTED:  cout << "Biome cell died with " << life_time << " left... how sad..." << endl;
                 break;
             }
 
+            // get new room
             cur_room = neighbours.front();
-            cout << "cur room: " << cur_room->pos_ << endl;
+            //cout << "cur room: " << cur_room->pos_ << endl;
 
-            cur_room->biome_ = biome;
+            // assign it a biome
+            cur_room->biome_ = biome_factory->createEntity(biome_name);
             todo.remove(cur_room);
 			neighbours.remove(cur_room);
-            life_time--;
             cur_biome.push_back(cur_room);
-            spread_count++;
-            for (int i = 0; i < 4; ++i)  //spread biome to neighbours
+            life_time--;
+
+            // save its neighbours as possible candidates to spread to
+            for (int i = 0; i < 4; ++i)
             {
                 if(cur_room->neighbours_[i] != nullptr)
                 {
@@ -515,18 +523,19 @@ BIOME_ADAPTED:  cout << "Biome cell died with " << life_time << " left... how sa
             }
 
 			//-- DEBUG --//
+            /*
 			cout << "Neighbours: ";
 			for(auto const& room : neighbours)
 			{
 				cout << room->pos_;
 			}
 			cout << endl;
+            */
         }
     }
 
-    cout << "### DONE! room count / spread count: " << rooms_sorted_.size() << " / " << spread_count << " ###" << endl;
-
     //-- DEBUG --//
+    /*
     for(auto& row : layout_)
     {
         for(auto& room : row)
@@ -562,6 +571,7 @@ BIOME_ADAPTED:  cout << "Biome cell died with " << life_time << " left... how sa
         }
         cout << endl;
     }
+     */
 }
 
 
@@ -569,15 +579,6 @@ void Dungeon::printBiomes()
 {
 	for (auto& row : layout_)
 	{
-		/*
-		for (Room* room : row)
-		{
-			if (room != NULL)
-				cout << ' ' << (char)(room->neighbours_[UP] ? '|' : ' ') << ' ';
-			else
-				cout << "...";
-		}
-		 */
 		for (auto room : row)
 		{
 			if (room != NULL)

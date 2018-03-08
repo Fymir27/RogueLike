@@ -25,7 +25,7 @@ void MovingSprite::aim(sf::Vector2f from, sf::Vector2f to)
 
     if(path_length == 0)
     {
-        cout << "MovingSprite::aim -> path_length is 0!" << endl;
+        //cout << "MovingSprite::aim -> path_length is 0!" << endl;
         return;
     }
 
@@ -56,7 +56,7 @@ void MovingSprite::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 MovingSprite::~MovingSprite()
 {
-    cout << "Moving Sprite dtor: " << this << endl;
+    //cout << "Moving Sprite dtor: " << this << endl;
 }
 
 //------------------------------------------------------------------------------------

@@ -193,14 +193,6 @@ int main()
 
 	//------- Test Area ----------//
 	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
-    Biome desert = { "Desert", 40, 50, Biomes::SAND };
-    Biomes::Condition<Biomes::Temperature> likes_it_warm = { 30, Biomes::BIGGER };
-    Biomes::Condition<Biomes::Temperature> likes_it_cold = { 20, Biomes::SMALLER };
-    Biomes::Condition<Biomes::FloorType> likes_sand = { Biomes::SAND, Biomes::EQUAL };
-    //auto likes_it_warm = Biomes::Condition<Biomes::Temperature, int>(new Biomes::Temperature(30), Biomes::BIGGER);
-    cout << "likes_it_warm: " << (desert.satisfies(likes_it_warm) ? "yes" : "no") << endl;
-    cout << "likes_it_cold: " << (desert.satisfies(likes_it_warm) ? "yes" : "no") << endl;
-    cout << "likes_sand: " << (desert.satisfies(likes_it_warm) ? "yes" : "no") << endl;
 	//----------------------------//
 
 	sf::Event event;
