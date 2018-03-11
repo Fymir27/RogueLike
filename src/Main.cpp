@@ -193,6 +193,9 @@ int main()
 
 	//------- Test Area ----------//
 	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
+	auto test_room = new Room();
+    test_room->generate();
+    test_room->printToConsole();
 	//----------------------------//
 
 	sf::Event event;

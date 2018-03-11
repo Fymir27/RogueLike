@@ -36,6 +36,7 @@ const Position DELTA_POS[4] = { Position(0,-1), Position(1,0), Position(0,1), Po
 extern Position operator+(Position first, const Position& second);
 extern Position operator-(Position first, const Position& second);
 extern bool operator==(const Position& first, const Position& second);
+extern bool operator!=(const Position& first, const Position& second);
 
 std::ostream& operator<<(std::ostream& out, const Position& pos);
 
@@ -78,7 +79,7 @@ inline void clamp(T& val, T min, T max)
 }
 
 template <typename T>
-inline size_t absolute(T i)
+inline T absolute(T i)
 {
     return i > 0 ? i : i*(-1);
 };
@@ -98,4 +99,11 @@ template <typename T>
 inline T getEnumFromAttribute(xml_attribute attr)
 {
 	return static_cast<T>(std::stoi(attr.value()));
+}
+
+/// min <= return <= max
+template <typename T>
+inline T getRandomBetween(T min, T max)
+{
+	return static_cast<T>(min + (random_engine() % (max - min + 1)));
 }

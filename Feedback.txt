@@ -1,0 +1,5 @@
+Fireball burn before hit
+Door indicator on Minimap
+Item activation keys upside down
+enemies trapped
+name length cap

@@ -32,7 +32,7 @@ RegenerationEffect::RegenerationEffect(int healing, size_t dur) :
 
 //#- Buffs #-//
 
-AllStatsDown::AllStatsDown(unsigned amount, size_t dur) :
+AllStatsDown::AllStatsDown(int amount, size_t dur) :
         StatEffect("Weakened", "Stats are reduced",
                    Stats(-amount, -amount, -amount, -amount, -amount), dur)
 {

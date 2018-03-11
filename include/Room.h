@@ -44,6 +44,7 @@ private:
 
 public:
     Room(Position pos, size_t height);
+    Room() {};
 
     size_t getColCount()
     { return map_.front().size(); };
@@ -63,7 +64,15 @@ public:
 
     Character* getCharacter(Position pos);
 
+    void generateFromParts();
     void generate();
+    void makePath(Position from, Position to);
+
+    /// widen paths by "bombing them"
+    /// credit: http://www.darkgnosis.com/2018/03/03/contour-bombing-cave-generation-algorithm/
+    void bombPaths();
+
+    void printToConsole();
 
     Position getPathToPlayer(Position from);
 

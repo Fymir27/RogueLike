@@ -35,7 +35,7 @@ public:
 class AllStatsDown : public StatEffect
 {
 public:
-    AllStatsDown(unsigned amount, size_t dur);
+    AllStatsDown(int amount, size_t dur);
 };
 
 

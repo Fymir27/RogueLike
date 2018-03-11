@@ -32,3 +32,8 @@ bool operator==(const Position& first, const Position& second)
 	return (first.x_ == second.x_ && first.y_ == second.y_);
 }
 
+bool operator!=(const Position& first, const Position& second)
+{
+	return (first.x_ != second.x_ || first.y_ != second.y_);
+}
+

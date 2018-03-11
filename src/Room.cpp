@@ -112,7 +112,7 @@ Character* Room::getCharacter(Position pos)
 }
 
 
-void Room::generate()
+void Room::generateFromParts()
 {
     //cout << "Randomly generating Room" << Position(x, y) << endl;
     RoomHeightClass room_parts = current_dungeon->getRoomParts(height_);
@@ -266,7 +266,7 @@ void Room::placeItem(Position pos, Item* item)
 
 Room::Room(Position pos, size_t height) : pos_(pos), height_(height)
 {
-    generate();
+    generateFromParts();
 }
 
 void Room::addNeighbour(Direction dir, Room* other)
@@ -318,18 +318,24 @@ void Room::draw(sf::RenderWindow& window)
 
 void Room::addField(Field* field)
 {
-    int x = field->pos_.x_;
-    int y = field->pos_.y_;
-
-    if (y >= map_.size() || x >= map_.at(y).size())
+    try
     {
-        cout << "Can't add a field there!" << endl;
-        return;
+        int x = field->pos_.x_;
+        int y = field->pos_.y_;
+
+        if (y >= map_.size() || x >= map_.at(y).size())
+        {
+            cout << "Can't add a field there!" << endl;
+            return;
+        }
+
+        delete map_.at(y).at(x);
+        map_.at(y).at(x) = field;
     }
-
-    delete map_.at(y).at(x);
-    map_.at(y).at(x) = field;
-
+    catch (std::out_of_range& e)
+    {
+        cout << e.what() << endl;
+    }
 }
 
 void Room::addEnemy(shared_ptr<Enemy> enemy)
@@ -413,6 +419,117 @@ void Room::addVisualEffect(shared_ptr<Effect>& e)
 void Room::removeVisualEffect(shared_ptr<Effect>& e)
 {
     effects_.remove(shared_ptr<Effect>(e));
+}
+
+void Room::generate()
+{
+    try
+    {
+        width_ = 20;
+        height_ = 20;
+        // start with wall everywhere
+        map_.resize(height_);
+        for (size_t y        = 0; y < height_; ++y)
+        {
+            for (size_t x = 0; x < width_; ++x)
+            {
+                map_.at(y).push_back(new Wall({(int) x, (int) y}));
+            }
+        }
+
+        // pick Door Positions
+        Position door_pos;
+        int      door_margin = 5;
+
+        door_pos = {getRandomBetween(door_margin, (int) width_ - door_margin), 0};
+        door_pos_[UP] = door_pos;
+        //addField(new Door(door_pos, UP));
+
+        door_pos = {(int) width_ - 1, getRandomBetween(door_margin, (int) height_ - door_margin)};
+        door_pos_[RIGHT] = door_pos;
+        //addField(new Door(door_pos, RIGHT));
+
+        door_pos = {getRandomBetween(door_margin, (int) width_ - door_margin), (int) height_ - 1};
+        door_pos_[DOWN] = door_pos;
+        //addField(new Door(door_pos, DOWN));
+
+        door_pos = {0, getRandomBetween(door_margin, (int) width_ - door_margin)};
+        door_pos_[LEFT] = door_pos;
+        //addField(new Door(door_pos, LEFT));
+
+        //connect doors
+        makePath(door_pos_[UP]    + DELTA_POS[DOWN], door_pos_[DOWN] + DELTA_POS[UP]);
+        makePath(door_pos_[RIGHT] + DELTA_POS[LEFT], door_pos_[LEFT] + DELTA_POS[RIGHT]);
+
+        bombPaths();
+
+    }
+    catch (std::exception& e)
+    {
+        cout << e.what() << endl;
+    }
+}
+
+void Room::makePath(Position from, Position to)
+{
+    Position step_x, step_y = {0, 0};
+
+    if(from.x_ != to.x_) step_x = (from.x_ < to.x_) ? DELTA_POS[RIGHT] : DELTA_POS[LEFT];
+    if(from.y_ != to.y_) step_y = (from.y_ < to.y_) ? DELTA_POS[DOWN]  : DELTA_POS[UP];
+
+    addField(new Floor(from));
+    while(from!= to)
+    {
+        if((from.x_ != to.x_) && roll(1,2))
+        {
+            from = from + step_x;
+        }
+        else if(from.y_ != to.y_)
+        {
+            from = from + step_y;
+        }
+        addField(new Floor(from));
+    }
+}
+
+void Room::printToConsole()
+{
+    cout << endl << "Room " << pos_ << endl;
+    for(auto const& row : map_)
+    {
+        for (auto const& field : row)
+        {
+            switch(field->tile_nr_)
+            {
+                case 0: cout << '#'; break;
+                case 1: cout << '.'; break;
+                case 2: cout << 'X'; break;
+                default: cout << '?'; break;
+            }
+            cout << ' ';
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+
+void Room::bombPaths()
+{
+    vector<Field*> candidates;
+    for(auto row : map_)
+    {
+        for(auto field : row)
+        {
+            candidates.push_back(field);
+        }
+    }
+    
+    //shuffle candiates
+    std::random_shuffle(candidates.begin(), candidates.end()/*, random_engine*/);
+
+    //TODO: finish: http://www.darkgnosis.com/2018/03/03/contour-bombing-cave-generation-algorithm/
+
 }
 
 
