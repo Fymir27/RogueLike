@@ -70,12 +70,13 @@ inline sf::Vector2f worldToScreen(Position pos)
 }
 
 template <typename T>
-inline void clamp(T& val, T min, T max)
+inline T clamp(T val, T min, T max)
 {
     if(val <  min)
-        val = min;
+        return min;
     if(val > max)
-        val = max;
+        return max;
+	return val;
 }
 
 template <typename T>

@@ -43,8 +43,8 @@ private:
     void initSpawnLocations();
 
 public:
-    Room(Position pos, size_t height);
-    Room() {};
+    //Room(Position pos, size_t height);
+    Room(Position pos, size_t width = 22, size_t height = 20);
 
     size_t getColCount()
     { return map_.front().size(); };
@@ -70,7 +70,7 @@ public:
 
     /// widen paths by "bombing them"
     /// credit: http://www.darkgnosis.com/2018/03/03/contour-bombing-cave-generation-algorithm/
-    void bombPaths();
+    void bombPaths(bool use_borders = true);
 
     void printToConsole();
 

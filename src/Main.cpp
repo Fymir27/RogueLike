@@ -164,7 +164,7 @@ int main()
 	current_dungeon = new Dungeon();	
 	current_dungeon->readRoomPartsFromFile();
 	cout << "Dungeon Layout:" << endl;
-	current_dungeon->generate(20, 15);
+	current_dungeon->generate(15, 10);
 
     current_dungeon->generateBiomes(current_room);
     current_dungeon->printBiomes();
@@ -193,9 +193,6 @@ int main()
 
 	//------- Test Area ----------//
 	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
-	auto test_room = new Room();
-    test_room->generate();
-    test_room->printToConsole();
 	//----------------------------//
 
 	sf::Event event;

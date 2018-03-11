@@ -181,8 +181,8 @@ void Dungeon::generate(size_t width, size_t height)
 	size_t margin_min = 2; //from both sides!
 	size_t margin_hor = random_engine() % width; //from left
 	size_t margin_ver = random_engine() % height; //from top
-	clamp<size_t>(margin_hor, margin_min, width - margin_min);
-	clamp<size_t>(margin_ver, margin_min, height - margin_min);
+	margin_hor = clamp<size_t>(margin_hor, margin_min, width - margin_min);
+	margin_ver = clamp<size_t>(margin_ver, margin_min, height - margin_min);
 
 	cout << "Margins (hor/ver): " << margin_hor << "/" << margin_ver << endl;
 
@@ -190,7 +190,7 @@ void Dungeon::generate(size_t width, size_t height)
 
 	for (size_t y = 0; y < height; y++)     //vertical line
 	{
-		tmp = new Room(Position(margin_hor, y), getRandomRoomHeight());
+		tmp = new Room(Position(margin_hor, y));
 		layout_[y][margin_hor] = tmp;
 		if (y > 0)
 		{
@@ -208,7 +208,7 @@ void Dungeon::generate(size_t width, size_t height)
 			tmp = getRoom(x, y);
 			if (tmp == NULL)
 			{
-				tmp = new Room(Position(x, y), getRandomRoomHeight());
+				tmp = new Room(Position(x, y));
 				layout_[y][x] = tmp;
 			}
 			connect(tmp, (dir_grow == 1 ? LEFT : RIGHT), getRoom(x + (dir_grow * -1), y));
@@ -221,7 +221,7 @@ void Dungeon::generate(size_t width, size_t height)
 		tmp = getRoom(x, margin_ver);            //horizontal line
 		if (tmp == NULL)
 		{
-			tmp = new Room(Position(x, margin_ver), getRandomRoomHeight());
+			tmp = new Room(Position(x, margin_ver));
 			layout_[margin_ver][x] = tmp;
 		}
 		if (x > 0)
@@ -240,7 +240,7 @@ void Dungeon::generate(size_t width, size_t height)
 			tmp = getRoom(x, y);
 			if (tmp == NULL)
 			{
-				tmp = new Room(Position(x, y), getRandomRoomHeight());
+				tmp = new Room(Position(x, y));
 				layout_[y][x] = tmp;
 			}
 			connect(tmp, (dir_grow == 1 ? UP : DOWN), getRoom(x, y + (dir_grow * -1)));

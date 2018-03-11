@@ -264,10 +264,12 @@ void Room::placeItem(Position pos, Item* item)
     getField(pos.x_, pos.y_)->placeItem(item);
 }
 
+/*
 Room::Room(Position pos, size_t height) : pos_(pos), height_(height)
 {
     generateFromParts();
 }
+ */
 
 void Room::addNeighbour(Direction dir, Room* other)
 {
@@ -425,11 +427,9 @@ void Room::generate()
 {
     try
     {
-        width_ = 20;
-        height_ = 20;
         // start with wall everywhere
         map_.resize(height_);
-        for (size_t y        = 0; y < height_; ++y)
+        for (size_t y = 0; y < height_; ++y)
         {
             for (size_t x = 0; x < width_; ++x)
             {
@@ -461,7 +461,7 @@ void Room::generate()
         makePath(door_pos_[UP]    + DELTA_POS[DOWN], door_pos_[DOWN] + DELTA_POS[UP]);
         makePath(door_pos_[RIGHT] + DELTA_POS[LEFT], door_pos_[LEFT] + DELTA_POS[RIGHT]);
 
-        bombPaths();
+        bombPaths(true);
 
     }
     catch (std::exception& e)
@@ -514,23 +514,92 @@ void Room::printToConsole()
 }
 
 
-void Room::bombPaths()
+void Room::bombPaths( bool use_borders)
 {
+    cout << "bombing paths..." << endl;
     vector<Field*> candidates;
     for(auto row : map_)
     {
         for(auto field : row)
         {
-            candidates.push_back(field);
+            if(field->tile_nr_ == 1) //FLOOR
+                candidates.push_back(field);
         }
     }
     
     //shuffle candiates
     std::random_shuffle(candidates.begin(), candidates.end()/*, random_engine*/);
 
-    //TODO: finish: http://www.darkgnosis.com/2018/03/03/contour-bombing-cave-generation-algorithm/
+    size_t iteration_count = std::round(candidates.size() * 2.d);
+    cout << candidates.size() << " canditadtes" << endl;
 
+    for (size_t i = 0; i < iteration_count; ++i)
+    {
+        cout << "Iteration count: " << i << "/" << iteration_count << endl;
+        size_t candidate_id;
+        //int tile_variation = 0;
+        // 1/3 chance that we will use as a bombing point one of the last 15 positions
+        if (roll(1,3))
+        {
+            cout << "Taking newer cells!" << endl;
+            candidate_id = getRandomBetween(candidates.size() - 15, candidates.size() - 1);
+            //tile_variation = 1;
+        }
+        else // otherwise use lower half of remaining tiles
+        {
+            cout << "Taking older cells!" << endl;
+            candidate_id = getRandomBetween<size_t>(0, candidates.size() / 2);
+            //tile_variation = 2;
+        }
+
+        // check boundaries
+        if (candidate_id >= candidates.size())  //unsigned, so now lower check needed
+            candidate_id = candidates.size() - 1;
+
+        int bomb_radius = 1; //roll(1,50) ? 1 : 2; //small chance of bigger radius
+
+        cout << "bomb radius: " << bomb_radius << endl;
+
+        Position bomb_pos = candidates[candidate_id]->pos_;
+
+        // step by step prompt:
+        //cout << "Bomb?" << endl;
+        //string s;
+        //std::getline(cin, s);
+
+        // bomb
+        for (int y = std::max(0, bomb_pos.y_ - bomb_radius - 1); y < std::max((int)height_, bomb_pos.y_ + bomb_radius); y++)
+        {
+            for (int x = std::max(0, bomb_pos.x_ - bomb_radius - 1); x < std::max((int)width_, bomb_pos.x_ + bomb_radius); x++)
+            {
+                //cout << "Checking " << Position(x,y) << endl;
+                //circle collision check
+                if ((x - bomb_pos.x_)*(x - bomb_pos.x_) + (y - bomb_pos.y_)*(y - bomb_pos.y_) < bomb_radius * bomb_radius /*TODO: remove?*/ + bomb_radius)
+                {
+                    //cout << "hit!" << endl;
+                    int tmp_x = clamp(x, use_borders ? 1 : 0, use_borders ? (int)width_  - 2 : (int)width_  - 1);
+                    int tmp_y = clamp(y, use_borders ? 1 : 0, use_borders ? (int)height_ - 2 : (int)height_ - 1);
+
+                    if(getField(tmp_x, tmp_y)->tile_nr_ == 0) //we hit a wall!
+                    {
+                        auto field = new Floor(Position(tmp_x, tmp_y));
+                        addField(field);
+                        candidates.push_back(field);
+                    }
+                }
+            } // for x
+        } // for y
+        //erase bombed cell
+        candidates.erase(candidates.begin() + candidate_id);
+        //printToConsole();
+    } // for i
+} // bombPaths()
+
+Room::Room(Position pos, size_t width, size_t height) : pos_(pos), width_(width), height_(height)
+{
+    generate();
 }
+
 
 
 

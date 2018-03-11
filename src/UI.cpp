@@ -135,9 +135,9 @@ UI::UI() : pos_inv_        ({750, 0  }),
            pos_stats_      ({765, 200}),
            stat_names_     ({750, 200}, "Statname"),
            stat_values_    ({900, 200}, "Statvalue"),
-           pos_bottom_text_({ 10, 300}),
-           player_info_    ({500, 300}, current_player),
-           abilities_      ({ 15, 425}, "Abilities:")
+           pos_bottom_text_({ 10, 650}),
+           player_info_    ({750, 500}, current_player),
+           abilities_      ({540, 655}, "Abilities:")
 {
 	//-- set fixed Text --//
 	stat_names_.setString("Strength\n"
@@ -147,7 +147,7 @@ UI::UI() : pos_inv_        ({750, 0  }),
 						  "Willpower\n");
 
 	textbox_ = new Textbox(5, 20, Text::getDefaultFont(),
-		    pos_bottom_text_, 420, 120,
+		    pos_bottom_text_, 500, 120,
 			5, 5, sf::Color(100, 100, 100), sf::Color(50,50,50));
 			
 }
@@ -210,8 +210,8 @@ void UI::draw(sf::RenderWindow& window)
         else
             ss << " - CD: " << ability->getCooldownLeft();
         ss << newl;
-        ss << "[ " << ability->getDescription() << " ]" << newl;
-        ss << newl;
+        //ss << "[ " << ability->getDescription() << " ]" << newl;
+        //ss << newl;
     }
     abilities_.setString(ss.str());
     abilities_.draw(window);
@@ -264,7 +264,7 @@ Player* UI::startMenu()
                     return getPlayer(player_class, player_name);
                 }
             }
-            else if(event.type == sf::Event::TextEntered)
+            else if(event.type == sf::Event::TextEntered && player_name.length() < 15)
             {
                 // Handle ASCII only
                 if (event.text.unicode < 128 && event.text.unicode > 31)
