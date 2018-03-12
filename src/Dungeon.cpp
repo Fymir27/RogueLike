@@ -67,7 +67,7 @@ Room*& Dungeon::getRoom(size_t x, size_t y)
 void Dungeon::connect(Room* from, Direction dir, Room* to)
 {
 	from->addNeighbour(dir, to);
-	to->addNeighbour(Direction((dir + 2) % 4), from);
+	to->addNeighbour(opposite(dir), from);
 }
 
 bool Dungeon::hasNeighbour(Position pos, Direction dir)
@@ -253,10 +253,8 @@ void Dungeon::generate(size_t width, size_t height)
 	while (current_room == NULL)
 		current_room = getRoom(random_engine() % width, random_engine() % height);
 
-	current_room->initSpawnLocations();
-
 	//DM.getNextPosition(Position(1,1);
-
+	current_room->generate(false);
 	Minimap::init(width_, height_, current_room->pos_);
 
 	/*
@@ -372,8 +370,7 @@ void Dungeon::changeRoom(Direction dir)
 	current_room = layout_.at(pos.y_).at(pos.x_);
 	if(!Minimap::isExplored(pos))
 	{
-		current_room->initSpawnLocations();
-		current_room->spawnEnemies(1+ random_engine() % 2);
+		current_room->generate();
 	}
 	Minimap::setActiveRoom(pos);	
 }

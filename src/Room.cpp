@@ -8,6 +8,7 @@
 #include "Effects.h"
 
 #include <sstream>
+#include <Potions.h>
 
 Room* current_room = NULL;
 
@@ -423,51 +424,39 @@ void Room::removeVisualEffect(shared_ptr<Effect>& e)
     effects_.remove(shared_ptr<Effect>(e));
 }
 
-void Room::generate()
+void Room::generate(bool generate_enemies)
 {
-    try
+    Position center = { width_ / 2, height_ / 2 };
+    //connect doors
+    for (size_t i = 0; i < 4; ++i)
     {
-        // start with wall everywhere
-        map_.resize(height_);
-        for (size_t y = 0; y < height_; ++y)
+        if(neighbours_[i] != nullptr)
         {
-            for (size_t x = 0; x < width_; ++x)
-            {
-                map_.at(y).push_back(new Wall({(int) x, (int) y}));
-            }
+            // + DELTA so door itself doesnt get turned into path
+            makePath(door_pos_[i] + DELTA_POS[opposite(static_cast<Direction>(i))], center);
         }
-
-        // pick Door Positions
-        Position door_pos;
-        int      door_margin = 5;
-
-        door_pos = {getRandomBetween(door_margin, (int) width_ - door_margin), 0};
-        door_pos_[UP] = door_pos;
-        //addField(new Door(door_pos, UP));
-
-        door_pos = {(int) width_ - 1, getRandomBetween(door_margin, (int) height_ - door_margin)};
-        door_pos_[RIGHT] = door_pos;
-        //addField(new Door(door_pos, RIGHT));
-
-        door_pos = {getRandomBetween(door_margin, (int) width_ - door_margin), (int) height_ - 1};
-        door_pos_[DOWN] = door_pos;
-        //addField(new Door(door_pos, DOWN));
-
-        door_pos = {0, getRandomBetween(door_margin, (int) width_ - door_margin)};
-        door_pos_[LEFT] = door_pos;
-        //addField(new Door(door_pos, LEFT));
-
-        //connect doors
-        makePath(door_pos_[UP]    + DELTA_POS[DOWN], door_pos_[DOWN] + DELTA_POS[UP]);
-        makePath(door_pos_[RIGHT] + DELTA_POS[LEFT], door_pos_[LEFT] + DELTA_POS[RIGHT]);
-
-        bombPaths(true);
-
     }
-    catch (std::exception& e)
+
+    //randomly spawn an item
+    if(roll(1, 3))
     {
-        cout << e.what() << endl;
+        Position item_pos = { getRandomBetween(2, width_), getRandomBetween(2, height_)};
+        cout << "Spawning item! " << item_pos << endl;
+        auto field = new Floor(item_pos); // in case there was a wall
+        addField(field);
+        makePath(item_pos, center);
+
+        if(roll(1,2))
+            placeItem(item_pos, new SmallHealingPotion(1));
+        else
+            placeItem(item_pos, new SmallManaPotion(1));
     }
+
+    bombPaths();
+
+    initSpawnLocations();
+    if(generate_enemies)
+        spawnEnemies((size_t)getRandomBetween(1,2));
 }
 
 void Room::makePath(Position from, Position to)
@@ -516,7 +505,7 @@ void Room::printToConsole()
 
 void Room::bombPaths( bool use_borders)
 {
-    cout << "bombing paths..." << endl;
+    cout << "Bombing paths..." << endl;
     vector<Field*> candidates;
     for(auto row : map_)
     {
@@ -531,25 +520,23 @@ void Room::bombPaths( bool use_borders)
     std::random_shuffle(candidates.begin(), candidates.end()/*, random_engine*/);
 
     size_t iteration_count = std::round(candidates.size() * 2.d);
-    cout << candidates.size() << " canditadtes" << endl;
+    //cout << candidates.size() << " canditadtes" << endl;
 
     for (size_t i = 0; i < iteration_count; ++i)
     {
-        cout << "Iteration count: " << i << "/" << iteration_count << endl;
+        //cout << "Iteration count: " << i << "/" << iteration_count << endl;
         size_t candidate_id;
-        //int tile_variation = 0;
+
         // 1/3 chance that we will use as a bombing point one of the last 15 positions
         if (roll(1,3))
         {
-            cout << "Taking newer cells!" << endl;
+            //cout << "Taking newer cells!" << endl;
             candidate_id = getRandomBetween(candidates.size() - 15, candidates.size() - 1);
-            //tile_variation = 1;
         }
         else // otherwise use lower half of remaining tiles
         {
-            cout << "Taking older cells!" << endl;
+            //cout << "Taking older cells!" << endl;
             candidate_id = getRandomBetween<size_t>(0, candidates.size() / 2);
-            //tile_variation = 2;
         }
 
         // check boundaries
@@ -558,7 +545,7 @@ void Room::bombPaths( bool use_borders)
 
         int bomb_radius = 1; //roll(1,50) ? 1 : 2; //small chance of bigger radius
 
-        cout << "bomb radius: " << bomb_radius << endl;
+        //cout << "bomb radius: " << bomb_radius << endl;
 
         Position bomb_pos = candidates[candidate_id]->pos_;
 
@@ -595,9 +582,40 @@ void Room::bombPaths( bool use_borders)
     } // for i
 } // bombPaths()
 
-Room::Room(Position pos, size_t width, size_t height) : pos_(pos), width_(width), height_(height)
+Room::Room(Position pos, int width, int height) : pos_(pos), width_(width), height_(height)
 {
-    generate();
+    try
+    {
+        // start with wall everywhere
+        map_.resize(height_);
+        for (size_t y = 0; y < height_; ++y)
+        {
+            for (size_t x = 0; x < width_; ++x)
+            {
+                map_.at(y).push_back(new Wall({(int) x, (int) y}));
+            }
+        }
+
+        // pick Door Positions
+        Position door_pos;
+        int      door_margin = 5;
+
+        door_pos = {getRandomBetween(door_margin, (int) width_ - door_margin), 0};
+        door_pos_[UP] = door_pos;
+
+        door_pos = {(int) width_ - 1, getRandomBetween(door_margin, (int) height_ - door_margin)};
+        door_pos_[RIGHT] = door_pos;
+
+        door_pos = {getRandomBetween(door_margin, (int) width_ - door_margin), (int) height_ - 1};
+        door_pos_[DOWN] = door_pos;
+
+        door_pos = {0, getRandomBetween(door_margin, (int) width_ - door_margin)};
+        door_pos_[LEFT] = door_pos;
+    }
+    catch (std::exception& e)
+    {
+        cout << e.what() << endl;
+    }
 }
 
 

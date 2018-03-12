@@ -81,6 +81,8 @@ public:
 
 	virtual void heal(unsigned amount);
 	virtual void damage(unsigned amount);
+	virtual void restoreMana(unsigned amount);
+
 	void applyAbilityEffect(AbilityEffect* effect);
 	void addVisualEffect(shared_ptr<Effect> e);
     void removeVisualEffect(shared_ptr<Effect> e);

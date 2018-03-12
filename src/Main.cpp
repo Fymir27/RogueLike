@@ -2,7 +2,7 @@
 #include "Dungeon.h"
 #include "Field.h"
 #include "Player.h"
-#include "HealingPotion.h"
+#include "Potions.h"
 #include "Item.h"
 #include "Utils.h"
 #include "Common.h"
@@ -192,7 +192,7 @@ int main()
 	auto ui = new UI();
 
 	//------- Test Area ----------//
-	current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
+	//current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
 	//----------------------------//
 
 	sf::Event event;

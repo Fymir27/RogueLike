@@ -179,6 +179,12 @@ void Character::damage(unsigned amount)
     cout << name_ << " damaged for " << amount << endl;
 }
 
+void Character::restoreMana(unsigned amount)
+{
+    mana_ += amount;
+    cout << name_ << " restored " << amount << " mana" << endl;
+}
+
 /*
 void Character::attack(Character* target)
 {

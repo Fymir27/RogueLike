@@ -22,8 +22,8 @@ class Room
 private:
     TileMap* tile_map_ = NULL;
     Map map_; //Fields
-    size_t width_;
-    size_t height_;
+    int width_;
+    int height_;
 
     list<shared_ptr<Enemy>> enemies_;
     vector<vector<bool> > spawn_locations_;
@@ -44,7 +44,7 @@ private:
 
 public:
     //Room(Position pos, size_t height);
-    Room(Position pos, size_t width = 22, size_t height = 20);
+    Room(Position pos, int width = 22, int height = 20);
 
     size_t getColCount()
     { return map_.front().size(); };
@@ -65,7 +65,7 @@ public:
     Character* getCharacter(Position pos);
 
     void generateFromParts();
-    void generate();
+    void generate(bool generate_enemies = true);
     void makePath(Position from, Position to);
 
     /// widen paths by "bombing them"
