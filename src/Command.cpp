@@ -76,6 +76,10 @@ bool Command::execute()
                     current_activity = SPACE;
                     return current_player->castSpell(prev->nr_, UP /*doesnt matter bec self cast*/, true);
 
+                case THROWITEM:
+                    current_activity = SPACE;
+                    return false;
+
                 default:
                     current_activity = SPACE;
                     current_player->rest();
@@ -88,6 +92,10 @@ bool Command::execute()
                 case CASTSPELL:
                     current_activity = DIRECTION;
                     return current_player->castSpell(prev->nr_, dir_);
+
+                case THROWITEM:
+                    current_activity = DIRECTION;
+                    return false;
 
                 default:
                     return current_player->move(current_player->getPosition() + DELTA_POS[dir_]);

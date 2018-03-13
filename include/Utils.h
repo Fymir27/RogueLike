@@ -108,3 +108,9 @@ inline T getRandomBetween(T min, T max)
 {
 	return static_cast<T>(min + (random_engine() % (max - min + 1)));
 }
+
+inline bool stringToBool(string& str)
+{
+	std::transform(str.begin(), str.begin(), str.begin(), ::tolower);
+	return str == "true";
+}

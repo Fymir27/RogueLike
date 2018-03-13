@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Potions.h"
 #include "ItemOLD.h"
+#include "Item.h"
 #include "Utils.h"
 #include "Common.h"
 #include "UI.h"
@@ -16,6 +17,7 @@
 #include <ctime>
 
 using Biomes::Biome;
+using Items::Item;
 
 enum Turn
 {
@@ -37,6 +39,7 @@ int main()
     // init singletons
 	Factory<Enemy>::get();
     Factory<Biome>::get();
+	Factory<Item>::get();
 
 	srand((unsigned int)std::time(0));
     random_engine.seed((unsigned)std::time(0));
@@ -223,6 +226,7 @@ int main()
     // destroy singletons
     Factory<Enemy>::destroy();
     Factory<Biome>::destroy();
+	Factory<Item>::destroy();
 
 	delete ui;
 	delete current_dungeon;

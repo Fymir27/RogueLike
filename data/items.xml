@@ -1,0 +1,40 @@
+<items>
+
+    <item name = "Template" texture = "images/items/item.png">
+        <maxStackSize>0</maxStackSize>
+        <description>Explanation etc.</description>
+        <usable>
+            <restoreHp>0</restoreHp>
+            <restoreMana>0</restoreMana>
+            <damage>0</damage>
+            <effects>
+                <overTime name = "Poison">
+                    <color>ffffff</color>
+                    <harmful>true</harmful> <!-- or false -->
+                    <amount>0</amount>
+                    <duration>0</duration>
+                </overTime>
+            </effects>
+        </usable>
+        <throwable>
+            <!-- stuff -->
+        </throwable>
+    </item>
+
+    <item name = "Small Health Potion" texture = "images/items/potion_health_small.png">
+        <maxStackSize>5</maxStackSize>
+        <description>Restores a small amount of health.</description>
+        <usable>
+            <restoreHp>20</restoreHp>
+        </usable>
+    </item>
+
+    <item name = "Small Mana Potion" texture = "images/items/potion_mana_small.png">
+        <maxStackSize>5</maxStackSize>
+        <description>Restores a small amount of mana.</description>
+        <usable>
+            <restoreMana>20</restoreMana>
+        </usable>
+    </item>
+
+</items>
