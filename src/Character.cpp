@@ -1,7 +1,7 @@
 #include "Character.h"
 #include "Field.h"
 #include "Room.h"
-#include "Item.h"
+#include "ItemOLD.h"
 #include "UI.h"
 #include "AbilityEffectTypes.h"
 #include "Abilities.h"
@@ -78,7 +78,7 @@ Stats::Stats(xml_node const& stats_node)
     wil_ = std::stoi(stats_node.child("wil").child_value());
 }
 
-bool Character::addItem(Item* item)
+bool Character::addItem(ItemOLD* item)
 {
     return inventory_->addItem(item);
 }

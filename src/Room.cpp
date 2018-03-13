@@ -260,7 +260,7 @@ void Room::occupyField(Position pos, Character* who)
     getField(pos.x_, pos.y_)->occupy(who);
 }
 
-void Room::placeItem(Position pos, Item* item)
+void Room::placeItem(Position pos, ItemOLD* item)
 {
     getField(pos.x_, pos.y_)->placeItem(item);
 }

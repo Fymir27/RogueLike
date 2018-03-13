@@ -2,11 +2,11 @@
 #include "Common.h"
 #include "Utils.h"
 
-class Item;
+class ItemOLD;
 class Inventory
 {
 private:
-	vector<Item*> items_;
+	vector<ItemOLD*> items_;
 	vector<size_t> count_;
 	size_t limit_;
 	size_t rows_;
@@ -19,8 +19,8 @@ public:
 	~Inventory();
 
 	void sort() {}; //not implemented
-	bool addItem(Item* item); //returns false when full
-	void removeItem(Item* item);
+	bool addItem(ItemOLD* item); //returns false when full
+	void removeItem(ItemOLD* item);
 	bool useItem(int slot);
 	sf::Sprite & getSprite();
 	void draw(sf::RenderWindow& window, Position pos = { 0,0 });

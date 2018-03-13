@@ -1,27 +1,27 @@
 #pragma once
 #include "Common.h"
-#include "Item.h"
+#include "ItemOLD.h"
 
 
-class HealingPotion : public Item
+class HealingPotion : public ItemOLD
 {
 private:
 	size_t heal_amount_;
 public:
 	HealingPotion(string name, string descr, size_t count, size_t max_count, size_t heal_amount, string texture_file);
 	void use(Character* who);
-	Item* clone();
+	ItemOLD* clone();
 	HealingPotion(const HealingPotion& orig);
 };
 
-class ManaPotion : public Item
+class ManaPotion : public ItemOLD
 {
 	private:
 	size_t restore_amount_;
 	public:
 	ManaPotion(string name, string descr, size_t count, size_t max_count, size_t restore_amount, string texture_file);
 	void use(Character* who);
-	Item* clone();
+	ItemOLD* clone();
 	ManaPotion(const ManaPotion& orig);
 };
 

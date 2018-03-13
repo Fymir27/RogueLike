@@ -3,7 +3,7 @@
 #include "Field.h"
 #include "Player.h"
 #include "Potions.h"
-#include "Item.h"
+#include "ItemOLD.h"
 #include "Utils.h"
 #include "Common.h"
 #include "UI.h"
@@ -12,6 +12,7 @@
 #include "PlayerClasses.h"
 #include "Effects.h"
 #include "Biome.h"
+#include "Command.h"
 #include <ctime>
 
 using Biomes::Biome;
@@ -24,127 +25,6 @@ enum Turn
 };
 
 Turn turn = PLAYER;
-
-enum InputType
-{
-	INVALID,
-	REST,
-	MOVE,
-	ITEM,
-	SPELL,
-    ESC,
-    CONFIRM
-};
-
-struct Command
-{
-	InputType type_ = INVALID;
-	Direction dir_;
-	int nr_;
-};
-
-Command getCommand(const sf::Keyboard::Key& key)
-{
-	Command c;
-
-	switch (key)
-	{
-        case sf::Keyboard::Escape:    c.type_ = ESC; break;
-
-		case sf::Keyboard::Space:	  c.type_ = REST; break;
-
-        case sf::Keyboard::Return:    c.type_ = CONFIRM; break;
-
-		case sf::Keyboard::Right:   c.type_ = MOVE; c.dir_ = RIGHT; break;
-		case sf::Keyboard::Left:    c.type_ = MOVE; c.dir_ = LEFT; break;
-		case sf::Keyboard::Up:      c.type_ = MOVE; c.dir_ = UP; break;
-		case sf::Keyboard::Down:    c.type_ = MOVE; c.dir_ = DOWN; break;
-
-		case sf::Keyboard::Numpad1: c.type_ = ITEM; c.nr_ = 1; break;
-		case sf::Keyboard::Numpad2: c.type_ = ITEM; c.nr_ = 2; break;
-		case sf::Keyboard::Numpad3: c.type_ = ITEM; c.nr_ = 3; break;
-		case sf::Keyboard::Numpad4: c.type_ = ITEM; c.nr_ = 4; break;
-		case sf::Keyboard::Numpad5: c.type_ = ITEM; c.nr_ = 5; break;
-		case sf::Keyboard::Numpad6: c.type_ = ITEM; c.nr_ = 6; break;
-		case sf::Keyboard::Numpad7: c.type_ = ITEM; c.nr_ = 7; break;
-		case sf::Keyboard::Numpad8: c.type_ = ITEM; c.nr_ = 8; break;
-		case sf::Keyboard::Numpad9: c.type_ = ITEM; c.nr_ = 9; break;
-
-		case sf::Keyboard::Num1:    c.type_ = SPELL; c.nr_ = 1; break;
-		case sf::Keyboard::Num2:    c.type_ = SPELL; c.nr_ = 2; break;
-		case sf::Keyboard::Num3:    c.type_ = SPELL; c.nr_ = 3; break;
-		case sf::Keyboard::Num4:    c.type_ = SPELL; c.nr_ = 4; break;
-		case sf::Keyboard::Num5:    c.type_ = SPELL; c.nr_ = 5; break;
-		case sf::Keyboard::Num6:    c.type_ = SPELL; c.nr_ = 6; break;
-		case sf::Keyboard::Num7:    c.type_ = SPELL; c.nr_ = 7; break;
-		case sf::Keyboard::Num8:    c.type_ = SPELL; c.nr_ = 8; break;
-		case sf::Keyboard::Num9:    c.type_ = SPELL; c.nr_ = 9; break;
-
-		default:
-			c.type_ = INVALID;
-			cout << "UNKNOWN COMMAND" << endl;
-			break;
-	}
-
-	return c;
-}
-
-void processInput(const sf::Event& event, sf::RenderWindow& window)
-{
-    static Command prev;
-	//cout << "Input detected!" << endl;
-	auto key = event.key.code;
-	Command com = getCommand(key);
-	bool valid = false; //valid action?
-
-	switch (com.type_)
-	{
-		case REST:
-            if (prev.type_ == SPELL)
-                valid = current_player->castSpell(prev.nr_, UP /*doesnt matter bec self cast*/, true);
-            else
-            {
-                valid = true;
-                current_player->rest();
-            }
-			break;
-
-		case MOVE:
-            if (prev.type_ == SPELL)
-                valid = current_player->castSpell(prev.nr_, com.dir_);
-            else
-			    valid = current_player->move(current_player->getPosition() + DELTA_POS[com.dir_]);
-			break;
-
-		case ITEM:
-			valid = current_player->getInventory()->useItem(com.nr_);
-			break;
-
-		case SPELL:
-           UI::displayText("Which direction?");
-           valid = false; //wait for next input to be move
-           break;
-
-        case ESC:
-            //interrupts spell casting automatically bec. prev is now ESC
-            break;
-
-        case INVALID:
-            //just do nothing
-            break;
-
-        case CONFIRM:
-            //nope
-            break;
-	}
-    prev = com;
-	if (valid)
-	{
-        turn = PLAYER_EFFECTS;
-		current_player->advanceEffects();
-		current_player->coolDownAbilities();
-	}
-}
 
 int main()
 {
@@ -210,7 +90,25 @@ int main()
             }
 			else if (event.type == sf::Event::KeyPressed && turn == PLAYER)
             {
-                processInput(event, window);
+				Command* command = new Command(event.key.code);
+				if (command->isValid())
+				{
+					if(command->execute())
+					{
+						turn = PLAYER_EFFECTS;
+						current_player->advanceEffects();
+						current_player->coolDownAbilities();
+					}
+					else
+					{
+						// command didn't do anything
+					}
+				}
+				else
+				{
+                    delete command;
+					cout << "Unknown Command!" << endl;
+				}
             }
 		}
 
@@ -311,14 +209,14 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			if (event.type == sf::Event::KeyPressed)
-				if(event.key.code == sf::Keyboard::Space)
-				{
-					current_player = UI::startMenu();
-					if(current_player == nullptr)
-						return 0;
-					//goto MAIN_LOOP;
-				}
+//			if (event.type == sf::Event::KeyPressed)
+//				if(event.key.code == sf::Keyboard::Space)
+//				{
+//					current_player = UI::startMenu();
+//					if(current_player == nullptr)
+//						return 0;
+//					//goto MAIN_LOOP;
+//				}
 		}
 	}
 

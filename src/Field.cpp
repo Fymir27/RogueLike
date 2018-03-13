@@ -2,7 +2,7 @@
 #include "Room.h"
 #include "Character.h"
 #include "UI.h"
-#include "Item.h"
+#include "ItemOLD.h"
 
 Field::Field(Position pos, int tile_nr, FIELD_STATUS status) : tile_nr_(tile_nr), pos_(pos), status_(status)
 {
@@ -26,7 +26,7 @@ void Field::occupy(Character* character)
 	status_ = OCCUPIED;
 }
 
-void Field::placeItem(Item* item)
+void Field::placeItem(ItemOLD* item)
 {
 	item_ = item;
 	status_ = PICKUP;

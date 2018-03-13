@@ -16,7 +16,7 @@ class Character;
 
 class Room;
 
-class Item;
+class ItemOLD;
 
 class Field
 {
@@ -30,7 +30,7 @@ protected:
     Position pos_;
     FIELD_STATUS status_;
     Character* character_ = NULL;   //Character standing on that field
-    Item* item_ = NULL;   //Item lying on that field
+    ItemOLD* item_ = NULL;   //Item lying on that field
     size_t count_ = 0;      //number of Items
     size_t distance_to_player_ = std::numeric_limits<size_t>::max();
 
@@ -53,7 +53,7 @@ public:
 
     void occupy(Character* character);
 
-    void placeItem(Item* item);
+    void placeItem(ItemOLD* item);
 
     void pickUpItem(Character* character);
 

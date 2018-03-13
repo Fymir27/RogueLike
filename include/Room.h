@@ -11,7 +11,7 @@ class Enemy;
 
 class TileMap;
 
-class Item;
+class ItemOLD;
 
 class DijkstraMap2D;
 
@@ -80,7 +80,7 @@ public:
     void freeField(Position pos);
     void occupyField(Position pos, Character* who);
 
-    void placeItem(Position pos, Item* item);
+    void placeItem(Position pos, ItemOLD* item);
 
     void addNeighbour(Direction dir, Room* other);
 

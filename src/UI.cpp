@@ -232,7 +232,6 @@ Player* UI::startMenu()
     Text player_name_text({15, 15}, "_");
     Menu::List<PlayerClass> class_list({25,50}, getPlayerClasses());
 
-
     string player_name = "";
     sf::Event event;
     while (window.isOpen())
@@ -261,6 +260,8 @@ Player* UI::startMenu()
                 else if(key == sf::Keyboard::Return) //forwards to game
                 {
                     player_class = class_list.select();
+                    if(player_name.length() == 0)
+                        player_name = "Anon";
                     return getPlayer(player_class, player_name);
                 }
             }

@@ -1,5 +1,5 @@
 #include "Inventory.h"
-#include "Item.h"
+#include "ItemOLD.h"
 #include "Room.h"
 #include "Common.h"
 #include "Utils.h"
@@ -17,11 +17,11 @@ Inventory::Inventory() : limit_(9), rows_(3)
 	count_.resize(limit_);
 }
 
-bool Inventory::addItem(Item* new_item)
+bool Inventory::addItem(ItemOLD* new_item)
 {
 	size_t max_count = new_item->max_count_;		
 	size_t new_count = new_item->count_;
-	Item* cur_item = NULL;
+	ItemOLD* cur_item = NULL;
 	
 	for(size_t i = 0; i < items_.size(); i++)
 	{
@@ -61,7 +61,7 @@ bool Inventory::addItem(Item* new_item)
 			{
 				items_[i] = new_item;
 				items_[i]->count_ = max_count;
-				Item* tmp = new_item->clone();
+				ItemOLD* tmp = new_item->clone();
 				tmp->count_ = overflow;
 				return addItem(tmp);
 			}
@@ -70,7 +70,7 @@ bool Inventory::addItem(Item* new_item)
 	return false;
 }
 
-void Inventory::removeItem(Item* item)
+void Inventory::removeItem(ItemOLD* item)
 {
 	//items_.remove(item);
 }
@@ -90,7 +90,7 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 	{
 		if(!items_[i])
 			continue;
-		Item* item = items_[i];
+		ItemOLD* item = items_[i];
 		sf::Sprite& sprite = item->getSprite();
 		sprite.setScale(sf::Vector2f(1.5f,1.5f));
 		float x = pos.x_ + i % rows_ * 63 + 10;
