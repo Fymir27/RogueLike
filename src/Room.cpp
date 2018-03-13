@@ -440,7 +440,7 @@ void Room::generate(bool generate_enemies)
     //randomly spawn an item
     if(roll(1, 3))
     {
-        Position item_pos = { getRandomBetween(2, width_), getRandomBetween(2, height_)};
+        Position item_pos = { getRandomBetween(2, width_ - 3), getRandomBetween(2, height_ - 3)};
         cout << "Spawning item! " << item_pos << endl;
         auto field = new Floor(item_pos); // in case there was a wall
         addField(field);
