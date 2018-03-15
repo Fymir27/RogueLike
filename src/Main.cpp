@@ -2,8 +2,6 @@
 #include "Dungeon.h"
 #include "Field.h"
 #include "Player.h"
-#include "Potions.h"
-#include "ItemOLD.h"
 #include "Item.h"
 #include "Utils.h"
 #include "Common.h"
@@ -17,7 +15,7 @@
 #include <ctime>
 
 using Biomes::Biome;
-using Items::Item;
+//using Items::Item;
 
 enum Turn
 {
@@ -39,7 +37,7 @@ int main()
     // init singletons
 	Factory<Enemy>::get();
     Factory<Biome>::get();
-	Factory<Item>::get();
+	Factory<Items::Item>::get();
 
 	srand((unsigned int)std::time(0));
     random_engine.seed((unsigned)std::time(0));
@@ -75,7 +73,7 @@ int main()
 	auto ui = new UI();
 
 	//------- Test Area ----------//
-	//current_room->placeItem(current_room->getFreePosition(), new SmallHealingPotion(5));
+    current_room->placeItem(current_room->getFreePosition(), Factory<Items::Item>::get()->createEntity("Potato"), 5);
 	//----------------------------//
 
 	sf::Event event;
@@ -226,7 +224,7 @@ int main()
     // destroy singletons
     Factory<Enemy>::destroy();
     Factory<Biome>::destroy();
-	Factory<Item>::destroy();
+	Factory<Items::Item>::destroy();
 
 	delete ui;
 	delete current_dungeon;

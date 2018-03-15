@@ -37,4 +37,12 @@
         </usable>
     </item>
 
+    <item name = "Potato" texture= "images/items/potion_mana_small.png">
+        <maxStackSize>10</maxStackSize>
+        <description>A potato</description>
+        <throwable>
+            <damage>5</damage>
+        </throwable>
+    </item>
+
 </items>

@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "Inventory.h"
 #include "Utils.h"
+#include "Item.h"
 #include "Ressource.h"
 //#include <SFML/Graphics.hpp>
 //#include <SFML/Window.hpp>
@@ -29,7 +30,6 @@ struct Stats
 extern std::ostream& operator<<(std::ostream& out, Stats stats);
 
 class Effect;
-class ItemOLD;
 class AbilityEffect;
 class Ability;
 class Character
@@ -88,7 +88,7 @@ public:
     void removeVisualEffect(shared_ptr<Effect> e);
 	bool dead() { return hp_.depleted(); }
 	
-	bool addItem(ItemOLD* item);
+	bool addItem(shared_ptr<Items::Item> item, size_t count);
 
 	virtual bool move(Position new_pos); //returns if the move was valid
 	void setPosition(Position pos) { pos_ = pos; }

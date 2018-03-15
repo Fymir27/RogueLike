@@ -4,17 +4,15 @@
 
 #pragma once
 
-
 #include "GameObject.h"
 #include "Factory.h"
+#include "Inventory.h"
 
-class Character;
-class Inventory;
 class Field;
+class Character;
 
 namespace Items
 {
-
     class IItemEffect
     {
         public:
@@ -26,10 +24,7 @@ namespace Items
         public:
         explicit RestoreHp(unsigned amount) : amount_(amount) {}
 
-        inline bool apply(Character* target) final
-        {
-            target->heal(amount_);
-        }
+        bool apply(Character* target) final;
 
         private:
         unsigned amount_;
@@ -40,10 +35,7 @@ namespace Items
         public:
         explicit RestoreMana(unsigned amount) : amount_(amount) {}
 
-        inline bool apply(Character* target) final
-        {
-            target->restoreMana(amount_);
-        }
+        bool apply(Character* target) final;
 
         private:
         unsigned amount_;
@@ -54,10 +46,7 @@ namespace Items
         public:
         explicit Damage(unsigned amount) : amount_(amount) {}
 
-        inline bool apply(Character* target) final
-        {
-            target->damage(amount_);
-        }
+        bool apply(Character* target) final;
 
         private:
         unsigned amount_;
@@ -67,7 +56,7 @@ namespace Items
 
     class Item : public GameObject
     {
-        friend class Inventory;
+        friend class ::Inventory;
 
         public:
         Item(string const& name, string const& descr, size_t max_stack_size, string const& texture);
@@ -80,6 +69,10 @@ namespace Items
         virtual bool use(Character* who);
         virtual bool throwAt(Character* target);
         virtual bool drop(Field* where);
+
+        sf::Sprite const& getSprite() { return  sprite_; }
+
+        //~Item() { cout << "Item::dtor" << endl; }
 
         private:
         // draw related
@@ -94,9 +87,6 @@ namespace Items
         vector<IItemEffect*> throw_effects_;
     };
 }
-
-template <>
-Factory<Items::Item>::Factory();
 
 
 

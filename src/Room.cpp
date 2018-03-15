@@ -6,9 +6,9 @@
 #include "DijkstraMap.h"
 #include "Dungeon.h"
 #include "Effects.h"
+#include "Item.h"
 
 #include <sstream>
-#include <Potions.h>
 
 Room* current_room = NULL;
 
@@ -260,9 +260,9 @@ void Room::occupyField(Position pos, Character* who)
     getField(pos.x_, pos.y_)->occupy(who);
 }
 
-void Room::placeItem(Position pos, ItemOLD* item)
+void Room::placeItem(Position pos, shared_ptr<Items::Item> item, size_t count)
 {
-    getField(pos.x_, pos.y_)->placeItem(item);
+    getField(pos.x_, pos.y_)->placeItem(item, count);
 }
 
 /*
@@ -446,10 +446,12 @@ void Room::generate(bool generate_enemies)
         addField(field);
         makePath(item_pos, center);
 
-        if(roll(1,2))
-            placeItem(item_pos, new SmallHealingPotion(1));
-        else
-            placeItem(item_pos, new SmallManaPotion(1));
+        auto factory = Factory<Items::Item>::get();
+        auto item_names = factory->getEntityNames();
+        size_t item_nr = random_engine() % item_names.size();
+        auto item_name = item_names.at(item_nr);
+        auto item = factory->createEntity(item_name);
+        field->placeItem(item, 1 + random_engine() % 1);
     }
 
     bombPaths();
@@ -616,6 +618,21 @@ Room::Room(Position pos, int width, int height) : pos_(pos), width_(width), heig
     {
         cout << e.what() << endl;
     }
+}
+
+Character* Room::getFirstCharacterInDirection(Position from, Direction dir)
+{
+    Field* field = nullptr;
+    while(true)
+    {
+        from = from  + DELTA_POS[dir];
+        field = getField(from);
+        if(field->character_ != nullptr)
+            return field->character_;
+        if(field->status_ == SOLID)
+            break;
+    }
+    return nullptr;
 }
 
 

@@ -1,9 +1,10 @@
 #include "Inventory.h"
-#include "ItemOLD.h"
 #include "Room.h"
 #include "Common.h"
 #include "Utils.h"
 #include "Player.h"
+#include "Character.h"
+#include "Item.h"
 
 Inventory::Inventory() : limit_(9), rows_(3)
 {
@@ -15,64 +16,61 @@ Inventory::Inventory() : limit_(9), rows_(3)
 
 	items_.resize(limit_);
 	count_.resize(limit_);
+	for (size_t i = 0; i < count_.size(); ++i)
+	{
+		count_[i] = 0;
+	}
 }
 
-bool Inventory::addItem(ItemOLD* new_item)
+bool Inventory::addItem(shared_ptr<Items::Item> new_item, size_t count)
 {
-	size_t max_count = new_item->max_count_;		
-	size_t new_count = new_item->count_;
-	ItemOLD* cur_item = NULL;
+    cout << "Adding " << count << "x " << new_item->getName() << " to Inventory..." << endl;
+ 	size_t max_count = new_item->max_stack_size_;
+
+	shared_ptr<Items::Item> cur_item;
 	
 	for(size_t i = 0; i < items_.size(); i++)
 	{
 		cur_item = items_[i];
-		if(cur_item != NULL)
+		if(cur_item != nullptr)
 		{
-			if (new_item->name_.compare(cur_item->name_) == 0)
+			if (new_item->getName() == cur_item->getName())
 			{
-				if(cur_item->count_ == max_count)
+				if(count_[i] == max_count)
 					continue;
 
-				int overflow = cur_item->count_ + new_count - max_count;
+				long long overflow = count_[i] + count - max_count;
 
 				if(overflow <= 0)
 				{
-					cur_item->count_ += new_count;
-					delete new_item;
+					count_[i] += count;
 					return true;
 				}
 				else
 				{
-					cur_item->count_ = max_count;
-					new_item->count_ = overflow;
-					return addItem(new_item);
+                    count_[i] = max_count;
+					return addItem(new_item, (size_t)overflow);
 				}
 			}
 		}
 		else
 		{
-			int overflow = new_count - max_count;
+            long long overflow = count - max_count;
 			if(overflow <= 0)
 			{
 				items_[i] = new_item;
+                count_[i] = count;
 				return true;
 			}
 			else
 			{
 				items_[i] = new_item;
-				items_[i]->count_ = max_count;
-				ItemOLD* tmp = new_item->clone();
-				tmp->count_ = overflow;
-				return addItem(tmp);
+				count_[i] = max_count;
+				return addItem(new_item, (size_t)overflow);
 			}
 		}
 	}
 	return false;
-}
-
-void Inventory::removeItem(ItemOLD* item)
-{
-	//items_.remove(item);
 }
 
 sf::Sprite& Inventory::getSprite()
@@ -90,8 +88,8 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 	{
 		if(!items_[i])
 			continue;
-		ItemOLD* item = items_[i];
-		sf::Sprite& sprite = item->getSprite();
+		auto item = items_[i];
+		auto sprite = item->getSprite();
 		sprite.setScale(sf::Vector2f(1.5f,1.5f));
 		float x = pos.x_ + i % rows_ * 63 + 10;
 		float y = pos.y_ + i / rows_ * 63 + 10;
@@ -101,7 +99,7 @@ void Inventory::draw(sf::RenderWindow& window, Position pos)
 		text.setFont(font_);
 		text.setCharacterSize(20);
 		text.setPosition(x, y + 30);
-		text.setString(std::to_string(item->getCount()));
+		text.setString(std::to_string(count_[i]));
 		window.draw(text);
 	}
 }
@@ -113,26 +111,52 @@ Inventory::~Inventory()
 
 
 
-bool Inventory::useItem(int slot)
+bool Inventory::useItem(size_t slot)
 {
 	try
 	{
-		if(items_.at(--slot) == NULL)
+		if(items_.at(--slot) == nullptr)
 		{
 			cout << "There is no Item!" << endl;
 			return false;
 		}
 
 		items_.at(slot)->use(current_player);
-		size_t new_count = --items_.at(slot)->count_;
-		if (new_count == 0)
+		count_[slot]--;
+		if (count_[slot] == 0)
 		{
-			delete items_.at(slot);
-			items_.at(slot) = NULL;
+			items_[slot].reset();
+
 		}
 		return true;
 	}
-	catch (std::exception e)
+	catch (std::exception& e)
+	{
+		cout << "Invalid Item!" << endl;
+		return false;
+	}
+}
+
+bool Inventory::throwItem(size_t slot, Character* target)
+{
+	try
+	{
+		if(items_.at(--slot) == nullptr)
+		{
+			cout << "There is no Item!" << endl;
+			return false;
+		}
+
+		items_.at(slot)->throwAt(target);
+		count_[slot]--;
+		if (count_[slot] == 0)
+		{
+			items_[slot].reset();
+
+		}
+		return true;
+	}
+	catch (std::exception& e)
 	{
 		cout << "Invalid Item!" << endl;
 		return false;

@@ -2,7 +2,7 @@
 #include "Room.h"
 #include "Character.h"
 #include "UI.h"
-#include "ItemOLD.h"
+#include "Item.h"
 
 Field::Field(Position pos, int tile_nr, FIELD_STATUS status) : tile_nr_(tile_nr), pos_(pos), status_(status)
 {
@@ -26,17 +26,18 @@ void Field::occupy(Character* character)
 	status_ = OCCUPIED;
 }
 
-void Field::placeItem(ItemOLD* item)
+void Field::placeItem(shared_ptr<Items::Item> item, size_t count)
 {
 	item_ = item;
+    count_ = count;
 	status_ = PICKUP;
 }
 
 void Field::pickUpItem(Character* character)
 {
-	UI::displayText("Found " + item_->getName() + " x" + std::to_string(item_->getCount()) + "!");
-	character->addItem(item_);
-	item_ = NULL;
+	UI::displayText("Found " + item_->getName() + " x" + std::to_string(count_) + "!");
+	character->addItem(item_, count_);
+	item_ = nullptr;
 	count_ = 0; 
 }
 
@@ -44,7 +45,7 @@ void Field::draw(sf::RenderWindow & window)
 {
 	if (status_ == PICKUP)
 	{
-		sf::Sprite& sprite = item_->getSprite();
+		auto sprite = item_->getSprite();
 		sprite.setPosition(pos_.x_ * TILE_SIZE, pos_.y_ * TILE_SIZE);
 		window.draw(sprite);
 	}

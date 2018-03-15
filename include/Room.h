@@ -11,7 +11,10 @@ class Enemy;
 
 class TileMap;
 
-class ItemOLD;
+namespace
+{
+    class Item;
+}
 
 class DijkstraMap2D;
 
@@ -62,6 +65,7 @@ public:
 
     vector<vector<bool>> const& getSpawnLocations();
 
+    Character* getFirstCharacterInDirection(Position from, Direction dir);
     Character* getCharacter(Position pos);
 
     void generateFromParts();
@@ -80,7 +84,7 @@ public:
     void freeField(Position pos);
     void occupyField(Position pos, Character* who);
 
-    void placeItem(Position pos, ItemOLD* item);
+    void placeItem(Position pos, shared_ptr<Items::Item> item, size_t count);
 
     void addNeighbour(Direction dir, Room* other);
 

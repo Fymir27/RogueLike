@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "Utils.h"
+#include "Item.h"
 
 enum FIELD_STATUS
 {
@@ -16,7 +17,10 @@ class Character;
 
 class Room;
 
-class ItemOLD;
+namespace Item
+{
+    class Item;
+}
 
 class Field
 {
@@ -29,8 +33,8 @@ protected:
 
     Position pos_;
     FIELD_STATUS status_;
-    Character* character_ = NULL;   //Character standing on that field
-    ItemOLD* item_ = NULL;   //Item lying on that field
+    Character* character_ = nullptr;   //Character standing on that field
+    shared_ptr<Items::Item> item_ = nullptr;   //Item lying on that field
     size_t count_ = 0;      //number of Items
     size_t distance_to_player_ = std::numeric_limits<size_t>::max();
 
@@ -53,7 +57,7 @@ public:
 
     void occupy(Character* character);
 
-    void placeItem(ItemOLD* item);
+    void placeItem(shared_ptr<Items::Item> item, size_t count);
 
     void pickUpItem(Character* character);
 

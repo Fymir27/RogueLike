@@ -1,12 +1,11 @@
 #include "Character.h"
 #include "Field.h"
 #include "Room.h"
-#include "ItemOLD.h"
+#include "Item.h"
 #include "UI.h"
 #include "AbilityEffectTypes.h"
 #include "Abilities.h"
 #include "Player.h"
-
 
 std::ostream& operator<<(std::ostream& out, Stats stats)
 {
@@ -78,9 +77,9 @@ Stats::Stats(xml_node const& stats_node)
     wil_ = std::stoi(stats_node.child("wil").child_value());
 }
 
-bool Character::addItem(ItemOLD* item)
+bool Character::addItem(shared_ptr<Items::Item> item, size_t count)
 {
-    return inventory_->addItem(item);
+    return inventory_->addItem(shared_ptr<Items::Item>(item), count);
 }
 
 map<size_t, size_t> Character::exp_needed_;

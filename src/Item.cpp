@@ -4,6 +4,7 @@
 
 #include "UI.h"
 #include "Item.h"
+#include "Character.h"
 
 namespace Items
 {
@@ -18,8 +19,9 @@ namespace Items
         sprite_.setTexture(texture_);
     }
 
-    Item::Item(Item* orig) : GameObject(this), max_stack_size_(orig->max_stack_size_),
-                             texture_(orig->texture_)
+    Item::Item(Item* orig) : GameObject(orig), max_stack_size_(orig->max_stack_size_),
+                             texture_(orig->texture_), use_effects_(orig->use_effects_),
+                             throw_effects_(orig->throw_effects_)
     {
         sprite_.setTexture(texture_);
     }
@@ -31,6 +33,7 @@ namespace Items
             UI::displayText("You can't use that!");
             return false;
         }
+        UI::displayText("You use an item! (" + name_ + ")");
         for (auto& e : use_effects_)
         {
             e->apply(who);
@@ -40,12 +43,12 @@ namespace Items
 
     bool Item::throwAt(Character* target)
     {
-
         if (throw_effects_.empty())
         {
             UI::displayText("You can't throw that!");
             return false;
         }
+        UI::displayText("You throw " + name_ + " at " + target->getName());
         for (auto& e : throw_effects_)
         {
             e->apply(target);
@@ -97,6 +100,27 @@ namespace Items
         }
         cout << type << " " << effect.child_value() << endl;
         return  i_effect;
+    }
+
+    inline bool RestoreHp::apply(Character* target)
+    {
+        UI::displayText(target->getName() + " gets healed! (" + std::to_string(amount_) + ")");
+        target->heal(amount_);
+        return false;
+    }
+
+    inline bool RestoreMana::apply(Character* target)
+    {
+        UI::displayText(target->getName() + " restores some mana! ( " + std::to_string(amount_) + ")");
+        target->restoreMana(amount_);
+        return false;
+    }
+
+    inline bool Damage::apply(Character* target)
+    {
+        UI::displayText(target->getName() + " loses some health! (" + std::to_string(amount_) + ")");
+        target->damage(amount_);
+        return false;
     }
 }
 

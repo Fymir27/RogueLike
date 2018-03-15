@@ -21,6 +21,11 @@ Command::Command(sf::Keyboard::Key const& key)
         case sf::Keyboard::Up:      type_ = DIRECTION; dir_ = UP;    break;
         case sf::Keyboard::Down:    type_ = DIRECTION; dir_ = DOWN;  break;
 
+        case sf::Keyboard::D:   type_ = DIRECTION; dir_ = RIGHT; break;
+        case sf::Keyboard::A:    type_ = DIRECTION; dir_ = LEFT;  break;
+        case sf::Keyboard::W:      type_ = DIRECTION; dir_ = UP;    break;
+        case sf::Keyboard::S:    type_ = DIRECTION; dir_ = DOWN;  break;
+
         case sf::Keyboard::Numpad1: type_ = NUMBER; nr_ = 1; break;
         case sf::Keyboard::Numpad2: type_ = NUMBER; nr_ = 2; break;
         case sf::Keyboard::Numpad3: type_ = NUMBER; nr_ = 3; break;
@@ -43,7 +48,7 @@ Command::Command(sf::Keyboard::Key const& key)
         // Items
         case sf::Keyboard::U: type_ = USEITEM;   break;
         case sf::Keyboard::T: type_ = THROWITEM; break;
-        case sf::Keyboard::D: type_ = DROPITEM;  break;
+        //case sf::Keyboard::D: type_ = DROPITEM;  break;
 
         // Spells
         case sf::Keyboard::C: type_ = CASTSPELL; break;
@@ -78,6 +83,7 @@ bool Command::execute()
 
                 case THROWITEM:
                     current_activity = SPACE;
+                    return current_player->getInventory()->throwItem(prev->nr_, current_player);
                     return false;
 
                 default:
@@ -95,7 +101,7 @@ bool Command::execute()
 
                 case THROWITEM:
                     current_activity = DIRECTION;
-                    return false;
+                    return current_player->getInventory()->throwItem(prev->nr_, current_room->getFirstCharacterInDirection(current_player->getPosition(), dir_));
 
                 default:
                     return current_player->move(current_player->getPosition() + DELTA_POS[dir_]);

@@ -44,6 +44,7 @@ private:
 template <class Entity>
 shared_ptr<Entity> Factory<Entity>::createEntity(string const& entity_name)
 {
+    //cout << "Factory<" << typeid(Entity).name() << ">::createEntity" << endl;
     return std::make_shared<Entity>(entity_templates_[entity_name].get());
 }
 
