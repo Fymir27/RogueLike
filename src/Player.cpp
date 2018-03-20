@@ -2,6 +2,7 @@
 #include "Room.h"
 #include "UI.h"
 #include "Abilities.h"
+#include "Lightmap.h"
 
 #include <fstream>
 
@@ -12,6 +13,7 @@ Player* current_player = NULL;
 Player::Player(string name, Position pos, Stats stats, string filename) : Character(name, pos, stats, filename)
 {
     cout << "Spawning Player..." << endl;
+    igniteLantern();
 }
 
 Inventory* Player::getInventory()
@@ -22,10 +24,13 @@ Inventory* Player::getInventory()
 
 bool Player::move(Position new_pos)
 {
+
 	if (Character::move(new_pos)) //check if move is valid
 	{
+        current_room->getLightmap()->updateLightSource(lantern_id_, pos_);
 		return true;
 	}
+    current_room->getLightmap()->updateLightSource(lantern_id_, pos_);
 	return false;
 }
 
@@ -89,5 +94,15 @@ void Player::coolDownAbilities()
     {
         ab->coolDown();
     }
+}
+
+void Player::putOutLantern()
+{
+    current_room->getLightmap()->removeLightSource(lantern_id_);
+}
+
+void Player::igniteLantern()
+{
+    lantern_id_ = current_room->getLightmap()->addLightSource(pos_);
 }
 

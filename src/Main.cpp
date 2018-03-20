@@ -12,6 +12,7 @@
 #include "Effects.h"
 #include "Biome.h"
 #include "Command.h"
+#include "Lightmap.h"
 #include <ctime>
 
 using Biomes::Biome;
@@ -74,6 +75,9 @@ int main()
 
 	//------- Test Area ----------//
     current_room->placeItem(current_room->getFreePosition(), Factory<Items::Item>::get()->createEntity("Potato"), 5);
+//    current_room->getLightmap()->addLightSource({3, 3});
+//    current_room->getLightmap()->addLightSource({6, 6});
+//    current_room->getLightmap()->addLightSource({9, 9});
 	//----------------------------//
 
 	sf::Event event;
@@ -133,6 +137,9 @@ int main()
             }
         }
 
+        auto cur_lightmap = current_room->getLightmap();
+        cur_lightmap->update();
+
 		if (current_player->dead())
 		{
 			UI::displayText("");
@@ -140,12 +147,12 @@ int main()
 			UI::displayText("");
 		}
 
-
         //-- Draw Stuff --//
 		window.clear(sf::Color::Black);
 		
 		current_room->draw(window);   //draws Fields and enemies
 		current_player->draw(window);
+        cur_lightmap->draw(window);
 
         //-- Lighting test ---------------------------------------------------------------------------------------------
         /*

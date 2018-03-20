@@ -8,15 +8,14 @@
 #include "Biome.h"
 
 class Enemy;
-
 class TileMap;
+class DijkstraMap2D;
+class Lightmap;
 
 namespace
 {
     class Item;
 }
-
-class DijkstraMap2D;
 
 class Room
 {
@@ -25,8 +24,8 @@ class Room
 private:
     TileMap* tile_map_ = NULL;
     Map map_; //Fields
-    int width_;
-    int height_;
+    unsigned width_;
+    unsigned height_;
 
     list<shared_ptr<Enemy>> enemies_;
     vector<vector<bool> > spawn_locations_;
@@ -40,6 +39,7 @@ private:
     Room* neighbours_[4] = {NULL, NULL, NULL, NULL};
     DijkstraMap2D* dm_player_ = NULL;
 
+    Lightmap* lightmap_ = nullptr;
 	list<shared_ptr<Effect>> effects_; //visual effects
 
     Field* getField(int x, int y);
@@ -47,13 +47,18 @@ private:
 
 public:
     //Room(Position pos, size_t height);
-    Room(Position pos, int width = 22, int height = 20);
+    Room(Position pos, unsigned width = 22, unsigned height = 20);
 
     size_t getColCount()
     { return map_.front().size(); };
-
     size_t getRowCount()
     { return map_.size(); };
+
+    unsigned getWidth()
+    { return width_; }
+
+    unsigned getHeight()
+    { return height_; }
 
     void addField(Field* field);
 
@@ -99,6 +104,9 @@ public:
     void stepEnemies();
     void spawnEnemy(string class_name, Position pos = {0,0});
     void spawnEnemies(size_t count);
+
+    Lightmap* getLightmap()
+    { return lightmap_; }
 
 };
 

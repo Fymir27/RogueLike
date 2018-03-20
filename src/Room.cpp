@@ -6,6 +6,7 @@
 #include "DijkstraMap.h"
 #include "Dungeon.h"
 #include "Effects.h"
+#include "Lightmap.h"
 #include "Item.h"
 
 #include <sstream>
@@ -229,20 +230,6 @@ bool Room::stepOn(Position to, Character* who, Position& new_pos)
     return false;
 }
 
-struct Node
-{
-    Position pos;
-    bool visited = false;
-    size_t distance = std::numeric_limits<size_t>::max();
-    Node* prev = NULL;
-};
-
-std::ostream& operator<<(std::ostream& out, const Node& node)
-{
-    out << node.pos << "[" << node.visited << "], " << node.distance << endl;
-    return out;
-};
-
 Position Room::getPathToPlayer(Position from)
 {
     if (dm_player_ == NULL)
@@ -440,7 +427,7 @@ void Room::generate(bool generate_enemies)
     //randomly spawn an item
     if(roll(1, 3))
     {
-        Position item_pos = { getRandomBetween(2, width_ - 3), getRandomBetween(2, height_ - 3)};
+        Position item_pos = { getRandomBetween((unsigned)2, width_ - 3), getRandomBetween((unsigned)2, height_ - 3)};
         cout << "Spawning item! " << item_pos << endl;
         auto field = new Floor(item_pos); // in case there was a wall
         addField(field);
@@ -584,8 +571,10 @@ void Room::bombPaths( bool use_borders)
     } // for i
 } // bombPaths()
 
-Room::Room(Position pos, int width, int height) : pos_(pos), width_(width), height_(height)
+Room::Room(Position pos, unsigned width, unsigned height) : pos_(pos), width_(width), height_(height)
 {
+    lightmap_ = new Lightmap(this);
+
     try
     {
         // start with wall everywhere
@@ -634,6 +623,7 @@ Character* Room::getFirstCharacterInDirection(Position from, Direction dir)
     }
     return nullptr;
 }
+
 
 
 

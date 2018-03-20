@@ -364,6 +364,7 @@ RoomHeightClass const & Dungeon::getRoomParts(size_t height)
 
 void Dungeon::changeRoom(Direction dir)
 {
+	current_player->putOutLantern(); // to reignite in new room
 	Position pos = current_room->pos_ + DELTA_POS[dir];
 
 	//cout << "New Room is at Pos. " << pos << " in Dungeon!" << endl;
@@ -372,7 +373,8 @@ void Dungeon::changeRoom(Direction dir)
 	{
 		current_room->generate();
 	}
-	Minimap::setActiveRoom(pos);	
+	Minimap::setActiveRoom(pos);
+	current_player->igniteLantern();
 }
 
 void Dungeon::updateRoomInfo(Room* spawn)

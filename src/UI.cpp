@@ -254,7 +254,8 @@ Player* UI::startMenu()
                     class_list.moveCursorUp();
                 else if(key == sf::Keyboard::BackSpace)
                 {
-                    player_name.pop_back();
+                    if(!player_name.empty())
+                        player_name.pop_back();
                     player_name_text.setString(player_name);
                 }
                 else if(key == sf::Keyboard::Return) //forwards to game
