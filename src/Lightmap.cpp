@@ -6,11 +6,13 @@
 #include "Room.h"
 
 vector<vector<float>> Lightmap::lighting_mask_ = {
-        {0.00, 0.15, 0.25, 0.15, 0.00},
-        {0.15, 0.42, 0.70, 0.42, 0.15},
-        {0.25, 0.70, 1.00, 0.70, 0.25},
-        {0.15, 0.42, 0.70, 0.42, 0.15},
-        {0.00, 0.15, 0.25, 0.15, 0.00}};
+        {0.00, 0.00, 0.10, 0.15, 0.10, 0.00, 0.00},
+        {0.00, 0.17, 0.20, 0.40, 0.20, 0.17, 0.00},
+        {0.10, 0.20, 0.50, 0.70, 0.50, 0.20, 0.10},
+        {0.15, 0.40, 0.70, 1.00, 0.70, 0.40, 0.15},
+        {0.10, 0.20, 0.50, 0.70, 0.50, 0.20, 0.10},
+        {0.00, 0.17, 0.20, 0.40, 0.20, 0.17, 0.00},
+        {0.00, 0.00, 0.10, 0.15, 0.10, 0.00, 0.00}};
 
 sf::BlendMode Lightmap::subtract_alpha_ = sf::BlendMode(
         sf::BlendMode::Zero, sf::BlendMode::DstColor, sf::BlendMode::Equation::Add,
@@ -31,15 +33,31 @@ Lightmap::Lightmap(Room* parent_room) : parent_room_(parent_room)
     {
         row.resize(width_);
     }
+    seen_.resize(height_);
+    for(auto& row : seen_)
+    {
+        row.resize(width_);
+        for (size_t i = 0; i < width_; ++i)
+        {
+            row[i] = false;
+        }
+    }
 }
 
 void Lightmap::update()
 {
     //cout << "Lightmap::update" << endl;
 
-    for(auto& row : intensity_)
-        for(auto& intensity : row)
-            intensity = 0.f;
+    for (size_t x = 0; x < width_; ++x)
+    {
+        for (size_t y = 0; y < height_; ++y)
+        {
+            if(seen_[y][x])
+                intensity_[y][x] = 0.10;
+            else
+                intensity_[y][x] = 0.0;
+        }
+    }
 
     static size_t mask_size      = lighting_mask_.size();
     static size_t mask_size_half = mask_size / 2;
@@ -54,11 +72,12 @@ void Lightmap::update()
                 size_t y = light.second.y_ - mask_size_half + mask_y;
                 if(x >= width_ || y >= height_)
                     continue;
-
                 auto& intensity = intensity_.at(y).at(x);
                 intensity += lighting_mask_.at(mask_y).at(mask_x);
                 if(intensity > 1.0)
                    intensity = 1.0;
+                if(intensity_[y][x] != 0.0)
+                    seen_[y][x] = true;
             }
         }
     }

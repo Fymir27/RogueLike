@@ -39,6 +39,7 @@ class Lightmap
     size_t                highest_available_id_ = 0;
 
     vector<vector<float>> intensity_;
+    vector<vector<bool>>  seen_;
     static vector<vector<float>> lighting_mask_;
 
     sf::RenderTexture    lighting_canvas_;
