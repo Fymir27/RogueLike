@@ -75,9 +75,11 @@ int main()
 
 	//------- Test Area ----------//
     current_room->placeItem(current_room->getFreePosition(), Factory<Items::Item>::get()->createEntity("Potato"), 5);
-//    current_room->getLightmap()->addLightSource({3, 3});
-//    current_room->getLightmap()->addLightSource({6, 6});
-//    current_room->getLightmap()->addLightSource({9, 9});
+//    auto light_id = current_room->getLightmap()->addLightSource({3, 3});
+    auto pixels = bresenham({0,0}, {3,3});
+    print(pixels);
+    pixels = bresenham({1,1}, {7,4});
+    print(pixels);
 	//----------------------------//
 
 	sf::Event event;

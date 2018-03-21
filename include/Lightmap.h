@@ -41,6 +41,7 @@ class Lightmap
     vector<vector<float>> intensity_;
     vector<vector<bool>>  seen_;
     static vector<vector<float>> lighting_mask_;
+    static vector<Position> light_shape_;
 
     sf::RenderTexture    lighting_canvas_;
     static sf::BlendMode subtract_alpha_;

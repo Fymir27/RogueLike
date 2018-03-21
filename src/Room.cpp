@@ -17,9 +17,11 @@ Field* Room::getField(int x, int y)
 {
     try
     {
-        return map_.at(y).at(x);
+        if(isInside({x, y}))
+            return map_.at(y).at(x);
+        return nullptr;
     }
-    catch (std::exception e)
+    catch (std::exception& e)
     {
         cout << "Invalid Field!" << endl;
         std::cout << e.what();
@@ -29,7 +31,9 @@ Field* Room::getField(int x, int y)
 
 Field* Room::getField(Position pos)
 {
-    return getField(pos.x_, pos.y_);
+    if(isInside(pos))
+        return getField(pos.x_, pos.y_);
+    return nullptr;
 }
 
 void Room::initSpawnLocations()
@@ -622,6 +626,14 @@ Character* Room::getFirstCharacterInDirection(Position from, Direction dir)
             break;
     }
     return nullptr;
+}
+
+bool Room::isInside(Position pos)
+{
+    if(pos.x_ >= width_  || pos.x_ < 0 ||
+       pos.y_ >= height_ || pos.y_ < 0 )
+        return false;
+    return true;
 }
 
 

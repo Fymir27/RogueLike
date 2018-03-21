@@ -12,7 +12,15 @@ vector<vector<float>> Lightmap::lighting_mask_ = {
         {0.15, 0.40, 0.70, 1.00, 0.70, 0.40, 0.15},
         {0.10, 0.20, 0.50, 0.70, 0.50, 0.20, 0.10},
         {0.00, 0.17, 0.20, 0.40, 0.20, 0.17, 0.00},
-        {0.00, 0.00, 0.10, 0.15, 0.10, 0.00, 0.00}};
+        {0.00, 0.00, 0.10, 0.15, 0.10, 0.00, 0.00}
+};
+
+vector<Position> Lightmap::light_shape_ = {
+        {-1, -3}, { 0, -3}, { 1, -3}, { 2, -2}, // top
+        { 3, -1}, { 3,  0}, { 3,  1}, { 2,  2}, // right
+        { 1,  3}, { 0,  3}, {-1,  3}, {-2,  2}, // bottom
+        {-3,  1}, {-3,  0}, {-3, -1}, {-2, -2}  // left
+};
 
 sf::BlendMode Lightmap::subtract_alpha_ = sf::BlendMode(
         sf::BlendMode::Zero, sf::BlendMode::DstColor, sf::BlendMode::Equation::Add,
@@ -53,12 +61,37 @@ void Lightmap::update()
         for (size_t y = 0; y < height_; ++y)
         {
             if(seen_[y][x])
-                intensity_[y][x] = 0.10;
+                intensity_[y][x] = 0.35;
             else
                 intensity_[y][x] = 0.0;
         }
     }
 
+    // use Bresenham's algorithm to cast rays to each vertex of the light shape
+    vector<Position> fields;
+    float light_power;
+    for(auto const& light : light_sources_)
+    {
+        for (auto const& vertex : light_shape_)
+        {
+            light_power = 1.f;
+            fields.clear();
+            fields = bresenham(light.second, light.second + vertex, false);
+            for(auto const& field : fields)
+            {
+                if(!current_room->isInside(field))
+                    continue;
+
+                intensity_[field.y_][field.x_] += light_power;
+                if( intensity_[field.y_][field.x_] > 1.f)
+                    intensity_[field.y_][field.x_] = 1.f;
+                seen_[field.y_][field.x_] = true;
+                light_power /= 1.5f;
+            }
+        }
+    }
+
+    /*
     static size_t mask_size      = lighting_mask_.size();
     static size_t mask_size_half = mask_size / 2;
 
@@ -81,6 +114,7 @@ void Lightmap::update()
             }
         }
     }
+     */
 }
 
 void Lightmap::draw(sf::RenderTarget& target)

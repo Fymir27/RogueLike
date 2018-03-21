@@ -21,6 +21,14 @@ void print(const std::vector<std::vector<T>>& v)
 	}
 }
 
+template <typename T>
+void print(const vector<T> v)
+{
+	for(auto const& el : v)
+		cout << el << ',';
+	cout << endl;
+}
+
 const char newl = '\n';
 const string separator(50, '-');
 
@@ -37,6 +45,13 @@ extern Position operator+(Position first, const Position& second);
 extern Position operator-(Position first, const Position& second);
 extern bool operator==(const Position& first, const Position& second);
 extern bool operator!=(const Position& first, const Position& second);
+
+template<typename T>
+inline int sign(T x)
+{
+	return (x > 0) ? 1 : (x == 0) ? 0 : -1;
+}
+extern vector<Position> bresenham(Position start, Position end, bool ignore_walls = true);
 
 std::ostream& operator<<(std::ostream& out, const Position& pos);
 

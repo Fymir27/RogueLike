@@ -60,6 +60,8 @@ public:
     unsigned getHeight()
     { return height_; }
 
+    bool isInside(Position pos);
+
     void addField(Field* field);
 
     Field* getField(Position pos);
