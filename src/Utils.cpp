@@ -99,3 +99,8 @@ vector<Position> bresenham(Position start, Position end, bool ignore_walls)
 	}
 	return pixels;
 }
+
+float realDistance(Position pos1, Position pos2)
+{
+    return sqrtf((pos2.x_ - pos1.x_)*(pos2.x_ - pos1.x_)+(pos2.y_ - pos1.y_)*(pos2.y_ - pos1.y_));
+}

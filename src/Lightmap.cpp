@@ -50,23 +50,54 @@ Lightmap::Lightmap(Room* parent_room) : parent_room_(parent_room)
             row[i] = false;
         }
     }
+    illuminated_.resize(height_);
+    for(auto& row : illuminated_)
+    {
+        row.resize(width_);
+        for (size_t i = 0; i < width_; ++i)
+        {
+            row[i] = false;
+        }
+    }
 }
 
 void Lightmap::update()
 {
     //cout << "Lightmap::update" << endl;
 
+    for(auto& row : illuminated_)
+    {
+        for (size_t i = 0; i < width_; ++i)
+        {
+            row[i] = false;
+        }
+    }
+
+    //light up already seen areas
     for (size_t x = 0; x < width_; ++x)
     {
         for (size_t y = 0; y < height_; ++y)
         {
             if(seen_[y][x])
-                intensity_[y][x] = 0.35;
+            {
+                intensity_[y][x] = 0.2;
+            }
             else
                 intensity_[y][x] = 0.0;
         }
     }
 
+    for(auto const& light : light_sources_)
+    {
+        intensity_[light.second.y_][light.second.x_] = 1.f;
+        seen_[light.second.y_][light.second.x_] = 1.f;
+        for (size_t i = 0; i < 4; ++i)
+        {
+            lightUp(light.second, light.second + DELTA_POS[i], static_cast<Direction>(i), 3);
+        }
+    }
+
+    /*
     // use Bresenham's algorithm to cast rays to each vertex of the light shape
     vector<Position> fields;
     float light_power;
@@ -90,6 +121,7 @@ void Lightmap::update()
             }
         }
     }
+    */
 
     /*
     static size_t mask_size      = lighting_mask_.size();
@@ -177,4 +209,64 @@ void Lightmap::removeLightSource(size_t id)
     light_sources_.erase(id);
     available_ids_.push_back(id);
     //cout << "Lightmap::removeLightSource: " << id << endl;
+}
+
+void Lightmap::lightUp(Position origin, Position pos, Direction dir, int power)
+{
+    static float distance_factor = 0.8;
+
+    if(power == 0)
+        return;
+
+    if(!current_room->isInside(pos))
+        return;
+
+    intensity_[pos.y_][pos.x_] = 1.f - (0.2f * realDistance(pos, origin));
+    seen_[pos.y_][pos.x_] = true;
+    illuminated_[pos.y_][pos.x_] = true;
+
+    if(current_room->getField(pos)->getFieldStatus() == SOLID)
+        return;
+
+    Position delta[2];
+    Position cur;
+    float intesity;
+
+    if(dir == UP || dir == DOWN)
+    {
+        delta[0] = DELTA_POS[RIGHT];
+        delta[1] = DELTA_POS[LEFT];
+    }
+    else
+    {
+        delta[0] = DELTA_POS[UP];
+        delta[1] = DELTA_POS[DOWN];
+    }
+
+    for (size_t j = 0; j < 2; ++j)
+    {
+        cur = pos;
+        for (size_t i = 0; i < power; ++i)
+        {
+            cur = cur + delta[j];
+            if(!current_room->isInside(cur))
+                break;
+
+            intesity = 1.f - (0.2f * realDistance(cur, origin));
+            if(illuminated_[cur.y_][cur.x_])
+            {
+                intensity_[cur.y_][cur.x_] += intesity/2;
+            }
+            else //if(intesity > intensity_[cur.y_][cur.x_]); // only update if brighter than FOV
+            {
+                intensity_[cur.y_][cur.x_]   = intesity/2;
+            }
+            illuminated_[cur.y_][cur.x_] = true;
+            seen_[cur.y_][cur.x_] = true;
+            if(current_room->getField(cur)->getFieldStatus() == SOLID)
+                break;
+        }
+    }
+
+    lightUp(origin, pos + DELTA_POS[dir], dir, power - 1);
 }

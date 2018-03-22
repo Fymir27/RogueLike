@@ -52,6 +52,7 @@ inline int sign(T x)
 	return (x > 0) ? 1 : (x == 0) ? 0 : -1;
 }
 extern vector<Position> bresenham(Position start, Position end, bool ignore_walls = true);
+extern float realDistance(Position x, Position y);
 
 std::ostream& operator<<(std::ostream& out, const Position& pos);
 
