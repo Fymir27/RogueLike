@@ -73,6 +73,17 @@ void Lightmap::update()
         }
     }
 
+    for(auto const& light : light_sources_)
+    {
+        intensity_[light.second.y_][light.second.x_] = 1.f;
+        seen_[light.second.y_][light.second.x_] = 1.f;
+        illuminated_[light.second.y_][light.second.x_] = true;
+        for (size_t i = 0; i < 4; ++i)
+        {
+            lightUp(light.second, light.second + DELTA_POS[i], static_cast<Direction>(i), 3);
+        }
+    }
+
     //light up already seen areas
     for (size_t x = 0; x < width_; ++x)
     {
@@ -80,20 +91,11 @@ void Lightmap::update()
         {
             if(seen_[y][x])
             {
-                intensity_[y][x] = 0.2;
+                if((illuminated_[y][x] && intensity_[y][x] < 0.2) || !illuminated_[y][x])
+                    intensity_[y][x] = 0.2;
             }
             else
                 intensity_[y][x] = 0.0;
-        }
-    }
-
-    for(auto const& light : light_sources_)
-    {
-        intensity_[light.second.y_][light.second.x_] = 1.f;
-        seen_[light.second.y_][light.second.x_] = 1.f;
-        for (size_t i = 0; i < 4; ++i)
-        {
-            lightUp(light.second, light.second + DELTA_POS[i], static_cast<Direction>(i), 3);
         }
     }
 
@@ -213,8 +215,6 @@ void Lightmap::removeLightSource(size_t id)
 
 void Lightmap::lightUp(Position origin, Position pos, Direction dir, int power)
 {
-    static float distance_factor = 0.8;
-
     if(power == 0)
         return;
 
@@ -257,7 +257,7 @@ void Lightmap::lightUp(Position origin, Position pos, Direction dir, int power)
             {
                 intensity_[cur.y_][cur.x_] += intesity/2;
             }
-            else //if(intesity > intensity_[cur.y_][cur.x_]); // only update if brighter than FOV
+            else //if(intesity > intensity_[cur.y_][cur.x_]); // only update if brighter than FOW
             {
                 intensity_[cur.y_][cur.x_]   = intesity/2;
             }

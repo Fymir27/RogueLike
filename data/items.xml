@@ -27,6 +27,9 @@
         <usable>
             <restoreHp>20</restoreHp>
         </usable>
+        <throwable>
+            <restoreHP>5</restoreHP>
+        </throwable>
     </item>
 
     <item name = "Small Mana Potion" texture = "images/items/potion_mana_small.png">
@@ -35,13 +38,19 @@
         <usable>
             <restoreMana>20</restoreMana>
         </usable>
+        <throwable>
+            <restoreMana>5</restoreMana>
+        </throwable>
     </item>
 
-    <item name = "Potato" texture= "images/items/potion_mana_small.png">
+    <item name = "Potato" texture= "images/items/potato.png">
         <maxStackSize>10</maxStackSize>
         <description>A potato</description>
+        <usable>
+            <restoreHp>10</restoreHp>
+        </usable>
         <throwable>
-            <damage>5</damage>
+            <damage>10</damage>
         </throwable>
     </item>
 

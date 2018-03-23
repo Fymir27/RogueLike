@@ -65,22 +65,63 @@ DijkstraMap2D::DijkstraMap2D(size_t width, size_t height, Position source) : wid
 
 Position DijkstraMap2D::getNextPosition(Position cur_pos)
 {
-	Position result;
-	int new_x;
-	int new_y;
-	size_t min = std::numeric_limits<size_t>::max();
-	for (size_t i = 0; i < 4; i++)
+    //cout << "DMap: Getting next step from " << cur_pos << " to " << source_ << endl;
+	int dx = absolute(source_.x_ - cur_pos.x_);
+	int dy = absolute(source_.y_ - cur_pos.y_);
+
+    //current_room->printToConsole();
+
+	if(dx == 0 && dy == 0)
+		return  cur_pos;
+
+	Direction vertical_dir = (source_.y_ > cur_pos.y_) ? DOWN : UP;
+	Direction horizontal_dir = (source_.x_ > cur_pos.x_) ? RIGHT : LEFT;
+
+    Position new_pos;
+
+	if(dx > dy)
 	{
-		new_x = cur_pos.x_ + DELTA_X[i];
-		new_y = cur_pos.y_ + DELTA_Y[i];
-		size_t tmp = map_.at(new_y).at(new_x);
-		if (tmp <= min)
-		{
-			min = tmp;
-			result = Position(new_x, new_y);
-		}
+        new_pos = cur_pos + DELTA_POS[horizontal_dir];
+        FIELD_STATUS status = current_room->getField(new_pos)->getFieldStatus();
+        if((status == SOLID))
+        {
+
+            new_pos = cur_pos + DELTA_POS[vertical_dir];
+        }
 	}
-	return result;
+	else if(dy > dx)
+	{
+        new_pos = cur_pos + DELTA_POS[vertical_dir];
+        FIELD_STATUS status = current_room->getField(new_pos)->getFieldStatus();
+        if((status == SOLID))
+        {
+
+            new_pos = cur_pos + DELTA_POS[horizontal_dir];
+        }
+	}
+	else
+	{
+        if(roll(1,2))
+        {
+            new_pos = cur_pos + DELTA_POS[horizontal_dir];
+            FIELD_STATUS status = current_room->getField(new_pos)->getFieldStatus();
+            if(status == SOLID)
+            {
+                new_pos = cur_pos + DELTA_POS[vertical_dir];
+            }
+        }
+        else
+        {
+            new_pos = cur_pos + DELTA_POS[vertical_dir];
+            FIELD_STATUS status = current_room->getField(new_pos)->getFieldStatus();
+            if(status == SOLID)
+            {
+                new_pos = cur_pos + DELTA_POS[horizontal_dir];
+            }
+        }
+	}
+    cout << "Final new_pos " << new_pos << endl;
+    return new_pos;
 }
 
 void DijkstraMap2D::updateSource(Position pos)

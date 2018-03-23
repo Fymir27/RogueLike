@@ -22,7 +22,8 @@ add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
 #target_link_libraries(${OPENJPEG_LIBRARIES})
 
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+#target_link_libraries(${EXECUTABLE_NAME} -shared-libgcc)
+target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} )#${SFML_DEPENDENCIES})
 
 
 

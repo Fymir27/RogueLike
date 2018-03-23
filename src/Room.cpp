@@ -31,6 +31,7 @@ Field* Room::getField(int x, int y)
 
 Field* Room::getField(Position pos)
 {
+    //cout << "getField:" << pos << endl;
     if(isInside(pos))
         return getField(pos.x_, pos.y_);
     return nullptr;
@@ -488,6 +489,15 @@ void Room::printToConsole()
                 case 2: cout << 'X'; break;
                 default: cout << '?'; break;
             }
+            cout << ' ';
+        }
+        cout << endl;
+    }
+    for(auto const& row : map_)
+    {
+        for (auto const& field : row)
+        {
+            cout << field->status_;
             cout << ' ';
         }
         cout << endl;
